@@ -9,6 +9,19 @@ From_Date   = Request.Form("From_Date")
 To_Date     = Request.Form("To_Date")
 Print_Excel = Request.Form("Print_Excel")
 Excel_Type  = Request.Form("Excel_Type")
+whatdo      = Request.Form("Whatdo")
+
+If whatdo = "printexcel" Then
+
+
+      set rs = server.createobject("adodb.recordset")
+      response.write  ("Exec PrintExcel '"&From_Date&"', '"&To_Date&"', '"&Excel_Type&"' ") 
+	  rs.open ("Exec PrintExcel '"&From_Date&"', '"&To_Date&"', '"&Excel_Type&"' ") ,  conn,3,1
+
+
+
+
+End if
 
 
 %>
@@ -30,6 +43,19 @@ document.fm1.submit();
 function findenum()
 {
 document.fm1.action="wk_rpt1.asp"
+document.fm1.submit();
+}
+
+function exportExcel()
+{
+document.fm1.action="wk_rpt_excel1.asp"
+document.fm1.submit();
+}
+
+function updateExcel()
+{
+document.fm1.action="wk_rpt1.asp"
+document.fm1.whatdo.value="printexcel"
 document.fm1.submit();
 }
 //-->

@@ -5,6 +5,17 @@
 pageid=request("pageid")
 
 
+From_Date      = Request.Form("From_Date")
+To_Date        = Request.Form("To_Date")
+Coupon_Type    = Request.Form("Coupon_Type")
+Station        = Request.Form("Station")
+Coupon_Batch   = Request.Form("Coupon_Batch")
+Coupon_Number  = Request.Form("Coupon_Number")
+Print_Excel    = Request.Form("Print_Excel")
+Face_Value     = Request.Form("Face_Value")
+Print_Excel    = Request.Form("Print_Excel")
+Excel_Type     = Request.Form("Excel_Type")
+
 
 
 
@@ -16,53 +27,23 @@ pageid=request("pageid")
 <link rel="stylesheet" type="text/css" href="include/hse.css" />
 <SCRIPT language=JavaScript>
 <!--
-function delcheck(){
-k=0;
-document.fm1.action="execute1.asp"
-	if (document.fm1.mid!=null)
-	{
-		for(i=0;i<document.fm1.mid.length;i++)
-		{
-			if(document.fm1.mid[i].checked)
-			  {
-			  k=1;
-			  i=1;
-			  break;
-			  }
-		}
-		if(i==0)
-		{
-			if (!document.fm1.mid.checked)
-               k=0;
-			else
-               k=1;
-		}
-	}
-
-if (k==0)
-  alert("You must  select one record at least !");	
-else if (k==1)
- {
-  var msg = "Are you sure ?";
-  if (confirm(msg)==true)
-   {
-    document.fm1.whatdo.value="del_mtr";
-    document.fm1.submit();
-   }
- }
-
-}
 
 function gtpage(what)
 {
 document.fm1.pageid.value=what;
-document.fm1.action="master1.asp"
+document.fm1.action="rd_r_co1.asp"
 document.fm1.submit();
 }
 
 function findenum()
 {
-document.fm1.action="master1.asp"
+document.fm1.action="rd_r_co1.asp"
+document.fm1.submit();
+}
+
+function exportExcel()
+{
+document.fm1.action="rd_co_r_excel1.asp"
 document.fm1.submit();
 }
 //-->
@@ -114,19 +95,19 @@ document.fm1.submit();
           <td height="100%" align="middle">
 
 
- <table width="100%" border="0" cellpadding=0 cellspacing="0" bgcolor="#FFFFFF" height="100%">
+ <table width="100%" border="0" cellpadding=2 cellspacing="0" bgcolor="#FFFFFF" height="100%">
                 <tr>
                   <td valign="top" align="center" bgcolor="#E6EBEF">
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#E6EBEF" class="normal">
+                    <table width="100%" border="0" cellpadding="2" cellspacing="0" bgcolor="#E6EBEF" class="normal">
                      <tr> 
                           
                         <td height="28" align="center"><font color="#FF6600"><b>
-Remdemption Raw Coupon</b></font></td>
+Redemption Raw Coupon</b></font></td>
                         </tr>
                         <tr> 
                           <td valign="top" align="center">
                             <form name=fm1 method=post>
-                            <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="normal">
+                            <table width="100%" border="0" cellpadding="4" cellspacing="0" bgcolor="#FFFFFF" class="normal">
 			 
                               <tr> 
                                 <td height="28"> 
@@ -143,15 +124,44 @@ Remdemption Raw Coupon</b></font></td>
 ' Start the queries
          
       set frs = server.createobject("adodb.recordset")
+      'response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
+	  frs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
 
-   
-     'response.write  ("Exec SearchReturnCoupon '"&Coupon_Number&"' ")
-	  frs.open ("Exec SearchReturnCoupon '"&Coupon_Number&"' ") ,  conn,3,1
-
-	     response.write "&nbsp;&nbsp;<input type='text' name='findnum' size='20' value='"&findnum&"'>"
-		 response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"
-	   
 %>
+
+
+Date From:
+<input type="text" name="From_Date" size="12" value="<% = From_Date %>">
+To Date:
+<input type="text" name="To_Date" size="12" value="<% = To_Date %>">
+Station
+<input type="text" name="Station" size="4" value="<% = Station %>">
+Coupon Type
+<input type="text" name="Coupon_Type" size="4" value="<% = Coupon_Type %>">
+Batch
+<input type="text" name="Coupon_Batch" size="4" value="<% = Coupon_Batch %>">
+Face Value
+<input type="text" name="Face_Value" size="4" value="<% = Face_Value %>">
+Coupon Number
+<input type="text" name="Coupon_Number" size="8" value="<% = Coupon_Number %>">
+
+
+Print Excel: 
+	<select size="1" name="Print_Excel" class="common">
+            <option value="All">All</option>
+			<option value="N">No</option>
+			<option value="Y">Yes</option>
+
+	</select>
+Excel Type :
+<input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
+<input type="button" value="   Search   " onClick="findenum();" class="common">
+
+<% if From_Date <> "" Then %>
+
+<input type="button" value="   Export to Excel   " onClick="exportExcel();" class="common">
+
+<% End If %>
    </td>
       </tr>
          <tr> 
@@ -163,10 +173,12 @@ Remdemption Raw Coupon</b></font></td>
 %>
 
 
-   <table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
-     <tr bgcolor="#DFDFDF">
-<td ></td>
+<table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
+<tr bgcolor="#DFDFDF">
+
 <td height="28">Present Date</td>
+<td height="28">Present Time</td>
+
 <td height="28">Station</td>
 <td height="28">Coupon<br/>Type</td>
 <td  height="28">Batch</td>
@@ -177,9 +189,8 @@ Remdemption Raw Coupon</b></font></td>
 <td  height="28">Sale<br/>Litre</td>
 <td>Issue Date</td>
 <td >Expiry Date</td>
-<td>Face Value</td>
 <td>Excel<br/> Type</td>
-<td>Period</td>
+
 <td>Print Excel</td>
 <td>Print Excel Date</td>
 </tr>
@@ -188,71 +199,58 @@ Remdemption Raw Coupon</b></font></td>
 
 
  i=0
- if frs.recordcount>0 then
-  frs.AbsolutePage = pageid
-  do while (frs.PageSize-i)
-   if frs.eof then exit do
-   i=i+1
-   if flage then
-     mycolor="#ffffff"
-   else
-	 mycolor="#efefef"
-   end if
+ 
+ 
+  do while not frs.EoF
   
 %>
    <tr>
-<td width="26">
-<input type="checkbox" name="mid" value="<% = frs("id") %>">
-</td>
 
-<td align=center width="95" height="28"><% = frs("Present_Date")%></td>
-<td  height="28">
-<% = frs("RequestedID") %>
-</td>
-<td  height="28"><% = frs("Coupon_Type") %>
-</td>
-
-<td height="28"><% = frs("Coupon_Batch") %>
-</td>
-
-<td  height="28"><% = frs("Coupon_number") %>
-</td>
+<td align=center width="95" height="28"><% = FormatDateTime(frs("Present Date"),2)%></td>
+<td align=center width="95" height="28"><% = FormatDateTime(frs("Present Date"),4)%></td>
 
 <td  height="28">
-<% = frs("Coupon_Type") %>
+<% = frs("Station") %>
+</td>
+<td  height="28"><% = frs("Coupon Type") %>
+</td>
+
+<td height="28"><% = frs("Batch") %>
+</td>
+
+<td  height="28"><% = frs("Coupon number") %>
+</td>
+
+<td  height="28">
+<% = frs("Product Type") %>
 </td>
 
 <td >
-<% = frs("Car_ID") %>
+<% = frs("Car no.") %>
 </td>
 
 <td>
-<% = frs("SaleAmount") %> 
+<% = frs("Sale Amount") %> 
 </td>
 
 <td >
-<% = frs("SaleLitre") %>
+<% '= frs("SaleLitre") %>
 </td>
 
 <td >
-<% = frs("Issue_Date") %>
+<% = frs("Issue Date") %>
 </td>
 
 <td >
-<% = frs("Expiry_Date") %>
+<% = frs("Expiry Date") %>
 </td>
 
-<td >
-<% = frs("FaceValue") %>
-</td>
 
 <td >
-<% = frs("Excel_Type") %>
+<% = frs("Excel Type") %>
 </td>
 
-<td >
-<% = frs("Period") %>
-</td>
+
 
 <td >
 <% = frs("Status") %>
@@ -263,10 +261,10 @@ Remdemption Raw Coupon</b></font></td>
 </td>
 </tr>
 <%
-   flage=not flage
+   
    frs.movenext
   loop
- end if
+ 
   %>
 
                                   </table>
