@@ -1,0 +1,120 @@
+/* Shell Logo */
+.logo 
+{ 
+position: absolute; 
+top: 20; 
+left: 20; 
+}
+
+/* Title */
+.Title
+{ 
+position: absolute; 
+top: 20; 
+left: 200; 
+}
+
+a { text-decoration:none }
+
+Table.Report
+{ 
+  position: relative;
+  top: 120;
+  border: 0; 
+  text-decoration:none;
+  font-family: arial; 
+  font-size:18px; 
+} 
+
+Table.DailyReport
+{ 
+  border: 0; 
+  text-decoration:none;
+  font-family: arial; 
+  font-size:16px; 
+} 
+
+/* Form */
+Table.Login
+{ 
+  position: relative;
+  top: 200; 
+  border: 0; 
+  font-family: arial; 
+  font-size:18px; 
+} 
+
+/* Form */
+Table.Ver
+{ 
+  position: relative;
+  top: 100; 
+  border: 0; 
+  font-family: arial; 
+  font-size:18px; 
+} 
+
+
+th { 
+  background-color:yellow; 
+} 
+
+
+
+/* Message */
+.Message
+{ 
+  position: relative; 
+  top: 250; 
+  left: 400; 
+  color:red
+}  
+
+/* Button */
+.button
+{
+   font-family: arial; 
+   font-size:18px; 
+
+}
+
+/* Input Field */
+input, select, textarea 
+{
+   font-family: arial; 
+   font-size:16px;
+}
+
+@media print 
+{
+
+Body
+{
+     margin-top:0px;
+     margin-right:0px;
+     margin-left:0px;
+}
+
+table
+{
+     border-collapse:collapse;
+}
+
+table, td
+{
+     border:1px dotted black;
+}
+
+.noprint {
+
+    display: none;
+    
+    	}
+
+.noborder {
+
+    border-width: 0;
+
+}
+
+}
