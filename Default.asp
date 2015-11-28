@@ -122,10 +122,7 @@ End If
 
         </td> 
 
-		<td ><p>This is the testing server of CVS system.</p>
-             <p>All the data are for testing purpose only.</p>
-
-        </td>
+		<td ></td>
 
      </tr>
 

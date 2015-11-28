@@ -1,11 +1,21 @@
 <!--#include file="include/SQLConn.inc" -->
+<!--#include file ="js/OVERLIB.JS" -->
+<!--#include file ="js/OVERLIB_MINI.JS" -->
+<!--#include file ="js/select_date.JS" -->
+
 <% 
 
 ' check which page is it
 pageid=request("pageid")
 
-
-
+From_Date      = Request.Form("From_Date")
+To_Date        = Request.Form("To_Date")
+Coupon_Type    = Request.Form("Coupon_Type")
+Station        = Request.Form("Station")
+Coupon_Batch   = Request.Form("Coupon_Batch")
+Coupon_Number  = Request.Form("Coupon_Number")
+Face_Value     = Request.Form("Face_Value")
+Excel_Type     = Request.Form("Excel_Type")
 
 
 %>
@@ -73,6 +83,7 @@ document.fm1.submit();
 </head>
 
 <body leftmargin="0" topmargin="0" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <!--#include file="include/header.inc" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -155,15 +166,57 @@ document.fm1.submit();
 
    fsql = fsql & "c.End_Range AND m.Coupon_Number >= c.Start_Range where 1 =1 " 
 
-   if findnum <> "" then
 
-   fsql = fsql & " and m.Coupon_Number like '%" & findnum & "%' "
+   ' Check Date Range
+   if From_Date <> "" then
+
+   fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 101) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 101) "
    
    end if
 
-  
+   ' Check Station
+   if Station <> "" then
 
-       fsql = fsql & " order by m.ID desc"
+   fsql = fsql & " and m.RequestedID = '" & Station & "' "
+   
+   end if
+
+   ' Coupon Type
+   if Coupon_Type <> "" then
+
+   fsql = fsql & " and c.Product_Type = '" & Coupon_Type & "' "
+   
+   end if
+
+   ' Batch
+   if Coupon_Batch <> "" then
+
+   fsql = fsql & " and c.Batch = '" & Coupon_Batch & "' "
+   
+   end if
+
+   ' Face Value
+   if Face_Value <> "" then
+
+   fsql = fsql & " and c.FaceValue like '%" & Face_Value & "%' "
+   
+   end if
+
+   ' Check Coupon Number
+   if Coupon_Number <> "" then
+
+   fsql = fsql & " and m.Coupon_Number like '%" & Coupon_Number & "%' "
+   
+   end if
+
+  ' Check Excel type
+   if Excel_type <> "" then
+
+   fsql = fsql & " and c.Excel_type = '" & Excel_type & "' "
+   
+   end if
+
+   fsql = fsql & " order by m.ID desc"
 
         'response.write fsql
         'response.end
@@ -187,10 +240,35 @@ document.fm1.submit();
 
          call countpage(frs.PageCount,pageid)
          end if
-	     response.write "&nbsp;&nbsp;<input type='text' name='findnum' size='13' value='"&findnum&"'>"
-		 response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"
+	     'response.write "&nbsp;&nbsp;<input type='text' name='findnum' size='13' value='"&findnum&"'>"
+		 'response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"
 	   
 %>
+
+
+Date From:
+<input type="text" name="From_Date" size="10" value="<% = From_Date %>">
+<a href="javascript:show_calendar('fm1.From_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
+To Date:
+<input type="text" name="To_Date" size="10" value="<% = To_Date %>">
+<a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
+
+Station
+<input type="text" name="Station" size="3" maxlength="3" value="<% = Station %>">
+Coupon Type
+<input type="text" name="Coupon_Type" size="2" maxlength="2" value="<% = Coupon_Type %>">
+Batch
+<input type="text" name="Coupon_Batch" size="3" maxlength="3" value="<% = Coupon_Batch %>">
+Face Value
+<input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
+Coupon Number
+<input type="text" name="Coupon_Number" size="7" maxlength="6" value="<% = Coupon_Number %>">
+Excel Type :
+<input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
+
+<input type="button" value="   Search   " onClick="findenum();" class="common">
+	   
+
    </td>
       </tr>
          <tr> 

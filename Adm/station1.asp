@@ -119,7 +119,7 @@ function dosubmit(){
 
        fsql = fsql & " order by Station desc"
 
-        response.write fsql
+        'response.write fsql
         'response.end
 
 ' Setting the page
@@ -161,19 +161,17 @@ function dosubmit(){
 <td width="26"></td>
 <td height="28">Station</td>
 
-<td width="100" height="28">IPAddress</td>
+<td height="28">IPAddress</td>
 
-<td width="100" height="28">Ship To code</td>
+<td>Outdoor</td>
 
-<td width="100" height="28">Sold To Code</td>
+<td height="28">Ship To code</td>
 
-<td width="139" height="28">SAP Code</td>
-<td width="108">Report Type</td>
-<td>AC Code</td>
-<td width="58">BA
-</td>
-<td>ST Date</td>
-<td>Ex Date</td>
+<td height="28">Sold To Code</td>
+
+<td height="28">SAP Code</td>
+
+
 </tr>
                                     <%
 
@@ -194,15 +192,28 @@ function dosubmit(){
 %>
    <tr>
 <td width="26">
-<input type="checkbox" name="mid" value="<% = frs("station") %>">
+<input type="checkbox" name="mid" value="<% = frs("IPAddress") %>">
 </td>
-<% id = frs("Station") %>
 <td  height="28">
-<% = frs("Station") %>
+<a href="newstation1.asp?Ipaddress=<%=frs("IPAddress")%>"><% = frs("Station") %></a>
 </td>
 <td  height="28"><% = frs("IPAddress") %>
 </td>
 
+<td width="58">
+<% 
+     if trim(frs("Outdoor")) = 0 then 
+
+             response.write "No" 
+
+     else
+
+             response.write "Yes"
+
+     End If
+
+%>
+</td>
 <td height="28"><% = frs("ShipToCode") %>
 </td>
 
@@ -213,21 +224,7 @@ function dosubmit(){
 <% = frs("SAPCode") %>
 </td>
 
-<td width="108">
-<% '= frs("ACCode") %>
-</td>
 
-<td>
-<%' = frs("Canopy_Copy_Disc") %> 
-</td>
-
-<td width="58">
-<% '= frs("Expiry_Date") %>
-</td>
-
-<td width="58">
-<% '= frs("Issue_Date") %>
-</td>
 
 
 </tr>

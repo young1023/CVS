@@ -1,4 +1,7 @@
 <!--#include file="include/SQLConn.inc" -->
+<!--#include file ="js/OVERLIB.JS" -->
+<!--#include file ="js/OVERLIB_MINI.JS" -->
+<!--#include file ="js/select_date.JS" -->
 <% 
 
 
@@ -43,6 +46,7 @@ document.fm1.submit();
 </head>
 
 <body leftmargin="0" topmargin="0" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <!--#include file="include/header.inc" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -113,13 +117,17 @@ document.fm1.submit();
      
  <tr><td>Effective Date: </td>
       <td>
-<input name="EffectiveDate" type=text value="">	    
+<input name="EffectiveDate" type=text value="">
+<a href="javascript:show_calendar('fm1.EffectiveDate');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
+	    
 </td>
    </tr>
 
 <tr><td>Expiry Date:</td>
       <td>
-<input name="ExpiryDate" type=text value="">	    
+<input name="ExpiryDate" type=text value="">
+<a href="javascript:show_calendar('fm1.ExpiryDate');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
+	    
 </td>
    </tr>
 

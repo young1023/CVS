@@ -1,13 +1,15 @@
 <!--#include file="include/SQLConn.inc" -->
+<!--#include file ="js/OVERLIB.JS" -->
+<!--#include file ="js/OVERLIB_MINI.JS" -->
+<!--#include file ="js/select_date.JS" -->
 <% 
 
 ' check which page is it
 pageid=request("pageid")
 
 
-From_Date   = Request.Form("From_Date")
-To_Date     = Request.Form("To_Date")
-
+From_Date      = Request.Form("From_Date")
+To_Date        = Request.Form("To_Date")
 
 
 %>
@@ -42,6 +44,7 @@ document.fm1.submit();
 </head>
 
 <body leftmargin="0" topmargin="0" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <!--#include file="include/header.inc" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -115,16 +118,18 @@ Redemption Coupon</b></font></td>
 ' Start the queries
          
       set frs = server.createobject("adodb.recordset")
-      'response.write  ("Exec RedemptionReport1 '"&From_Date&"', '"&To_Date&"' ") 
+      response.write  ("Exec RedemptionReport1 '"&From_Date&"', '"&To_Date&"' ") 
 	  frs.open ("Exec RedemptionReport1 '"&From_Date&"', '"&To_Date&"' ") ,  conn,3,1
 
 %>
 
 
 Date From:
-<input type="text" name="From_Date" size="20" value="<% = From_Date %>">
+<input type="text" name="From_Date" size="10" value="<% = From_Date %>">
+<a href="javascript:show_calendar('fm1.From_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 To Date:
-<input type="text" name="To_Date" size="20" value="<% = To_Date %>">
+<input type="text" name="To_Date" size="10" value="<% = To_Date %>">
+<a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 
 <input type="button" value="   Search   " onClick="findenum();" class="common">
 

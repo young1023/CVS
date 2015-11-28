@@ -1,12 +1,12 @@
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
   <tr>
     <td height="72" width="10%"><IMG style="LEFT: 0px; POSITION: absolute; TOP: 0px"  alt ="Shell logo" src="IMAGES/Shell.gif" border=0 ></IMG></td>
-    <td width="10%">
+   
 <td align="right">
 
-<table width="100%" border="0" cellspacing="4" cellpadding="4">
+<table width="100%" border="0" cellspacing="2" cellpadding="4">
   <tr>
-    <td width="10%">
+    
 <td align="right">
 <a href="pco1.asp" title="Create new procoupon" style="TEXT-DECORATION: none">
 New Procoupon</a>
@@ -45,6 +45,7 @@ Price</a>
 </td>
   </tr>
 </table>
+
 
 </td>
   </tr>

@@ -90,7 +90,5 @@ document.barCodeForm.submit();
 }
 
 
-
-
 //-->
 </SCRIPT>

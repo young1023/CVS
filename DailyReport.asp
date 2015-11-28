@@ -344,7 +344,7 @@ for m = Year_starting to Year_ending
 			</td>
 
 
-	<td colspan="4">
+	<td colspan="3">
 			 
 			<select name="NDay" class="common">
 
@@ -411,6 +411,16 @@ for i = Year_starting to Year(Now())
 </div>
 			</td>
 
+<td>更期:
+
+            <select size="1" name="Shift" class="common">
+            <option value="All">全日</option>
+			<option value="11">早更</option>
+			<option value="12">中更</option>
+            <option value="13">晚更</option>
+	</select>
+
+</td>
 
 	<td width="21%" ><input type="button" value="更結報告" onClick="Report();" class="noborder">
 	</td>

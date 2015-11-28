@@ -1,19 +1,24 @@
 <!--#include file="include/SQLConn.inc" -->
 <%
 
-
-
 UserIPAddress = Request.ServerVariables("REMOTE_ADDR")
+'response.write UserIPAddress
 
 Set Rs1 = Server.CreateObject("Adodb.Recordset")
   
-sql1 = "Select Station , LoginUser From Station Where IPAddress ='" &UserIPAddress& "'"
+sql1 = "Select Station , LoginUser , Outdoor From Station Where IPAddress ='" &UserIPAddress& "'"
 
 Set Rs1 = Conn.Execute(sql1)
 
 StationID = Rs1("Station")
 
-response.write stationid
+Outdoor = Rs1("Outdoor")
+
+If Outdoor = 1 then
+
+   response.redirect "CouponVerification2.asp"
+
+end if
 
 CarPlate  = Replace(Request("CarPlate")," ","")
 
@@ -29,7 +34,7 @@ Message = ""
 <HTML>
 <HEAD>
 <title>
- - 禮券驗證系統 (澳門) -
+ - 禮券驗證系統  -
 </title>
 <meta http-equiv="Content-Language" content="zh-hk">
 <meta http-equiv="Content-Type" content="text/html; charset=big5" />

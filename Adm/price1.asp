@@ -289,14 +289,14 @@ else if (k==1)
 function gtpage(what)
 {
 document.fm1.pageid.value=what;
-document.fm1.action="station.asp"
+document.fm1.action="price1.asp"
 document.fm1.submit();
 }
 
 function findenum()
 {
 document.fm1.pageid.value=1;
-document.fm1.action="Price.asp"
+document.fm1.action="Price1.asp"
 document.fm1.submit();
 }
 //-->

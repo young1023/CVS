@@ -7,15 +7,17 @@
 
    StationID = Request("StationID")
 
+   Dim UserIPAddress
+   UserIPAddress = Request.ServerVariables("REMOTE_ADDR")
+
+
    Set Rs1 = Server.CreateObject("Adodb.Recordset")
 
-   Rs1.open ("Exec CheckLoginPwd '"&UserID&"', '"&Password&"' , '"&StationID&"' ") ,  conn,3,1
+   Rs1.open ("Exec CheckLoginPwd '"&UserID&"', '"&Password&"' , '"&UserIPAddress&"' ") ,  conn,3,1
 
-    If Not Rs1.EoF Then
+   If Not Rs1.EoF Then
 
-
-   Response.Redirect "pco.asp"
-
+   Response.Redirect "CouponVerification.asp"
 
    Else
 

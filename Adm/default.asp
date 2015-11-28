@@ -112,7 +112,7 @@ End If
 		
 <% 
 
-If  StationID <> 101 then
+If  StationID = 101 then
 
     Alert = "No unauthority PC is allowed to access the system."
 

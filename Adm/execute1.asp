@@ -9,8 +9,8 @@
 '------------------------------------------------------------------------------------
 
 response.expires=0
-flage=trim(request.form("whatdo"))
-'Response.write flage
+flag = trim(request.form("whatdo"))
+'Response.write flag
 
 ''-----------------------------------------------------------------------------------------------------
 '
@@ -21,8 +21,47 @@ flage=trim(request.form("whatdo"))
 '----------------------------------------------------------------------------------------------------- 
 
 
-if flage="add_pco" then
+if flag = "add_pco" then
  
+  Face_Value = replace(trim(request.form("Face_Value")),"'","''")
+  Product_Type = replace(trim(request.form("Product_Type")),"'","''")
+  Batch = replace(trim(request.form("Batch")),"'","''")
+  Start_Range = replace(trim(request.form("Start_Range")),"'","''")
+  End_Range = request.form("End_Range")
+  Category = trim(request.form("Category"))
+  Dealer = trim(request.form("Dealer")) 
+  Canopy_Disc = trim(request.form("Canopy_Disc")) 
+  Expiry_Date = trim(request.form("Expiry_Date")) 
+  Issue_Date = trim(request.form("Issue_Date"))
+  Completed = trim(request.form("Completed")) 
+  Excel_Type = trim(request.form("Excel_Type")) 
+  Effective_Date = trim(request.form("Effective_Date")) 
+  
+ 'response.write product_type
+'response.end
+
+      sql = "Insert into CouponRequest (FaceValue, Product_Type, Batch, Start_Range, End_Range, Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, Excel_Type, Effective_Date)"
+      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Disc&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date&"')"
+  response.write sql
+  'response.end
+     conn.execute(sql)
+     message="The items are added."
+      whatgo = "pco1.asp"
+
+
+'-----------------------------------------------------------------------------------------------------
+'
+'
+'  Create new Pro coupon
+'
+'
+'----------------------------------------------------------------------------------------------------- 
+
+
+elseif flag = "edit_pco" then
+
+
+  RequestID = Request("ID")
   Face_Value = replace(trim(request.form("Face_Value")),"'","''")
   Product_Type = replace(trim(request.form("Product_Type")),"'","''")
   Batch = replace(trim(request.form("Batch")),"'","''")
@@ -37,16 +76,31 @@ if flage="add_pco" then
   Excel_Type = trim(request.form("Excel_Type")) 
   Effective_Date = trim(request.form("Effective_Date")) 
   
- response.write product_type
-'response.end
+ 
+  sql = "Update CouponRequest Set FaceValue = '"&Face_Value&"', "
 
-      sql = "Insert into CouponRequest (FaceValue, Product_Type, Batch, Start_Range, End_Range, Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, Excel_Type, Effective_Date)"
-      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Copy_Disc&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date&"')"
-  response.write sql
+  sql = sql & "Product_Type = '"&Product_Type&"' ,"
+
+  sql = sql & "Batch = '"&Batch&"', "
+
+  sql = sql & "Start_Range = '"&Start_Range&"', End_Range = '"&End_Range&"', "
+
+  sql = sql & "Category = '"&Category&"', Dealer = '"&Dealer&"', "
+
+  sql = sql & "Canopy_Copy_Disc = '"&Canopy_Copy_Disc&"', "
+
+  sql = sql & "Expiry_Date = '"&Expiry_Date&"', Issue_Date = '"&Issue_Date&"' , "
+
+  sql = sql & "Completed = '"&Completed&"', Excel_Type = '"&Excel_Type&"' ,"
+
+  sql = sql & "Effective_Date = '"&Effective_Date&"' where RequestID ="&RequestID
+      
+  'response.write sql
   'response.end
      conn.execute(sql)
-     message="The items are added."
-      whatgo = "pco1.asp"
+     message="The items are edited."
+      whatgo = "pco2.asp?id="&RequestID
+
 
 
 '==========================================================================
@@ -58,7 +112,7 @@ if flage="add_pco" then
 '==========================================================================
 
 
-elseif flage="delpc" then
+elseif flag = "delpc" then
  
   delid=split(trim(request.form("mid")),",")
    for i=0 to Ubound(delid)
@@ -78,38 +132,63 @@ elseif flage="delpc" then
 '----------------------------------------------------------------------------------------------------- 
 
 
-elseif flage="add_st" then
+elseif flag ="add_st" then
 
-  station = replace(trim(request.form("station")),"'","''")
-
-  Sql1 = "Select station from station where station='"&station&"'"
-
-   'response.write sql1
-
-  Set Rs1 = conn.execute(sql1)
-
-  If Rs1.EoF Then
   
+  station = replace(trim(request.form("station")),"'","''")
   ipaddress = replace(trim(request.form("ipaddress")),"'","''")
   SAPCode = replace(trim(request.form("SAPCode")),"'","''")
   ShipToCode = replace(trim(request.form("ShipToCode")),"'","''")
   SoldToCode = request.form("SoldToCode")
+  Outdoor    = request.form("Outdoor")
 
-      sql = "Insert into station (station, IPAddress, SAPCode, SoldToCode, ShipToCode)"
-      sql = sql & " values('"&station&"', '"&IPAddress&"', '"&SAPCode&"' , '"&SoldToCode&"', '"&ShipToCode&"')"
+      sql = "Insert into station (station, IPAddress, SAPCode, SoldToCode, ShipToCode, Outdoor)"
+      sql = sql & " values('"&station&"', '"&IPAddress&"', '"&SAPCode&"' , '"&SoldToCode&"', '"&ShipToCode&"', "&Outdoor&")"
   response.write sql
   'response.end
      conn.execute(sql)
      message="The items are added."
 
-   Else
+ 
 
-     message="Station number is used."
+      whatgo = "station1.asp"
 
-   End if
 
-      whatgo = "station.asp"
+'-----------------------------------------------------------------------------------------------------
+'
+'
+'  edit station
+'
+'
+'----------------------------------------------------------------------------------------------------- 
 
+
+elseif flag ="edit_st" then
+
+  
+  station = replace(trim(request.form("station")),"'","''")
+  ipaddress = replace(trim(request.form("ipaddress")),"'","''")
+  SAPCode = replace(trim(request.form("SAPCode")),"'","''")
+  ShipToCode = replace(trim(request.form("ShipToCode")),"'","''")
+  SoldToCode = request.form("SoldToCode")
+  Outdoor    = request.form("Outdoor")
+
+      sql = "Update station set station='"&station&"', "
+
+      sql = sql & "IPAddress='"&IPAddress&"', SAPCode='"&SAPCode&"' , "
+
+      sql = sql & "SoldToCode='"&SoldToCode&"',  ShipToCode='"&ShipToCode&"', "
+
+      sql = sql & "Outdoor="&Outdoor&" where IPAddress ='"& IPAddress &"'"
+
+      'response.write sql
+      'response.end
+     conn.execute(sql)
+     message="The items are edited."
+
+ 
+
+      whatgo = "station1.asp"
 '==========================================================================
 '
 '
@@ -119,16 +198,16 @@ elseif flage="add_st" then
 '==========================================================================
 
 
-elseif flage="del_st" then
+elseif flag = "del_st" then
  
   delid=split(trim(request.form("mid")),",")
    for i=0 to Ubound(delid)
-     sql="delete from station where station='"&trim(delid(i))&"'"
+     sql="delete from station where IPAddress='"&trim(delid(i))&"'"
      conn.execute(sql)
 	 'response.write sql&"<br>"
    next
   message="Station was deleted successfully"
-   whatgo="station.asp"
+   whatgo="station1.asp"
 
 
 
@@ -143,7 +222,7 @@ elseif flage="del_st" then
 '----------------------------------------------------------------------------------------------------- 
 
 
-elseif flage="add_pr" then
+elseif flag = "add_pr" then
  
   product = replace(trim(request.form("product")),"'","''")
   price = replace(trim(request.form("price")),"'","''")
@@ -168,7 +247,7 @@ elseif flage="add_pr" then
 '==========================================================================
 
 
-elseif flage="del_pr" then
+elseif flag = "del_pr" then
  
   delid=split(trim(request.form("mid")),",")
    for i=0 to Ubound(delid)

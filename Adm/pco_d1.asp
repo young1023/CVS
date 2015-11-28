@@ -1,12 +1,19 @@
 <!--#include file="include/SQLConn.inc" -->
+<!--#include file ="js/OVERLIB.JS" -->
+<!--#include file ="js/OVERLIB_MINI.JS" -->
+<!--#include file ="js/select_date.JS" -->
 <% 
 
 ' check which page is it
-page_id=request("page_id")
+page_id=request("pageid")
 
-' get the today date
-submit_date = datevalue(date())
 
+
+Coupon_Type    = Request.Form("Coupon_Type")
+Coupon_Batch   = Request.Form("Coupon_Batch")
+Coupon_Number  = Request.Form("Coupon_Number")
+Face_Value     = Request.Form("Face_Value")
+Excel_Type     = Request.Form("Excel_Type")
 
 
 
@@ -77,6 +84,7 @@ document.fm1.submit();
 </head>
 
 <body leftmargin="0" topmargin="0" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <!--#include file="include/header.inc" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -152,18 +160,48 @@ document.fm1.submit();
       
        fsql = "select * from CouponRequest where 1 =1  "
 
-  ' Search location
-  ' ****************
-   if location_id <> "" then
-       fsql = fsql & " and Customer_Name = '"&System_Name&"' "
+    ' Coupon Type
+   if Coupon_Type <> "" then
+
+   fsql = fsql & " and Product_Type = '" & Coupon_Type & "' "
+   
    end if
+
+   ' Batch
+   if Coupon_Batch <> "" then
+
+   fsql = fsql & " and Batch = '" & Coupon_Batch & "' "
+   
+   end if
+
+   ' Face Value
+   if Face_Value <> "" then
+
+   fsql = fsql & " and FaceValue like '%" & Face_Value & "%' "
+   
+   end if
+
+   ' Check Coupon Number
+   if Coupon_Number <> "" then
+
+   fsql = fsql & " and Coupon_Number like '%" & Coupon_Number & "%' "
+   
+   end if
+
+  ' Check Excel type
+   if Excel_type <> "" then
+
+   fsql = fsql & " and Excel_type = '" & Excel_type & "' "
+   
+   end if
+
 
 
   
 
        fsql = fsql & " order by RequestID desc"
 
-        'response.write fsql
+        response.write fsql
         'response.end
 
 ' Setting the page
@@ -185,10 +223,23 @@ document.fm1.submit();
 
          call countpage(frs.PageCount,pageid)
          end if
-	     response.write "&nbsp;&nbsp;<input type='text' name='findnum' size='13' value='"&findnum&"'>"
-		 response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"
+	     'response.write "&nbsp;&nbsp;<input type='text' name='findnum' size='13' value='"&findnum&"'>"
+		 'response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"
 	   
 %>
+
+Coupon Type
+<input type="text" name="Coupon_Type" size="2" maxlength="2" value="<% = Coupon_Type %>">
+Batch
+<input type="text" name="Coupon_Batch" size="3" maxlength="3" value="<% = Coupon_Batch %>">
+Face Value
+<input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
+Coupon Number
+<input type="text" name="Coupon_Number" size="7" maxlength="6" value="<% = Coupon_Number %>">
+Excel Type :
+<input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
+<input type="button" value="   Search   " onClick="findenum();" class="common">
+
    </td>
       </tr>
          <tr> 
@@ -244,7 +295,7 @@ document.fm1.submit();
 <input type="checkbox" name="mid" value="<% = frs("Requestid") %>">
 </td>
 <% id = frs("RequestID") %>
-<td align=center width="95" height="28"><% = frs("FaceValue")%></td>
+<td align=center width="95" height="28"><a href="pco2.asp?id=<% =frs("RequestID") %>"><% = frs("FaceValue")%></a></td>
 <td  height="28">
 <% = frs("Product_Type") %>
 </td>

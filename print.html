@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Untitled Page</title>
+    <script language='VBScript'>
+Sub Print()
+OLECMDID_PRINT = 6
+OLECMDEXECOPT_DONTPROMPTUSER = 2
+OLECMDEXECOPT_PROMPTUSER = 1
+call WB.ExecWB(OLECMDID_PRINT, OLECMDEXECOPT_DONTPROMPTUSER,1)
+End Sub
+document.write "<object ID='WB' WIDTH=0 HEIGHT=0 CLASSID='CLSID:8856F961-340A-11D0-A96B-00C04FD705A2'></object>"
+</script>
+ 
+ 
+<script language="javascript" type="text/javascript">
+// <!CDATA[
+ 
+function Button1_onclick() {
+window.print();
+}
+ 
+// ]]>
+</script>
+</head>
+<body>
+<P>I had an issue where someone wanted to stream a file that was generated on the web server and prevent it from caching on the client.&nbsp; The correct way to do this is to specify the Cache-Control: no-cache header.&nbsp; When this was done however the pdf file did not display using https and on Windows XP.&nbsp; After some research the method that worked for this scenario was to define an OBJECT tag and point the SRC attribute to the page that generates the file on the fly.</P>
+ 
+<p>
+    <input id="Button1" type="button" value="button" onclick="Button1_onclick()" /></p>
+ 
+ 
+<P>&nbsp;Example code:</P>
+ 
+<P>This is an example of the failing page:</P>
+ 
+</body>
+</html>

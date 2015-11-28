@@ -1,4 +1,7 @@
 <!--#include file="include/SQLConn.inc" -->
+<!--#include file ="js/OVERLIB.JS" -->
+<!--#include file ="js/OVERLIB_MINI.JS" -->
+<!--#include file ="js/select_date.JS" -->
 <% 
 
 ' check which page is it
@@ -51,6 +54,7 @@ document.fm1.submit();
 </head>
 
 <body leftmargin="0" topmargin="0" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <!--#include file="include/header.inc" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -124,26 +128,28 @@ Redemption Raw Coupon</b></font></td>
 ' Start the queries
          
       set frs = server.createobject("adodb.recordset")
-      'response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
+      response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
 	  frs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
 
 %>
 
 
 Date From:
-<input type="text" name="From_Date" size="12" value="<% = From_Date %>">
+<input type="text" name="From_Date" size="10" value="<% = From_Date %>">
+<a href="javascript:show_calendar('fm1.From_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 To Date:
-<input type="text" name="To_Date" size="12" value="<% = To_Date %>">
+<input type="text" name="To_Date" size="10" value="<% = To_Date %>">
+<a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 Station
-<input type="text" name="Station" size="4" value="<% = Station %>">
+<input type="text" name="Station" size="3" maxlength="3" value="<% = Station %>">
 Coupon Type
-<input type="text" name="Coupon_Type" size="4" value="<% = Coupon_Type %>">
+<input type="text" name="Coupon_Type" size="2" maxlength="2" value="<% = Coupon_Type %>">
 Batch
-<input type="text" name="Coupon_Batch" size="4" value="<% = Coupon_Batch %>">
+<input type="text" name="Coupon_Batch" size="3" maxlength="3" value="<% = Coupon_Batch %>">
 Face Value
-<input type="text" name="Face_Value" size="4" value="<% = Face_Value %>">
+<input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
 Coupon Number
-<input type="text" name="Coupon_Number" size="8" value="<% = Coupon_Number %>">
+<input type="text" name="Coupon_Number" size="6" maxlength="6" value="<% = Coupon_Number %>">
 
 
 Print Excel: 

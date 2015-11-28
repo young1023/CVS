@@ -65,18 +65,18 @@
           'iCount = Rs2("iCount")
          
 
-         
+          Rs2.close
+          set Rs2 = nothing
+
+
           'response.end
 
-         If Not Rs2.EoF Then
+        If Not Rs2.EoF Then
 
          Present_Date = Rs2("Present_Date")
 
-         response.write Present_Date
-'response.end
+         Message = "驗證失敗 - 重複使用!<br/><br/>"
 
-         Message = "驗證失敗 - 重複使用! 禮券 " & Barcode & " 曾於 " & Present_Date &  " 驗證!"
-         
        
          Else
 
@@ -91,12 +91,7 @@
           End if
 
 
-         Response.Redirect  "CouponVerification2.asp?Message="&Message&"&ProductType="&ProductType
-      
-
-          Rs2.close
-          set Rs2 = nothing
-
- 
+         Response.Redirect  "CouponVerification2.asp?Message="&Message&"&CarPlate="&CarPlate&"&ProductType="&ProductType
+       
 %>
      

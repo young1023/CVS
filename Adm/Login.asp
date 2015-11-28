@@ -14,7 +14,7 @@
     If Not Rs1.EoF Then
 
 
-   Response.Redirect "pco.asp"
+   Response.Redirect "pco1.asp"
 
 
    Else

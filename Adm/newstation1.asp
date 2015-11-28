@@ -1,4 +1,29 @@
 <!--#include file="include/SQLConn.inc" -->
+<%
+   
+
+    IPAddress = Request("IPAddress")
+
+
+    If IPAddress <> "" then
+
+      sql = "Select * from Station where IPAddress = '"& IPAddress &"'"
+
+      Set rs = Conn.Execute(sql)
+
+
+    Station = rs("Station")
+
+    ShipToCode = rs("ShipToCode")
+
+    SoldToCode = rs("SoldToCode")
+
+    SAPCode = rs("SAPCode")
+
+    Outdoor = trim(rs("Outdoor"))
+
+    End if
+%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
@@ -22,12 +47,6 @@ if (document.fm1.IPAddress.value == "")
    return false;
   }
 
-if (document.fm1.SAPCode.value == "")
-  {
-   alert("Please input SAP Code.");
-   document.fm1.SAPCode.focus();
-   return false;
-  }
 
 document.fm1.submit();
 }
@@ -99,30 +118,40 @@ document.fm1.submit();
 
  <tr><td>Station: </td>
       <td>
-<input name="Station" type=text value="">	    
+<input name="Station" type=text value="<% = station %>">	    
 </td>
    </tr>
  <tr>
 <td>IP Addres:</td>
 <td>
-<input name="IPAddress" type=text value="">	    
+<input name="IPAddress" type=text value="<% =IPAddress %>">	    
 </td>
 </tr>
      
  <tr><td>ShipToCode: </td>
       <td>
-<input name="ShipToCode" type=text value="">	    
+<input name="ShipToCode" type=text value="<% =ShipToCode %>">	    
 </td>
    </tr>
 
 <tr><td>Sold To Code:</td>
       <td>
-<input name="SoldToCode" type=text value="">	    
+<input name="SoldToCode" type=text value="<% =SoldToCode %>">	    
 </td>
    </tr>
 <tr><td>SAP Code:</td>
       <td>
-<input name="SAPCode" type=text value="">	    
+<input name="SAPCode" type=text value="<% =SAPCode %>">	    
+</td>
+   </tr>
+
+<tr><td>Outdoor:</td>
+      <td>
+	<select size="1" name="Outdoor" class="common">
+			<option value="0" <%if Outdoor = 0 then%>Selected<%End If%>>No</option>
+			<option value="1" <%if Outdoor = 1 then%>Selected<%End If%>>Yes</option>
+
+	</select>    
 </td>
    </tr>
 
@@ -140,7 +169,12 @@ document.fm1.submit();
 
 <input type="button" value="  Submit  " onClick="dosubmit();" class="common">
 <input type="Reset" value="  Reset  " class="common">
+
+<%  If IPAddress <> "" Then %>
+<input type=hidden name=whatdo value='edit_st'>
+<% Else %>
 <input type=hidden name=whatdo value='add_st'>
+<%  end if %>
 
 </td>
 </tr>

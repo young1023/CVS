@@ -1,9 +1,7 @@
 <!--#include file="include/SQLConn.inc" -->
-<% 
-
-
-
-%>
+<!--#include file ="js/OVERLIB.JS" -->
+<!--#include file ="js/OVERLIB_MINI.JS" -->
+<!--#include file ="js/select_date.JS" -->
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
@@ -20,10 +18,73 @@ function dosubmit(){
    document.fm1.Face_Value.focus();
    return false;
   }
+var x = document.fm1.Face_Value.value
+ if (isNaN(x)) 
+  {
+    alert("Please input numbers.");
+    return false;
+  }
 if (document.fm1.Product_Type.value == "")
   {
    alert("Please input coupon type.");
    document.fm1.Product_Type.focus();
+   return false;
+  }
+var y = document.fm1.Product_Type.value
+ if (isNaN(y)) 
+  {
+    alert("Please input numbers.");
+    return false;
+  }
+if (document.fm1.Batch.value == "")
+  {
+   alert("Please input Batch.");
+   document.fm1.Batch.focus();
+   return false;
+  }
+var z = document.fm1.Batch.value
+ if (isNaN(z)) 
+  {
+    alert("Please input numbers.");
+    return false;
+  }
+if (document.fm1.Start_Range.value == "")
+  {
+   alert("Please input Start Range.");
+   document.fm1.Start_Range.focus();
+   return false;
+  }
+var s = document.fm1.Start_Range.value
+ if (isNaN(s)) 
+  {
+    alert("Please input numbers.");
+    return false;
+  }
+if (document.fm1.End_Range.value == "")
+  {
+   alert("Please input End Range.");
+   document.fm1.End_Range.focus();
+   return false;
+  }
+var e = document.fm1.End_Range.value
+ if (isNaN(e)) 
+  {
+    alert("Please input numbers.");
+    return false;
+  }
+
+if (document.fm1.Expiry_Date.value == "")
+  {
+   alert("Please input Expiry Date.");
+   document.fm1.Expiry_Date.focus();
+   return false;
+  }
+
+
+if (document.fm1.Issue_date.value == "")
+  {
+   alert("Please input Issue date.");
+   document.fm1.Issue_date.focus();
    return false;
   }
 
@@ -35,9 +96,13 @@ document.fm1.submit();
 
 //-->
 </SCRIPT>
+
+<script language="JavaScript" src="include\ts_picker.js">
+</script>
 </head>
 
 <body leftmargin="0" topmargin="0" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <!--#include file="include/header.inc" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -140,6 +205,16 @@ document.fm1.submit();
 </td>
    	</tr>
 
+<tr><td>Digital Coupon:</td>
+      <td>
+<select size="1" name="Digital" class="common">
+			<option value="N">No</option>
+			<option value="Y">Yes</option>
+
+	</select>    
+</td>
+   </tr>
+
 <tr><td>Category:</td>
       <td>
 <input name="Category" type=text value="">	    
@@ -147,7 +222,7 @@ document.fm1.submit();
    </tr>
 <tr><td>Dealer A/C:</td>
       <td>
-<input name="Dealer_AC" type=text value="">	    
+<input name="Dealer" type=text value="">	    
 </td>
    </tr>
 <tr><td>Canopy Disc:</td>
@@ -157,12 +232,16 @@ document.fm1.submit();
    </tr>
 <tr><td>Expiry Date: (dd-mm-yyyy)</td>
       <td>
-<input name="Expiry_Date" type=text value="">	    
+<input name="Expiry_Date" type=text value="">
+<a href="javascript:show_calendar('fm1.Expiry_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 </td>
    </tr>
-<tr><td>Issue Date: (dd-mm-yyyy)</td>
+<tr><td>Issue Date: (dd-mm-yyyy)
+</td>
       <td>
-<input name="Issue_date" type=text value="">	    
+<input name="Issue_date" type=text value="">
+<a href="javascript:show_calendar('fm1.Issue_date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
+
 </td>
    </tr>
 <tr><td>Completed:</td>
@@ -177,7 +256,9 @@ document.fm1.submit();
    </tr>
 <tr><td>Effective Date:</td>
       <td>
-<input name="Effective_Date" type=text value="">	    
+<input name="Effective_Date" type=text value="">
+<a href="javascript:show_calendar('fm1.Effective_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
+	    
 </td>
    </tr>
 	<tr>
