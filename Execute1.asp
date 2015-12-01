@@ -26,7 +26,7 @@
 
     Rs1.open ("Exec Checkrange '"&Barcode&"'") ,  conn,3,1
 
-   Response.write ("Exec Checkrange '"&Barcode&"'")
+    Response.write ("Exec Checkrange '"&Barcode&"'")
 
    'Response.end
 

@@ -1,87 +1,13 @@
 <!--#include file="include/SQLConn.inc" -->
 <%
-sub Write_CSV_From_Recordset(RS)
 
-   
-    if RS.EOF then
-    
-        '
-        ' There is no data to be written
-        '
-        exit sub
-    
-    end if
+StationID     = Request("Station"))
 
-    dim RX
-    set RX = new RegExp
-        RX.Pattern = "\r|\n|,|"""
+' Tells the browser to open excel
+Response.ContentType = "application/vnd.ms-excel" 
+Response.addHeader "content-disposition","attachment;filename=DailyReport_Station"&StationID&"_"&Month(Now())&Year(now())&".xls"
 
-    dim i
-    dim Field
-    dim Separator
-
-    '
-    ' Writing the header row (header row contains field names)
-    '
-
-    Separator = ""
-    for i = 0 to RS.Fields.Count - 1
-        Field = RS.Fields(i).Name
-        if RX.Test(Field) then
-            '
-            ' According to recommendations:
-            ' - Fields that contain CR/LF, Comma or Double-quote should be enclosed in double-quotes
-            ' - Double-quote itself must be escaped by preceeding with another double-quote
-            '
-            Field = """" & Replace(Field, """", """""") & """"
-        end if
-        Response.Write Separator & Field
-        Separator = ","
-    next
-    Response.Write vbNewLine
-
-    '
-    ' Writing the data rows
-    '
-
-    do until RS.EOF
-        Separator = ""
-        for i = 0 to RS.Fields.Count - 1
-            '
-            ' Note the concatenation with empty string below
-            ' This assures that NULL values are converted to empty string
-            '
-            Field = RS.Fields(i).Value & ""
-            if RX.Test(Field) then
-                Field = """" & Replace(Field, """", """""") & """"
-            end if
-            Response.Write Separator & Field
-            Separator = ","
-        next
-        Response.Write vbNewLine
-        RS.MoveNext
-    loop
-
-end sub
-
-'
-' EXAMPLE USAGE
-'
-' - Open a RECORDSET object (forward-only, read-only recommended)
-' - Send appropriate response headers
-' - Call the function
-'
-
-dim RS1
-
-
-UserID        = trim(Request("UserID"))
-
-Level         = trim(Request("SecLevel"))
-
-StationID     = trim(Request("StationID"))
-
-UserID        = Rtrim(Request("UserID"))
+' Received parameters 
 
 SDay          = Request("SDay")
 
@@ -95,39 +21,157 @@ NMonth        = Request("NMonth")
 
 NYear         = Request("NYear")
 
+UserID        = Request("UserID")
 
-Search_Date = Formatdatetime(DateSerial(SYear, SMonth, SDay),2)
+Search_Date = SDay & "/" & SMonth & "/" & SYear
 
-Search_NDate = Formatdatetime(DateSerial(NYear, NMonth, NDay),2)
-
-      
-      fsql = "select * from MasterCoupon where RequestedID = "&StationID &_
+Search_NDate = NDay & "/" & NMonth & "/" & NYear
 
 
-       " and  Present_Date >=   Convert(datetime, '" & Search_Date &"', 105) " &_
-
-  
-       " and  Present_Date < DATEADD(dd,DATEDIFF(dd,0, Convert(datetime, '" & Search_NDate &"', 105)),0) + 1 " &_
-
- 
-       " order by id desc"
-
-        'response.write fsql
-        'response.end
-
-         Set Rs1 = Conn.Execute(fsql)
-
-     Response.ContentType = "text/csv"
-
-     Today = formatdatetime(now(),2)
-
-     Response.AddHeader "Content-Disposition", "attachment;filename=禮券紀錄("&Today&").csv"
-
-     Write_CSV_From_Recordset RS1
-
-		 
 %>
 
+<HTML>
+<HEAD>
+<title>
+    --  禮券驗證系統 -- 
+</title>
+
+
+<meta http-equiv="Content-Language" content="zh-hk">
+<meta http-equiv="Content-Type" content="text/html; charset=big5" /> 
+</HEAD>
+<body>
+<%
+
+
+' Start the Queries
+' *****************
+      
+   fsql = "SELECT m.Product_Type as ProductType, * FROM MasterCoupon m INNER JOIN CouponRequest c "
+
+   fsql = fsql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
+
+   fsql = fsql & "AND cast(m.Face_Value as decimal(9,0))   = c.FaceValue AND m.Coupon_Number <="
+
+   fsql = fsql & "c.End_Range AND m.Coupon_Number >= c.Start_Range where m.RequestedID = "&StationID
+
+ 
+  ' Search by Date
+  ' **************
+
+
+    fsql = fsql & " and  Present_Date >=   Convert(datetime, '" & Search_Date &"', 105) " 
+
   
+    fsql = fsql & " and  Present_Date < DATEADD(dd,DATEDIFF(dd,0, Convert(datetime, '" & Search_NDate &"', 105)),0) + 1 " 
+
+    
+    if UserID <> "" then
+
+    fsql = fsql & " and Period = '"& UserID &"' " 
+
+    end if
+
+    fsql = fsql & " order by id desc"
+
+    set frs= conn.execute(fsql)
+	
+%>
 
 
+<table>
+<tr bgcolor="#DFDFDF">
+<td width="15%">日期 / 時間</td>
+<td width="10%">更期</td>
+<td width="10%">銀碼</td>
+<td width="10%">類型</td>
+<td width="10%">批次</td>
+<td width="15%">禮券編號</td>
+<td width="10%">產品</td>
+<td width="10%">機號</td>
+<td width="10%">電子禮券</td>
+</tr>
+
+<%
+
+  do while not frs.eof
+
+   if frs.eof then exit do
+   
+  
+%>
+
+<tr>
+<td width="30%">
+<% = frs("Present_Date") %>
+</td>
+
+<td>
+<%
+If frs("Period") = 11 Then
+
+   Response.write "早"
+
+Elseif frs("Period") = 12 Then
+
+   Response.write "中"
+
+Elseif frs("Period") = 13 Then
+
+   Response.write "晚"
+
+End if
+%>
+</td>
+
+<td>
+<%= frs("Face_Value") %>
+<%  
+
+Total = Total + frs("Face_Value") 
+
+%>
+</td>
+
+<td>
+ <% = frs("Coupon_type") %>
+</td>
+
+<td>
+ <% = frs("Coupon_Batch") %>
+</td>
+
+<td>
+<% = frs("Coupon_Number") %>
+</td>
+
+<td>
+<% = frs("Product_Type") %>
+</td>
+
+<td>
+
+</td>
+
+<td>
+<% = frs("Digital") %>
+</td>
+
+</tr>
+
+
+
+<%
+
+   
+   frs.movenext
+
+  loop
+ 
+
+  %>
+
+</table>
+                                
+</body>
+</HTML>

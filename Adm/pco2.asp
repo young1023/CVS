@@ -95,7 +95,7 @@ document.fm1.submit();
     </tr>
     <tr> 
       <td width="35%"> </td>
-      <td width="65%" align="right">Today is <% = submit_date %></td>
+      <td width="65%" align="right"></td>
     </tr>
     <tr> 
       <td colspan="2"></td>
@@ -143,6 +143,16 @@ document.fm1.submit();
 
 </td>
    	</tr>
+
+<tr><td>Digital Coupon:</td>
+      <td>
+<select size="1" name="Digital" class="common">
+			<option value="N" <%if Trim(rs("Digital"))="N" Then %>Selected<%End If%>>No</option>
+			<option value="Y" <%if Trim(rs("Digital"))="Y" Then %>Selected<%End If%>>Yes</option>
+
+	</select>    
+</td>
+   </tr>
 
 <tr><td>Category:</td>
       <td>

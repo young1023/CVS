@@ -14,6 +14,10 @@
 
     Station = rs("Station")
 
+    StationName = rs("StationName")
+
+    MachineNo = rs("MachineNo")
+
     ShipToCode = rs("ShipToCode")
 
     SoldToCode = rs("SoldToCode")
@@ -127,6 +131,20 @@ document.fm1.submit();
 <input name="IPAddress" type=text value="<% =IPAddress %>">	    
 </td>
 </tr>
+
+<tr><td>Station Name:</td>
+      <td>
+<input name="StationName" type=text value="<% =StationName %>">	    
+</td>
+   </tr>
+
+<tr><td>Machine No:</td>
+      <td>
+<input name="MachineNo" type=text value="<% =MachineNo %>">	    
+</td>
+   </tr>
+
+
      
  <tr><td>ShipToCode: </td>
       <td>
@@ -139,11 +157,14 @@ document.fm1.submit();
 <input name="SoldToCode" type=text value="<% =SoldToCode %>">	    
 </td>
    </tr>
+
 <tr><td>SAP Code:</td>
       <td>
 <input name="SAPCode" type=text value="<% =SAPCode %>">	    
 </td>
    </tr>
+
+
 
 <tr><td>Outdoor:</td>
       <td>

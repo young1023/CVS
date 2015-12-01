@@ -28,6 +28,7 @@ if flag = "add_pco" then
   Batch = replace(trim(request.form("Batch")),"'","''")
   Start_Range = replace(trim(request.form("Start_Range")),"'","''")
   End_Range = request.form("End_Range")
+  Digital = trim(request.form("Digiatl")) 
   Category = trim(request.form("Category"))
   Dealer = trim(request.form("Dealer")) 
   Canopy_Disc = trim(request.form("Canopy_Disc")) 
@@ -40,8 +41,8 @@ if flag = "add_pco" then
  'response.write product_type
 'response.end
 
-      sql = "Insert into CouponRequest (FaceValue, Product_Type, Batch, Start_Range, End_Range, Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, Excel_Type, Effective_Date)"
-      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Disc&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date&"')"
+      sql = "Insert into CouponRequest (FaceValue, Product_Type, Batch, Start_Range, End_Range, Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, Excel_Type, Effective_Date, Digital)"
+      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Disc&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date&"', '"&Digital&"')"
   response.write sql
   'response.end
      conn.execute(sql)
@@ -67,6 +68,7 @@ elseif flag = "edit_pco" then
   Batch = replace(trim(request.form("Batch")),"'","''")
   Start_Range = replace(trim(request.form("Start_Range")),"'","''")
   End_Range = request.form("End_Range")
+  Digital = request.form("Digital")
   Category = trim(request.form("Category"))
   Dealer = trim(request.form("Dealer")) 
   Canopy_Copy_Disc = trim(request.form("Canopy_Copy_Disc")) 
@@ -85,6 +87,8 @@ elseif flag = "edit_pco" then
 
   sql = sql & "Start_Range = '"&Start_Range&"', End_Range = '"&End_Range&"', "
 
+  sql = sql & "Digital = '"&Digital&"', "
+
   sql = sql & "Category = '"&Category&"', Dealer = '"&Dealer&"', "
 
   sql = sql & "Canopy_Copy_Disc = '"&Canopy_Copy_Disc&"', "
@@ -98,7 +102,7 @@ elseif flag = "edit_pco" then
   'response.write sql
   'response.end
      conn.execute(sql)
-     message="The items are edited."
+     message="Pro coupon is edited."
       whatgo = "pco2.asp?id="&RequestID
 
 
@@ -137,17 +141,19 @@ elseif flag ="add_st" then
   
   station = replace(trim(request.form("station")),"'","''")
   ipaddress = replace(trim(request.form("ipaddress")),"'","''")
+  stationname = replace(trim(request.form("StationName")),"'","''")
+  MachineNo = replace(trim(request.form("MachineNo")),"'","''")
   SAPCode = replace(trim(request.form("SAPCode")),"'","''")
   ShipToCode = replace(trim(request.form("ShipToCode")),"'","''")
   SoldToCode = request.form("SoldToCode")
   Outdoor    = request.form("Outdoor")
 
-      sql = "Insert into station (station, IPAddress, SAPCode, SoldToCode, ShipToCode, Outdoor)"
-      sql = sql & " values('"&station&"', '"&IPAddress&"', '"&SAPCode&"' , '"&SoldToCode&"', '"&ShipToCode&"', "&Outdoor&")"
+      sql = "Insert into station (station, IPAddress, StationName, MachineNo, SAPCode, SoldToCode, ShipToCode, Outdoor)"
+      sql = sql & " values('"&station&"', '"&IPAddress&"', '"&StationName&"' , '"&MachineNo&"' , '"&SAPCode&"' , '"&SoldToCode&"', '"&ShipToCode&"', "&Outdoor&")"
   response.write sql
   'response.end
      conn.execute(sql)
-     message="The items are added."
+     message="Station is added."
 
  
 
@@ -184,7 +190,7 @@ elseif flag ="edit_st" then
       'response.write sql
       'response.end
      conn.execute(sql)
-     message="The items are edited."
+     message="Station is edited."
 
  
 
@@ -202,7 +208,7 @@ elseif flag = "del_st" then
  
   delid=split(trim(request.form("mid")),",")
    for i=0 to Ubound(delid)
-     sql="delete from station where IPAddress='"&trim(delid(i))&"'"
+     sql="delete from station where StationID='"&trim(delid(i))&"'"
      conn.execute(sql)
 	 'response.write sql&"<br>"
    next
@@ -247,16 +253,16 @@ elseif flag = "add_pr" then
 '==========================================================================
 
 
-elseif flag = "del_pr" then
+elseif flag = "del_mtr" then
  
   delid=split(trim(request.form("mid")),",")
    for i=0 to Ubound(delid)
-     sql="delete from pricefile where product='"&trim(delid(i))&"'"
+     sql="delete from mastercoupon where id='"&trim(delid(i))&"'"
      conn.execute(sql)
 	 'response.write sql&"<br>"
    next
-  message="Price was deleted successfully"
-   whatgo="price1.asp"
+  message="Coupon was deleted successfully"
+   whatgo="master1.asp"
 
 
 
@@ -271,20 +277,65 @@ wait=10
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
-<meta http-equiv="Refresh" content="3; url='<%=whatgo%>'">
+<link rel="stylesheet" type="text/css" href="include/hse.css" />
+<meta http-equiv="Refresh" content="4; url='<%=whatgo%>'">
 <title></title>
 </head>
 <body topmargin="0" marginwidth="0" marginheight="0" leftmargin="0" >
- <br><br>
-<table border=0 cellpadding=3 cellspacing=0 class=hardcolor width="90%" align=center>
-  <tbody>
-  <tr> 
-    <td align=center bgcolor="#006699" height="28"><font color=white><%=message%></font></td>
+<!--#include file="include/header.inc" -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="3" class="NavyBlue" height="3"></td>
   </tr>
   <tr>
-    <td align=center height="38"><br><a href='<%=whatgo%>'>Return</a></td>
-  </tr>
-  </tbody>
-</table>
-</body>
-</html>
+    <td colspan="3" class="NavyBlue">
+    <table border="0" width="100%" cellspacing="0" cellpadding="0" class="TitleBar">
+      <tr>
+        <td width="100%">
+        <table border="0" width="100%" cellspacing="0" cellpadding="0" class="TitleBar">
+            <tr>
+              <td><div align="center"><font class="Head" style="font-size: 13px">Shell CVS Administration</font></div></td>
+            </tr>
+            </table>
+          </td>
+          <td nowrap="true">
+          </td>
+        </tr>
+      </table>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" class="NavyBlue" height="1"></td>
+    </tr>
+    <tr>
+      <td colspan="3" height="1"></td>
+    </tr>
+  </table>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" height="60%">
+    <tr>
+      <td width="1" class="HSEBlue"></td>
+      <td valign="top">
+      <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td height="4" class="HSEBlue"></td>
+        </tr>
+        <tr valign="top">
+          <td height="25"><img src="images/Curve.gif" width="22" height="16" /></td>
+        </tr>
+        <tr valign="top">
+          <td height="100%" align="middle">
+
+<p><a href='<%=whatgo%>'>Return</a></p>
+
+<p><% response.write message %></p>
+
+</td>
+              </tr>
+                </table>
+                </td>
+                </tr>
+              </table>
+           
+              </body>
+
+              </html>

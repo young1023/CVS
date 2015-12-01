@@ -12,18 +12,17 @@ sql1 = sql1 & " s.LoginUser = u.UserName Where IPAddress ='" &UserIPAddress& "'"
 
 Set Rs1 = Conn.Execute(sql1)
 
+UserID        = Request.Form("UserID")
+
+If UserID     = "" Then
+
 UserID        = trim(Rs1("LoginUser"))
+
+End If
 
 StationID     = trim(Rs1("Station"))
 
 SecLevel      = trim(Rs1("SecLevel"))
-
-If UserID = "" Then
-
-   Response.Redirect "Default.asp"
-
-End If
-
 
 Message       = Request("Message")
 
@@ -88,7 +87,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 <HTML>
 <HEAD>
 <title>
-    --  禮券驗證系統 (澳門) -- 
+    --  禮券驗證系統 -- 
 </title>
 
 
@@ -110,32 +109,14 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 
 <div align="center">
 
-<h1 class="Title">禮券驗證系統 (澳門)</h1>
+<h2 class="Title">禮券驗證系統</h2>
 
 <span class="noprint">
-<table width="60%" border="0" class="Report">
-
-      <tr>
-
-              <td>
-
-                      <a href="CouponVerification.asp">驗證</a>                 
-
-              </td>
-
-               <td>
-
-                      <a href="logout.asp">登出</a>                 
-
-              </td>
-
-      </tr>
-
-</table>
-
-<br/>
+<div align="right"><a href="CouponVerification2.asp">驗證</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="logout.asp">登出</a></div>
 </span>
- <table width="98%" border="1" cellpadding="04" cellspacing="2" class="Ver">
+
+
+ <table width="98%" border="0" cellpadding="4" cellspacing="1" class="Report">
                       
                         
 
@@ -173,7 +154,14 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
     ' Start the queries
 ' *****************
       
-       fsql = "select * from MasterCoupon where RequestedID = "&StationID
+       fsql = "SELECT m.Product_Type as ProductType, * FROM MasterCoupon m INNER JOIN CouponRequest c "
+
+   fsql = fsql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
+
+   fsql = fsql & "AND cast(m.Face_Value as decimal(9,0))   = c.FaceValue AND m.Coupon_Number <="
+
+   fsql = fsql & "c.End_Range AND m.Coupon_Number >= c.Start_Range where m.RequestedID = "&StationID
+
 
   ' Search Coupon Number
   ' ********************
@@ -211,7 +199,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 
    ' By UserID
 
-    if Trim(SecLevel) = 1  then
+    if UserID <> "All"  then
 
 
       fsql = fsql & " and Period = '"& UserID &"' " 
@@ -236,13 +224,13 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 <%
 
         if frs.RecordCount=0 then
-           response.write "<font color=red>No Record</font>"
+           response.write "<font color=red>沒有紀錄</font>"
            'response.end
         else
 
 
           findrecord=frs.recordcount
-          response.write "Total <font color=red>"&findrecord&"</font> Records ;"
+          response.write "共有 <font color=red>"&findrecord&"</font> 條紀錄 ;"
 
   
          frs.PageSize = 100
@@ -266,10 +254,10 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
                                 <td valign="top" height="28"> 
 
 
-   <table border="0" align=center cellpadding="4" cellspacing="1" class="DailyReport" width="100%" height="100%">
+   <table border="1" align=center cellpadding="4" cellspacing="1" class="DailyReport" width="100%" height="100%">
 
 <tr bgcolor="#DFDFDF">
-          <td colspan="7" align="right">油站</td>
+          <td colspan="8" align="right">油站</td>
           <td align="center"><% = StationID %></td>
       </tr>
     <tr> 
@@ -411,18 +399,18 @@ for i = Year_starting to Year(Now())
 </div>
 			</td>
 
-<td>更期:
+<td colspan="2">更期:
 
-            <select size="1" name="Shift" class="common">
-            <option value="All">全日</option>
-			<option value="11">早更</option>
-			<option value="12">中更</option>
-            <option value="13">晚更</option>
+            <select size="1" name="UserID" class="common">
+            <option value="All" <% If UserID = "All" then%>Selected<%End If%>>全日</option>
+			<option value="11" <% If UserID = "11" then%>Selected<%End If%>>早更</option>
+			<option value="12" <% If UserID = "12" then%>Selected<%End If%>>中更</option>
+            <option value="13" <% If UserID = "13" then%>Selected<%End If%>>晚更</option>
 	</select>
 
 </td>
 
-	<td width="21%" ><input type="button" value="更結報告" onClick="Report();" class="noborder">
+	<td ><input type="button" value="更結報告" onClick="Report();" class="noborder">
 	</td>
     
 </tr>
@@ -437,12 +425,13 @@ for i = Year_starting to Year(Now())
 
 <td width="15%">日期 / 時間</td>
 <td width="10%">更期</td>
-<td width="15%">禮券編號</td>
+<td width="10%">銀碼</td>
 <td width="10%">類型</td>
+<td width="10%">批次</td>
+<td width="15%">禮券編號</td>
 <td width="10%">產品</td>
-<td width="10%">升數</td>
-<td>銀碼</td>
-<td>車牌</td>
+<td width="10%">機號</td>
+<td width="10%">電子禮券</td>
 </tr>
 
 <%
@@ -456,21 +445,17 @@ i=0
   do while (frs.PageSize-i)
    if frs.eof then exit do
    i=i+1
-   if flage then
-     mycolor="#ffffff"
-   else
-	 mycolor="#efefef"
-   end if
+   
   
 %>
 
 
    <tr>
 
-<% id = frs("id") %>
 <td width="30%">
 <% = i & ". " & frs("Present_Date") %>
 </td>
+
 <td>
 <%
 If frs("Period") = 11 Then
@@ -488,30 +473,38 @@ Elseif frs("Period") = 13 Then
 End if
 %>
 </td>
+
 <td>
-<% = frs("Coupon_Number") %>
+<%= frs("Face_Value") %>
+<%  
+
+Total = Total + frs("Face_Value") 
+
+%>
 </td>
+
 <td>
  <% = frs("Coupon_type") %>
 </td>
+
+<td>
+ <% = frs("Coupon_Batch") %>
+</td>
+
+<td>
+<% = frs("Coupon_Number") %>
+</td>
+
 <td>
 <% = frs("Product_Type") %>
-<td>
-<% = FormatNumber(frs("SaleLitre"),2) %>
 </td>
-</td>
+
 <td>
 
-<%= frs("SaleAmount") %>
-<%  
-
-Total = Total + frs("SaleAmount") 
-
-%>
-   
 </td>
+
 <td>
-<% = frs("Car_ID") %>
+<% = frs("Digital") %>
 </td>
 
 </tr>
@@ -520,16 +513,16 @@ Total = Total + frs("SaleAmount")
 
 <%
 
-   flage=not flage
+   
    frs.movenext
   loop
  end if
   %>
 <tr>
-<td colspan = "6" align="right">
+<td colspan = "2" align="right">
 Total:
 </td>
-<td colspan= "2" align="left"><% = Total %>
+<td colspan= "8" align="left"><% = Total %>
 </td>
 </tr>
 
@@ -592,9 +585,9 @@ document.fm1.submit();
                                 <td height="28" align="center">
 <span class="noprint"> 
 <input type="button" value="   打印   "  onClick="window.print();" class='common'>
-<% if SecLevel > 1 then %>
-<input type="button" value="   CSV   "  onClick="window.doConvert();" class='common'>
-<% end If %>
+
+<input type="button" value="   Excel   "  onClick="window.doConvert();" class='common'>
+
 </span>
 
 <%
@@ -617,7 +610,7 @@ document.fm1.submit();
 
   ' function
   Sub countpage(PageCount,pageid)
-  response.write pagecount&"</font> Pages "
+  response.write "第 "&pagecount&"</font> 頁 "
 	   if PageCount>=1 and PageCount<=10 then
 		 for i=1 to PageCount
 		   if (pageid-i =0) then
@@ -652,7 +645,7 @@ document.fm1.submit();
 <SCRIPT language=JavaScript>
 <!--
 function doConvert(){
-window.open("ConvertReport.asp?StationID=<%=StationID%>&Level=<%=SecLevel%>&Sday=<%=SDay%>&SMonth=<%=SMonth%>&SYear=<%=SYear%>&NDay=<%=NDay%>&NMonth=<%=NMonth%>&NYear=<%=NYear%>&UserID=<%=UserID%>"); 
+window.open("ConvertReport1.asp?Station=<%=StationID%>&Sday=<%=SDay%>&SMonth=<%=SMonth%>&SYear=<%=SYear%>&NDay=<%=NDay%>&NMonth=<%=NMonth%>&NYear=<%=NYear%>&UserID=<%=UserID%>"); 
 
 }
 

@@ -163,6 +163,10 @@ function dosubmit(){
 
 <td height="28">IPAddress</td>
 
+<td height="28">Station Name</td>
+
+<td height="28">Machine No.</td>
+
 <td>Outdoor</td>
 
 <td height="28">Ship To code</td>
@@ -192,12 +196,18 @@ function dosubmit(){
 %>
    <tr>
 <td width="26">
-<input type="checkbox" name="mid" value="<% = frs("IPAddress") %>">
+<input type="checkbox" name="mid" value="<% = frs("StationID") %>">
 </td>
 <td  height="28">
 <a href="newstation1.asp?Ipaddress=<%=frs("IPAddress")%>"><% = frs("Station") %></a>
 </td>
 <td  height="28"><% = frs("IPAddress") %>
+</td>
+
+<td  height="28"><% = frs("StationName") %>
+</td>
+
+<td  height="28"><% = frs("MachineNo") %>
 </td>
 
 <td width="58">

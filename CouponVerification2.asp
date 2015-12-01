@@ -6,13 +6,11 @@ UserIPAddress = Request.ServerVariables("REMOTE_ADDR")
 
 Set Rs1 = Server.CreateObject("Adodb.Recordset")
   
-sql1 = "Select Station , LoginUser , Outdoor From Station Where IPAddress ='" &UserIPAddress& "'"
+sql1 = "Select Station , LoginUser From Station Where IPAddress ='" &UserIPAddress& "'"
 
 Set Rs1 = Conn.Execute(sql1)
 
 StationID = Rs1("Station")
-
-CarPlate  = Replace(Request("CarPlate")," ","")
 
 ProductType = Request("ProductType")
 
@@ -22,7 +20,6 @@ If ProductType = "" then
 
 End If
 
-Message = ""
 
 
 'Response.write "Station ID:  " & StationID & "<br/>"
@@ -34,9 +31,7 @@ Message = ""
 <title>
  - 禮券驗證系統  -
 </title>
-<meta http-equiv="Content-Language" content="zh-hk">
 <meta http-equiv="Content-Type" content="text/html; charset=big5" />
-<link href="include/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" media="all" href="include/publish.css" />
 <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
 <!--#include file="include/JavaScript.js" -->
@@ -66,14 +61,13 @@ input[type=radio] {
 input[type=radio] + label {
     display:inline-block;
     margin: -2px;
-    padding: 30px 80px;
+    padding: 13px 80px;
     background-color: #9fdf9f;
     text-align: center;
     text-shadow: 0 1px 1px rgba(255,255,255,0.75);
     vertical-align: middle;
     cursor: pointer;
-    border: 1px solid #ccc;
-   
+    border: 2px solid #ccc;   
     border-color: #e6e6e6 #e6e6e6 #bfbfbf;
     border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
     border-bottom-color: #b3b3b3;
@@ -89,6 +83,7 @@ input[type=radio]:checked + label {
     border-color: #cc7a00;
 }
 
+
 </style>
 </HEAD>
 <body class="homepage" onload="document.barCodeForm.Barcode.focus();">
@@ -97,21 +92,17 @@ input[type=radio]:checked + label {
 
 <form name="barCodeForm" method="post" action="" onSubmit="javascript:return mod10CheckDigit();">
 
-<h1 class="Title">禮券驗證系統</h1> 
+<h2 class="Title">禮券驗證系統</h2> 
 
 <div align="right"><a href="DailyReport.asp">驗證紀錄</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="logout.asp">登出</a></div>
 
 
 <div align="center">
 
-<table width="80%" border="0"  cellpadding="15" cellspacing="4" class="Ver">
+<table width="80%" border="0"  cellpadding="6" cellspacing="2" class="Ver">
 
 
      <tr>
-
-	    <td width="25%">產品類型
-
-        </td>
 
 		<td width="25%">
 
@@ -125,33 +116,31 @@ input[type=radio]:checked + label {
          <label for="radio2">油渣</label>
         </td> 
 
-	    <td width="25%">
+	    <td width="35%">
 
          <input type="radio" id="radio3" name="ProductType" value="54" <% If ProductType = "54" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
          <label for="radio3">V 能量</label>
+        </td>
      </tr>
 
 
      <tr>
+    	   
 
-	    <td width="25%"></td>
-
-	   
-
-	    <td width="25%">
+	    <td >
 
          <input type="radio" id="radio5" name="ProductType" value="LB" <% If ProductType = "LB" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
          <label for="radio5">機油</label>
         </td> 
 
-	    <td width="25%">
+	    <td >
 
          <input type="radio" id="radio6" name="ProductType" value="CW" <% If ProductType = "CW" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
          <label for="radio6">洗車</label>
 
         </td> 
 
-        <td width="20%">
+        <td >
 
          <input type="radio" id="radio4" name="ProductType" value="CR" <% If ProductType = "CR" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
 
@@ -170,15 +159,15 @@ input[type=radio]:checked + label {
 		<td >
 
 					
-<input name="Barcode" type="text" autocomplete="off" value="" size="20" maxlength="15" id="bc" ">
+<input name="Barcode" class="ver" type="text" autocomplete="off" value="" size="15" maxlength="15" id="bc" ">
 
          </td>
 
-         <td colspan="2">
+         <td>
 
-<input name="StationID" type="hidden" value="<%=StationID%>">
+    <input name="StationID" type="hidden" value="<%=StationID%>">
 
-	<input type="Submit" Name="Button" value="確定">
+	<input type="Submit" Name="Button" value="  確定  " style="background: #9fdf9f;border:1px solid #00ff00;font-size:46px">
 
 
         </td>
@@ -188,11 +177,39 @@ input[type=radio]:checked + label {
 
 </table>
 
-</div>
+
 
 </form>
 
-<div class="Message">
+
+<% 
+
+   Color = request("Color")
+
+   If Color = 1 then
+
+       bgcolor = "#9fdf9f"
+
+   Elseif Color = 2 then
+
+       bgcolor = "#ffa31a"
+
+   Else
+
+       bgcolor = "#ffffff"
+
+   End if
+
+%>
+
+<table width="80%" border="0"  cellpadding="30" cellspacing="2" bgcolor="<%=bgcolor%>" class="Message">
+
+
+     <tr>
+
+	    <td align="center">
+
+
 
  <%
 
@@ -201,46 +218,38 @@ input[type=radio]:checked + label {
       
         If Message <> "" then
 
+%>
 
-           Response.write Message
+ 
+
+
+
+<%
+
+
+        Response.write Message
 
 
         End If
 
-        Message = ""
+        Message = " "
        
 
   %>
 
-
-
-</div>
-
-<div align="right">
-
-<table width="100%" border="0"  cellpadding="15" cellspacing="4" class="Login">
-
-
-     <tr>
-
-	    <td align="right">
-
-           <font size="-1">050072137000120     31 Nov 2015 12:20 </font><br>
-           <font size="-1">050072137000121     31 Nov 2015 12:18 </font><br>
-<font size="-1">050072137000114     31 Nov 2015 12:16 </font><br>
-<font size="-1">050072137000113     31 Nov 2015 11:20 </font><br>
-<font size="-1">050072137000112     31 Nov 2015 10:25 </font><br>
-
-
         </td>
 
+	
      </tr>
 
 </table>
 
 
 
+
+
 </div>
+
 
 </body>
 </HTML>

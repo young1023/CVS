@@ -34,9 +34,9 @@
 
            Message = "驗證失敗 - 禮券無效 "
 
- 
-    Response.Redirect  "CouponVerification2.asp?Message="&Message
 
+    Response.Redirect  "CouponVerification2.asp?&ProductType="&ProductType&"&Color=2&Message="&Message
+      
  
    Else
 
@@ -45,10 +45,11 @@
 
   
           Message = "驗證失敗 - 禮券過期!"
+        
+          
 
-
-   Response.Redirect  "CouponVerification2.asp?Message="&Message
-
+    Response.Redirect  "CouponVerification2.asp?&ProductType="&ProductType&"&Color=2&Message="&Message
+      
 
        End if
 
@@ -62,26 +63,28 @@
 
           Response.write ("Exec CheckCouponExist '"&Barcode&"'")
 
-          'iCount = Rs2("iCount")
-         
-
-         
-          'response.end
-
+     
          If Not Rs2.EoF Then
 
          Present_Date = Rs2("Present_Date")
 
-         response.write Present_Date
-'response.end
+         RequestedID  = Rs2("RequestedID")
 
-         Message = "驗證失敗 - 重複使用! 禮券 " & Barcode & " 曾於 " & Present_Date &  " 驗證!"
+         StationName  = Rs2("StationName")
+
+         'response.write Present_Date
+         'response.end
+         Color   = "2"
+
+         Message = "驗證失敗 - 重複使用! 禮券 " & Barcode & " 曾於 " & Present_Date & " 在"& StationName & "站驗證!"
          
        
          Else
 
         
           Message = "驗證成功!"
+
+          Color   = "1"
 
      
 
@@ -91,7 +94,7 @@
           End if
 
 
-         Response.Redirect  "CouponVerification2.asp?Message="&Message&"&ProductType="&ProductType
+         Response.Redirect  "CouponVerification2.asp?&ProductType="&ProductType&"&Color="&Color&"&Message="&Message
       
 
           Rs2.close

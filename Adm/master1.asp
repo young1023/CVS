@@ -158,7 +158,7 @@ document.fm1.submit();
 
    
       
-   fsql = "SELECT * FROM MasterCoupon m INNER JOIN CouponRequest c "
+   fsql = "SELECT m.Product_Type as ProductType, * FROM MasterCoupon m INNER JOIN CouponRequest c "
 
    fsql = fsql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
 
@@ -285,16 +285,15 @@ Excel Type :
 <td ></td>
 <td height="28">Present Date</td>
 <td height="28">Station</td>
+<td>Face Value</td>
 <td height="28">Coupon<br/>Type</td>
 <td  height="28">Batch</td>
 <td  height="28">Coupon Number</td>
 <td  height="28">Product<br/>Type</td>
-<td >Car Plate no.</td>
-<td  height="28">Sale<br/>Amount</td>
-<td  height="28">Sale<br/>Litre</td>
+<td>Digital</td>
 <td>Issue Date</td>
 <td >Expiry Date</td>
-<td>Face Value</td>
+
 <td>Excel<br/> Type</td>
 <td>Period</td>
 <td>Print Excel</td>
@@ -326,6 +325,11 @@ Excel Type :
 <td  height="28">
 <% = frs("RequestedID") %>
 </td>
+
+<td >
+<% = frs("FaceValue") %>
+</td>
+
 <td  height="28"><% = frs("Coupon_Type") %>
 </td>
 
@@ -336,20 +340,13 @@ Excel Type :
 </td>
 
 <td  height="28">
-<% = frs("Coupon_Type") %>
+<% = frs("ProductType") %>
 </td>
 
 <td >
-<% = frs("Car_ID") %>
+<% = frs("Digital") %>
 </td>
 
-<td>
-<% = frs("SaleAmount") %> 
-</td>
-
-<td >
-<% = frs("SaleLitre") %>
-</td>
 
 <td >
 <% = frs("Issue_Date") %>
@@ -359,9 +356,7 @@ Excel Type :
 <% = frs("Expiry_Date") %>
 </td>
 
-<td >
-<% = frs("FaceValue") %>
-</td>
+
 
 <td >
 <% = frs("Excel_Type") %>

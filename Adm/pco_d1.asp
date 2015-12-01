@@ -201,7 +201,7 @@ document.fm1.submit();
 
        fsql = fsql & " order by RequestID desc"
 
-        response.write fsql
+        'response.write fsql
         'response.end
 
 ' Setting the page
@@ -262,6 +262,7 @@ Excel Type :
 <td width="10%" height="28">Start Range</td>
 
 <td width="10%" height="28">End Range</td>
+<td >Digital</td>
 
 <td width="10%" height="28">Category</td>
 <td >Dealer</td>
@@ -306,6 +307,9 @@ Excel Type :
 </td>
 
 <td ><% = frs("End_Range") %>
+</td>
+
+<td ><% = frs("Digital") %>
 </td>
 
 <td >

@@ -200,9 +200,7 @@ Coupon Number
 <td  height="28">Batch</td>
 <td  height="28">Coupon Number</td>
 <td  height="28">Product<br/>Type</td>
-<td >Car Plate no.</td>
-<td  height="28">Sale<br/>Amount</td>
-<td  height="28">Sale<br/>Litre</td>
+<td >Digital</td>
 <td>Issue Date</td>
 <td >Expiry Date</td>
 <td>Face Value</td>
@@ -251,16 +249,9 @@ Coupon Number
 </td>
 
 <td >
-<% = frs("Car_ID") %>
+<% = frs("Digital") %>
 </td>
 
-<td>
-<% = frs("SaleAmount") %> 
-</td>
-
-<td >
-<% = frs("SaleLitre") %>
-</td>
 
 <td >
 <% = frs("Issue_Date") %>
