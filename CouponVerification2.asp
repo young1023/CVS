@@ -16,7 +16,7 @@ ProductType = Request("ProductType")
 
 If ProductType = "" then
 
-   ProductType = "53"
+   ProductType = "54"
 
 End If
 
@@ -99,32 +99,46 @@ input[type=radio]:checked + label {
 
 <div align="center">
 
-<table width="80%" border="0"  cellpadding="6" cellspacing="2" class="Ver">
+<table width="90%" border="0"  cellpadding="6" cellspacing="2" class="Ver">
 
 
      <tr>
 
+       <td width="25%">
+
+         <input type="radio" id="radio1" name="ProductType" value="54" <% If ProductType = "54" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+         <label for="radio1">V  能量</label>
+        </td>
+
 		<td width="25%">
 
-         <input type="radio" id="radio1" name="ProductType" value="53" <% If ProductType = "53" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
-         <label for="radio1" >無鉛</label>
+         <input type="radio" id="radio2" name="ProductType" value="53" <% If ProductType = "53" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+         <label for="radio2" >無鉛</label>
         </td> 
 
 	    <td width="25%">
 
-         <input type="radio" id="radio2" name="ProductType" value="52" <% If ProductType = "52" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
-         <label for="radio2">油渣</label>
+         <input type="radio" id="radio3" name="ProductType" value="52" <% If ProductType = "52" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+         <label for="radio3">柴油</label>
         </td> 
 
-	    <td width="35%">
+        <td width="25%">
 
-         <input type="radio" id="radio3" name="ProductType" value="54" <% If ProductType = "54" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
-         <label for="radio3">V 能量</label>
-        </td>
+    	<input type="Submit" Name="Button" value=" 其他選項  " style="background: #9fdf9f;border:1px solid #00ff00;font-size:36px" onclick="NextPage1()">
+
+      </td> 
+	 
      </tr>
 
 
      <tr>
+
+        <td >
+
+         <input type="radio" id="radio4" name="ProductType" value="CR" <% If ProductType = "CR" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+
+          <label for="radio4">便利店</label>
+        </td>
     	   
 
 	    <td >
@@ -140,12 +154,9 @@ input[type=radio]:checked + label {
 
         </td> 
 
-        <td >
+   
 
-         <input type="radio" id="radio4" name="ProductType" value="CR" <% If ProductType = "CR" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
-
-          <label for="radio4">便利店</label>
-        </td>
+        
 
         </tr>
 
@@ -159,11 +170,11 @@ input[type=radio]:checked + label {
 		<td >
 
 					
-<input name="Barcode" class="ver" type="text" autocomplete="off" value="" size="15" maxlength="15" id="bc" ">
+<input name="Barcode" class="ver" type="text" autocomplete="off" value="" size="18" maxlength="15" id="bc" ">
 
          </td>
 
-         <td>
+         <td colspan="2" align="left">
 
     <input name="StationID" type="hidden" value="<%=StationID%>">
 

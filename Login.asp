@@ -17,7 +17,7 @@
 
    If Not Rs1.EoF Then
 
-   Response.Redirect "CouponVerification2.asp"
+   Response.Redirect "CouponVerification.asp"
 
    Else
 

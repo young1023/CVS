@@ -112,11 +112,11 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 <h2 class="Title">禮券驗證系統</h2>
 
 <span class="noprint">
-<div align="right"><a href="CouponVerification2.asp">驗證</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="logout.asp">登出</a></div>
+<div align="center"><a href="CouponVerification.asp">驗證</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="logout.asp">登出</a></div>
 </span>
 
 
- <table width="98%" border="0" cellpadding="4" cellspacing="1" class="Report">
+ <table width="98%" border="1" cellpadding="4" cellspacing="1" class="Report">
                       
                         
 
@@ -150,11 +150,10 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
         end if
         
 
-' Start the Queries
-    ' Start the queries
-' *****************
+   ' Start the Queries    
+   ' *****************
       
-       fsql = "SELECT m.Product_Type as ProductType, * FROM MasterCoupon m INNER JOIN CouponRequest c "
+   fsql = "SELECT m.Product_Type as ProductType, * FROM MasterCoupon m INNER JOIN CouponRequest c "
 
    fsql = fsql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
 
@@ -194,7 +193,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
      fsql = fsql & " and  Present_Date >=   Convert(datetime, '" & Search_Date &"', 105) " 
 
   
-      fsql = fsql & " and  Present_Date < DATEADD(dd,DATEDIFF(dd,0, Convert(datetime, '" & Search_NDate &"', 105)),0) + 1 " 
+     fsql = fsql & " and  Present_Date < DATEADD(dd,DATEDIFF(dd,0, Convert(datetime, '" & Search_NDate &"', 105)),0) + 1 " 
 
 
    ' By UserID
@@ -496,11 +495,11 @@ Total = Total + frs("Face_Value")
 </td>
 
 <td>
-<% = frs("Product_Type") %>
+<% = frs("ProductType") %>
 </td>
 
 <td>
-
+<% = frs("MachineNo") %>
 </td>
 
 <td>
@@ -581,6 +580,105 @@ document.fm1.submit();
 </span>
                                 </td>
                               </tr>
+
+
+<tr>
+
+    <td>
+
+
+<%
+
+   ' Start the Queries for eCoupon  
+   ' *****************************
+      
+     sql = "SELECT MachineNo, Digital, Face_Value, Count(Face_Value) as eCount, Sum(Cast(Face_Value as float)) as eAmount FROM MasterCoupon m INNER JOIN CouponRequest c "
+
+     sql = sql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
+
+     sql = sql & "AND cast(m.Face_Value as decimal(9,0))   = c.FaceValue AND m.Coupon_Number <="
+
+     sql = sql & "c.End_Range AND m.Coupon_Number >= c.Start_Range where m.RequestedID = "&StationID
+
+     sql = sql & " and  Present_Date >=   Convert(datetime, '" & Search_Date &"', 105) " 
+
+     sql = sql & " and  Present_Date < DATEADD(dd,DATEDIFF(dd,0, Convert(datetime, '" & Search_NDate &"', 105)),0) + 1 " 
+
+   ' By UserID
+
+    if UserID <> "All"  then
+
+      sql = sql & " and Period = '"& UserID &"' " 
+
+    end if 
+ 
+      sql = sql & " Group by MachineNo, Digital, Face_Value"
+
+      'response.write sql
+
+
+     Set rs = Conn.Execute(sql)
+
+
+  %>
+
+         <table width="60%" border="1" cellpadding="4" cellspacing="0" class="DailyReport">
+ 
+
+             <tr>
+
+                    <td width="20%">電腦編號</td>
+
+                    <td>電子禮券</td>
+
+                    <td>銀碼</td>
+
+                    <td>數量</td>
+
+                    <td>總值</td>
+
+             </tr>
+
+<%
+
+    If Not rs.EoF Then
+
+       rs.MoveFirst
+
+     Do While Not rs.Eof
+ 
+  %>           
+             <tr>
+
+                    <td><% = rs("MachineNo") %></td>
+
+                    <td><% = rs("Digital") %></td>
+
+                    <td><% = rs("Face_Value") %></td>
+
+                    <td><% = rs("eCount") %></td>
+
+                    <td><% = rs("eAmount") %></td>
+
+
+             </tr>
+<%
+            rs.MoveNext
+
+            Loop
+
+   End If
+
+%>
+
+     
+        
+
+         </table>
+
+    </td>
+
+</tr>
                               <tr> 
                                 <td height="28" align="center">
 <span class="noprint"> 

@@ -1,7 +1,7 @@
 <!--#include file="include/SQLConn.inc" -->
 <%
 
-StationID     = Request("Station"))
+StationID     = Request("Station")
 
 ' Tells the browser to open excel
 Response.ContentType = "application/vnd.ms-excel" 
@@ -66,13 +66,15 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
     fsql = fsql & " and  Present_Date < DATEADD(dd,DATEDIFF(dd,0, Convert(datetime, '" & Search_NDate &"', 105)),0) + 1 " 
 
     
-    if UserID <> "" then
+    if UserID <> "All" then
 
     fsql = fsql & " and Period = '"& UserID &"' " 
 
     end if
 
     fsql = fsql & " order by id desc"
+
+    'response.write fsql
 
     set frs= conn.execute(fsql)
 	
@@ -81,15 +83,15 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 
 <table>
 <tr bgcolor="#DFDFDF">
-<td width="15%">日期 / 時間</td>
-<td width="10%">更期</td>
-<td width="10%">銀碼</td>
-<td width="10%">類型</td>
-<td width="10%">批次</td>
-<td width="15%">禮券編號</td>
-<td width="10%">產品</td>
-<td width="10%">機號</td>
-<td width="10%">電子禮券</td>
+<td >日期 / 時間</td>
+<td >更期</td>
+<td >銀碼</td>
+<td >類型</td>
+<td >批次</td>
+<td >禮券編號</td>
+<td >產品</td>
+<td >機號</td>
+<td >電子禮券</td>
 </tr>
 
 <%
@@ -102,7 +104,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 %>
 
 <tr>
-<td width="30%">
+<td >
 <% = frs("Present_Date") %>
 </td>
 
@@ -171,7 +173,93 @@ Total = Total + frs("Face_Value")
 
   %>
 
-</table>
+
+
+<%
+
+   ' Start the Queries for eCoupon  
+   ' *****************************
+      
+     sql = "SELECT MachineNo, Digital, Face_Value, Count(Face_Value) as eCount, Sum(Cast(Face_Value as float)) as eAmount FROM MasterCoupon m INNER JOIN CouponRequest c "
+
+     sql = sql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
+
+     sql = sql & "AND cast(m.Face_Value as decimal(9,0))   = c.FaceValue AND m.Coupon_Number <="
+
+     sql = sql & "c.End_Range AND m.Coupon_Number >= c.Start_Range where m.RequestedID = "&StationID
+
+     sql = sql & " and  Present_Date >=   Convert(datetime, '" & Search_Date &"', 105) " 
+
+     sql = sql & " and  Present_Date < DATEADD(dd,DATEDIFF(dd,0, Convert(datetime, '" & Search_NDate &"', 105)),0) + 1 " 
+
+   ' By UserID
+
+    if UserID <> "All"  then
+
+      sql = sql & " and Period = '"& UserID &"' " 
+
+    end if 
+ 
+      sql = sql & " Group by MachineNo, Digital, Face_Value"
+
+      'response.write sql
+
+
+     Set rs = Conn.Execute(sql)
+
+
+  %>
+
+     
+
+             <tr>
+
+                    <td >電腦編號</td>
+
+                    <td>電子禮券</td>
+
+                    <td>銀碼</td>
+
+                    <td>數量</td>
+
+                    <td>總值</td>
+
+             </tr>
+
+<%
+
+    If Not rs.EoF Then
+
+       rs.MoveFirst
+
+     Do While Not rs.Eof
+ 
+  %>           
+             <tr>
+
+                    <td><% = rs("MachineNo") %></td>
+
+                    <td><% = rs("Digital") %></td>
+
+                    <td><% = rs("Face_Value") %></td>
+
+                    <td><% = rs("eCount") %></td>
+
+                    <td><% = rs("eAmount") %></td>
+
+
+             </tr>
+<%
+            rs.MoveNext
+
+            Loop
+
+   End If
+
+%>
+
+
+         </table>
                                 
 </body>
 </HTML>

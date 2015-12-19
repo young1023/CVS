@@ -23,11 +23,14 @@ flag = trim(request.form("whatdo"))
 
 if flag = "add_pco" then
  
-  Face_Value = Cint(replace(trim(request.form("Face_Value")),"'","''"))
-  Product_Type = Cint(replace(trim(request.form("Product_Type")),"'","''"))
-  Batch = Cint(replace(trim(request.form("Batch")),"'","''"))
-  Start_Range = Cint(replace(trim(request.form("Start_Range")),"'","''"))
-  End_Range = Cint(request.form("End_Range"))
+  Face_Value = int(replace(trim(request.form("Face_Value")),"'","''"))
+  Product_Type = replace(trim(request.form("Product_Type")),"'","''")
+  Batch = replace(trim(request.form("Batch")),"'","''")
+  Start_Range = replace(trim(request.form("Start_Range")),"'","''")
+  End_Range = request.form("End_Range")
+
+  Start_Range1 = int(Start_Range)
+  End_Range1   = int(End_Range)
   Digital = trim(request.form("Digital")) 
   Category = trim(request.form("Category"))
   Dealer = trim(request.form("Dealer")) 
@@ -37,44 +40,46 @@ if flag = "add_pco" then
   Completed = trim(request.form("Completed")) 
   Excel_Type = trim(request.form("Excel_Type")) 
   Effective_Date = trim(request.form("Effective_Date")) 
+ 
+  sql1 = "Select count(1) as Tcount From CouponRequest Where Cast(FaceValue as float) = "& Face_Value
 
+  sql1 = sql1 & " and Cast(Product_Type as float) = " & Product_Type
 
-     sql1 = "Select count(1) From CouponRequest Where Cast(FaceValue as float)= " & Face_Value 
+  sql1 = sql1 & " and Cast(batch as float) = " & Batch
 
-     sql1 = sql1 & " and Cast(Product_Type as float)= " & Product_Type 
+  sql1 = sql1 & " and ( " & Start_Range1 & " between Cast(Start_Range as float) "
 
-     sql1 = sql1 & " and Cast(Batch as float)= " & Batch 
+  sql1 = sql1 & " and Cast(End_Range as float)  " 
 
-     sql1 = sql1 & " and (Cast(Start_Range as float) < " &Start_Range
+  sql1 = sql1 & " or  " & End_Range1 & " between Cast(Start_Range as float) "
 
-     sql1 = sql1 & " and Cast(End_Range as float) < " &Start_Range
+  sql1 = sql1 & " and Cast(End_Range as float) "
 
-     sql1 = sql1 & " or Cast(Start_Range as float) > " &End_Range
+  sql1 = sql1 & " or Cast(Start_Range as float) between " & Start_Range1 & " and " & End_Range1 
 
-     sql1 = sql1 & " and Cast(End_Range as float) > " &End_Range& ")"
+  sql1 = sql1 & " or Cast(End_Range as float)  between " & Start_Range1 & " and " & End_Range1 
 
-     response.write sql1
-     response.end
+  sql1 = sql1 & " ) " 
 
-     Set rs1 = Conn.Execute(sql1)
+  'response.write sql1
+  'response.end
 
-     ' if there is no record
-     If not rs1.EoF Then
+  set rs1 = conn.execute(sql1)
 
-      sql2 = "Insert into CouponRequest (FaceValue, Product_Type, Batch, Start_Range, End_Range, Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, Excel_Type, Effective_Date, Digital)"
-      sql2 = sql2 & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Disc&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date&"', '"&Digital&"')"
-  
-    'response.write sql2
-    'response.end
-     conn.execute(sql2)
+  If rs1("Tcount") = 0 then
+
+      sql = "Insert into CouponRequest (FaceValue, Product_Type, Batch, Start_Range, End_Range, Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, Excel_Type, Effective_Date, Digital)"
+      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Disc&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date&"', '"&Digital&"')"
+  'response.write sql
+  'response.end
+     conn.execute(sql)
      message="The items are added."
 
-     Else
+  else
 
-     message = "The range covered another procoupon range."
+     message = "The range is covered by another pro coupon."
 
-     End If
-
+  end if
       whatgo = "pco1.asp"
 
 
@@ -176,12 +181,25 @@ elseif flag ="add_st" then
   SoldToCode = request.form("SoldToCode")
   Outdoor    = request.form("Outdoor")
 
+      sql1 = "Select count(1) as Tcount From station where IPAddress ='" & ipaddress &"'"
+
+      set rs1 = conn.execute(sql1)
+
+      if rs1("Tcount") = 0 then
+
+
       sql = "Insert into station (station, IPAddress, StationName, MachineNo, SAPCode, SoldToCode, ShipToCode, Outdoor)"
       sql = sql & " values('"&station&"', '"&IPAddress&"', '"&StationName&"' , '"&MachineNo&"' , '"&SAPCode&"' , '"&SoldToCode&"', '"&ShipToCode&"', "&Outdoor&")"
-  response.write sql
+  'response.write sql
   'response.end
      conn.execute(sql)
      message="Station is added."
+
+     else
+
+      message = "IP address is used."
+
+    end if
 
  
 
@@ -202,7 +220,7 @@ elseif flag ="edit_st" then
   
   station = replace(trim(request.form("station")),"'","''")
   ipaddress = replace(trim(request.form("ipaddress")),"'","''")
-  StationName = replace(trim(request.form("StationName")),"'","''")
+  stationname = replace(trim(request.form("StationName")),"'","''")
   MachineNo = replace(trim(request.form("MachineNo")),"'","''")
   SAPCode = replace(trim(request.form("SAPCode")),"'","''")
   ShipToCode = replace(trim(request.form("ShipToCode")),"'","''")
@@ -213,7 +231,7 @@ elseif flag ="edit_st" then
 
       sql = sql & "IPAddress='"&IPAddress&"', SAPCode='"&SAPCode&"' , "
 
-      sql = sql & "StationName='"&StationName&"', MachineNo='"&MachineNo&"' , "
+      sql = sql & "StationName ='"&stationname&"', MachineNo = '"&MachineNo&"', "
 
       sql = sql & "SoldToCode='"&SoldToCode&"',  ShipToCode='"&ShipToCode&"', "
 
@@ -240,7 +258,7 @@ elseif flag = "del_st" then
  
   delid=split(trim(request.form("mid")),",")
    for i=0 to Ubound(delid)
-     sql="delete from station where StationID='"&trim(delid(i))&"'"
+     sql="delete from station where IPAddress='"&trim(delid(i))&"'"
      conn.execute(sql)
 	 'response.write sql&"<br>"
    next

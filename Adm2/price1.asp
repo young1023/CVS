@@ -1,21 +1,8 @@
 <!--#include file="include/SQLConn.inc" -->
-<!--#include file ="js/OVERLIB.JS" -->
-<!--#include file ="js/OVERLIB_MINI.JS" -->
-<!--#include file ="js/select_date.JS" -->
-
 <% 
 
 ' check which page is it
 pageid=request("pageid")
-
-From_Date      = Request.Form("From_Date")
-To_Date        = Request.Form("To_Date")
-Coupon_Type    = Request.Form("Coupon_Type")
-Station        = Request.Form("Station")
-Coupon_Batch   = Request.Form("Coupon_Batch")
-Coupon_Number  = Request.Form("Coupon_Number")
-Face_Value     = Request.Form("Face_Value")
-Excel_Type     = Request.Form("Excel_Type")
 
 
 %>
@@ -56,34 +43,36 @@ else if (k==1)
   var msg = "Are you sure ?";
   if (confirm(msg)==true)
    {
-    document.fm1.whatdo.value="del_mtr";
+    document.fm1.whatdo.value="del_pr";
     document.fm1.submit();
    }
  }
 
 }
 
-
-
-
 function gtpage(what)
 {
 document.fm1.pageid.value=what;
-document.fm1.action="master1.asp"
+document.fm1.action="price1.asp"
 document.fm1.submit();
 }
 
 function findenum()
 {
-document.fm1.action="master1.asp"
+document.fm1.action="price1.asp"
 document.fm1.submit();
 }
+
+function dosubmit(){
+ document.fm1.action="newprice1.asp"; 
+ document.fm1.submit();
+}
+
 //-->
 </script>
 </head>
 
 <body leftmargin="0" topmargin="0" >
-<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <!--#include file="include/header.inc" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -135,12 +124,12 @@ document.fm1.submit();
                      <tr> 
                           
                         <td height="28" align="center"><font color="#FF6600"><b>
-	Master Coupon</b></font></td>
+	Price Management</b></font></td>
                         </tr>
                         <tr> 
                           <td valign="top" align="center">
                             <form name=fm1 method=post>
-                            <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="normal">
+                            <table width="99%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="normal">
 			 
                               <tr> 
                                 <td height="28"> 
@@ -155,68 +144,16 @@ document.fm1.submit();
         findnum=replace(findnum,"'","''")
    
 ' Start the queries
-
-   
       
-   fsql = "SELECT m.Product_Type as ProductType, * FROM MasterCoupon m INNER JOIN CouponRequest c "
+       fsql = "select * from PriceFile where 1 =1  "
 
-   fsql = fsql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
+       if findnum <> "" then
 
-   fsql = fsql & "AND cast(m.Face_Value as decimal(9,0))   = c.FaceValue AND m.Coupon_Number <="
+       fsql = fsql & " and product = " & findnum 
 
-   fsql = fsql & "c.End_Range AND m.Coupon_Number >= c.Start_Range where 1 =1 " 
+       end if
 
-
-   ' Check Date Range
-   if From_Date <> "" then
-
-   fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 101) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 101) "
-   
-   end if
-
-   ' Check Station
-   if Station <> "" then
-
-   fsql = fsql & " and m.RequestedID = '" & Station & "' "
-   
-   end if
-
-   ' Coupon Type
-   if Coupon_Type <> "" then
-
-   fsql = fsql & " and c.Product_Type = '" & Coupon_Type & "' "
-   
-   end if
-
-   ' Batch
-   if Coupon_Batch <> "" then
-
-   fsql = fsql & " and c.Batch = '" & Coupon_Batch & "' "
-   
-   end if
-
-   ' Face Value
-   if Face_Value <> "" then
-
-   fsql = fsql & " and c.FaceValue like '%" & Face_Value & "%' "
-   
-   end if
-
-   ' Check Coupon Number
-   if Coupon_Number <> "" then
-
-   fsql = fsql & " and m.Coupon_Number like '%" & Coupon_Number & "%' "
-   
-   end if
-
-  ' Check Excel type
-   if Excel_type <> "" then
-
-   fsql = fsql & " and c.Excel_type = '" & Excel_type & "' "
-   
-   end if
-
-   fsql = fsql & " order by m.ID desc"
+       fsql = fsql & " order by  effectiveDate desc"
 
         'response.write fsql
         'response.end
@@ -238,37 +175,12 @@ document.fm1.submit();
 
 ' Call the function to count the page.
 
-         call countpage(frs.PageCount,pageid)
+        ' call countpage(frs.PageCount,pageid)
          end if
-	     'response.write "&nbsp;&nbsp;<input type='text' name='findnum' size='13' value='"&findnum&"'>"
-		 'response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"
+	     response.write "&nbsp;&nbsp;Product&nbsp;&nbsp;<input type='text' name='findnum' size='13' value='"&findnum&"'>"
+		 response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"
 	   
 %>
-
-
-Date From:
-<input type="text" name="From_Date" size="10" value="<% = From_Date %>">
-<a href="javascript:show_calendar('fm1.From_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
-To Date:
-<input type="text" name="To_Date" size="10" value="<% = To_Date %>">
-<a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
-
-Station
-<input type="text" name="Station" size="3" maxlength="3" value="<% = Station %>">
-Coupon Type
-<input type="text" name="Coupon_Type" size="2" maxlength="2" value="<% = Coupon_Type %>">
-Batch
-<input type="text" name="Coupon_Batch" size="3" maxlength="3" value="<% = Coupon_Batch %>">
-Face Value
-<input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
-Coupon Number
-<input type="text" name="Coupon_Number" size="7" maxlength="6" value="<% = Coupon_Number %>">
-Excel Type :
-<input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
-
-<input type="button" value="   Search   " onClick="findenum();" class="common">
-	   
-
    </td>
       </tr>
          <tr> 
@@ -282,22 +194,15 @@ Excel Type :
 
    <table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
      <tr bgcolor="#DFDFDF">
-<td ></td>
-<td height="28">Present Date</td>
-<td height="28">Station</td>
-<td>Face Value</td>
-<td height="28">Coupon<br/>Type</td>
-<td  height="28">Batch</td>
-<td  height="28">Coupon Number</td>
-<td  height="28">Product<br/>Type</td>
-<td>Digital</td>
-<td>Issue Date</td>
-<td >Expiry Date</td>
-<td >Machine No</td>
-<td>Excel<br/> Type</td>
-<td>Period</td>
-<td>Print Excel</td>
-<td>Print Excel Date</td>
+<td width="26"></td>
+<td height="28" width="20%">Product</td>
+
+<td width="100" height="28">Unit Price</td>
+
+<td width="100" height="28">Effective Date</td>
+
+
+
 </tr>
                                     <%
 
@@ -318,65 +223,21 @@ Excel Type :
 %>
    <tr>
 <td width="26">
-<input type="checkbox" name="mid" value="<% = frs("id") %>">
-</td>
-
-<td align=center width="95" height="28"><% = frs("Present_Date")%></td>
-<td  height="28">
-<% = frs("RequestedID") %>
-</td>
-
-<td >
-<% = frs("FaceValue") %>
-</td>
-
-<td  height="28"><% = frs("Coupon_Type") %>
-</td>
-
-<td height="28"><% = frs("Coupon_Batch") %>
-</td>
-
-<td  height="28"><% = frs("Coupon_number") %>
+<input type="checkbox" name="mid" value="<% = frs("Product") %>">
 </td>
 
 <td  height="28">
-<% = frs("ProductType") %>
+<% = frs("Product") %>
+</td>
+<td  height="28"><% = frs("UnitPrice") %>
 </td>
 
-<td >
-<% = frs("Digital") %>
-</td>
-
-
-<td >
-<% = frs("Issue_Date") %>
-</td>
-
-<td >
-<% = frs("Expiry_Date") %>
-</td>
-
-<td >
-<% = frs("MachineNo") %>
+<td height="28"><% = formatdatetime(frs("EffectiveDate"),1) %>
 </td>
 
 
 
-<td >
-<% = frs("Excel_Type") %>
-</td>
 
-<td >
-<% = frs("Period") %>
-</td>
-
-<td >
-<% = frs("Status") %>
-</td>
-
-<td >
-<% = frs("Creation_Date") %>
-</td>
 </tr>
 <%
    flage=not flage
@@ -390,10 +251,63 @@ Excel Type :
                               </tr>
                               <tr> 
                                 <td align="right" height="28"> 
+   <script language=JavaScript>
+<!--
+function delcheck(){
+k=0;
+document.fm1.action="execute1.asp"
+	if (document.fm1.mid!=null)
+	{
+		for(i=0;i<document.fm1.mid.length;i++)
+		{
+			if(document.fm1.mid[i].checked)
+			  {
+			  k=1;
+			  i=1;
+			  break;
+			  }
+		}
+		if(i==0)
+		{
+			if (!document.fm1.mid.checked)
+               k=0;
+			else
+               k=1;
+		}
+	}
 
+if (k==0)
+  alert("You must  select one record at least !");	
+else if (k==1)
+ {
+  var msg = "Are you sure ?";
+  if (confirm(msg)==true)
+   {
+    document.fm1.whatdo.value="del_pr";
+    document.fm1.submit();
+   }
+ }
+
+}
+
+function gtpage(what)
+{
+document.fm1.pageid.value=what;
+document.fm1.action="price1.asp"
+document.fm1.submit();
+}
+
+function findenum()
+{
+document.fm1.pageid.value=1;
+document.fm1.action="Price1.asp"
+document.fm1.submit();
+}
+//-->
+</script>
                                   <%
 	 if frs.recordcount>0 then
-             call countpage(frs.PageCount,pageid)
+            ' call countpage(frs.PageCount,pageid)
 			 response.write "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 			 if Clng(pageid)<>1 then
                  response.write " <a href=javascript:gtpage('1') style='cursor:hand' >First</a> "
@@ -416,6 +330,8 @@ Excel Type :
                               </tr>
                               <tr> 
                                 <td height="28" align="center"> 
+<input type="button" value="    New Price    " onClick="dosubmit();" class="common">
+
 <%
    response.write "<input type='button' value='    Delete    ' onClick='delcheck();' class='common'>"
    response.write "<input type=hidden value='' name=whatdo>"
@@ -449,41 +365,8 @@ Excel Type :
                 </table>
                 </td>
                 </tr>
-              </table>  
-
-<%
-
-  ' function
-  Sub countpage(PageCount,pageid)
-  response.write pagecount&"</font> Pages "
-	   if PageCount>=1 and PageCount<=10 then
-		 for i=1 to PageCount
-		   if (pageid-i =0) then
-              response.write "<font color=green> "&i&"</font> "
-		   else
-             response.write " <a href=javascript:gtpage('"&i&"') style='cursor:hand' >"&i&"</a>"
-		   end if
-		 next
-	   elseif PageCount>11 then
-	      if pageid<=5 then
-		     for i=1 to 10
-		       if (pageid-i =0) then
-                 response.write "<font color=green> "&i&"</font> "
-		       else
-                 response.write " <a href=javascript:gtpage('"&i&"') style='cursor:hand' >"&i&"</a>"
-		       end if
-		     next
-		  else
-		    for i=(pageid-4) to (pageid+5)
-		       if (pageid-i =0) then
-                 response.write "<font color=green> "&i&"</font> "
-		       elseif i=<pagecount then
-                 response.write " <a href=javascript:gtpage('"&i&"') style='cursor:hand' >"&i&"</a>"
-		       end if
-			next
-		  end if
-	   end if
-  end sub
-%>         
+              </table>
+           
               </body>
+
               </html>

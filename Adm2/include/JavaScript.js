@@ -4,7 +4,10 @@
 function doLogin(){
 
    document.fm1.action="Login.asp";
-     
+   
+   
+
+   
    if (document.fm1.UserID.value == "")
 {
    alert("請輸入用戶編號.");
@@ -56,12 +59,26 @@ total = total + temp;
 //Determine the checksum. if modDigit = 10, modDigit = 0
 modDigit = (10 - ((total + 17) % 10)) % 10;
 
+var CouponType = bc.substr(4,2);
+var ProductType = document.getElementById("ProductType");
+
+if (CouponType == 73 || CouponType == 83){
+if (ProductType.options[ProductType.selectedIndex].value === "CS"){
+alert("驗證失敗 - 類型不對!");
+return false;
+}
+}
+
+if (CouponType == 24){
+if (ProductType.options[ProductType.selectedIndex].value != 54){
+alert("驗證失敗 - 類型不對!");
+return false;
+}
+}
 
 if (checkdigit != modDigit){
 alert("驗證失敗 - 禮券無效!");
-document.barCodeForm.Barcode.focus();
 return false;
-
 }
 
 
@@ -69,7 +86,9 @@ return false;
 //document.barCodeForm.barCodeShow.value = barcode1;
 document.barCodeForm.action="execute.asp";
 document.barCodeForm.submit();
+//return false;
 }
+
 
 
 

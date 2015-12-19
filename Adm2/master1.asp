@@ -293,7 +293,7 @@ Excel Type :
 <td>Digital</td>
 <td>Issue Date</td>
 <td >Expiry Date</td>
-<td >Machine No</td>
+
 <td>Excel<br/> Type</td>
 <td>Period</td>
 <td>Print Excel</td>
@@ -354,10 +354,6 @@ Excel Type :
 
 <td >
 <% = frs("Expiry_Date") %>
-</td>
-
-<td >
-<% = frs("MachineNo") %>
 </td>
 
 

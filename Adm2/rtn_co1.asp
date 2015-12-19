@@ -135,7 +135,7 @@ document.fm1.submit();
                      <tr> 
                           
                         <td height="28" align="center"><font color="#FF6600"><b>
-	Master Coupon</b></font></td>
+	Return Coupon</b></font></td>
                         </tr>
                         <tr> 
                           <td valign="top" align="center">
@@ -158,19 +158,21 @@ document.fm1.submit();
 
    
       
-   fsql = "SELECT m.Product_Type as ProductType, * FROM MasterCoupon m INNER JOIN CouponRequest c "
+   fsql = "SELECT * , m.product_type as 'Product_Type' FROM MasterCoupon m INNER JOIN CouponRequest c "
 
    fsql = fsql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
 
-   fsql = fsql & "AND cast(m.Face_Value as decimal(9,0))   = c.FaceValue AND m.Coupon_Number <="
+   fsql = fsql & "AND cast(m.Face_Value as decimal(9,0))   = c.FaceValue "
 
-   fsql = fsql & "c.End_Range AND m.Coupon_Number >= c.Start_Range where 1 =1 " 
+   fsql = fsql & "AND m.Coupon_Number <= c.End_Range "
+
+   fsql = fsql & "AND m.Coupon_Number >= c.Start_Range where 1 =1 " 
 
 
    ' Check Date Range
    if From_Date <> "" then
 
-   fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 101) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 101) "
+   fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 110) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 110) "
    
    end if
 
@@ -218,7 +220,7 @@ document.fm1.submit();
 
    fsql = fsql & " order by m.ID desc"
 
-        'response.write fsql
+       ' response.write fsql
         'response.end
 
 ' Setting the page
@@ -290,10 +292,8 @@ Excel Type :
 <td  height="28">Batch</td>
 <td  height="28">Coupon Number</td>
 <td  height="28">Product<br/>Type</td>
-<td>Digital</td>
 <td>Issue Date</td>
 <td >Expiry Date</td>
-<td >Machine No</td>
 <td>Excel<br/> Type</td>
 <td>Period</td>
 <td>Print Excel</td>
@@ -340,13 +340,8 @@ Excel Type :
 </td>
 
 <td  height="28">
-<% = frs("ProductType") %>
+<% = frs("Product_Type") %>
 </td>
-
-<td >
-<% = frs("Digital") %>
-</td>
-
 
 <td >
 <% = frs("Issue_Date") %>
@@ -354,10 +349,6 @@ Excel Type :
 
 <td >
 <% = frs("Expiry_Date") %>
-</td>
-
-<td >
-<% = frs("MachineNo") %>
 </td>
 
 
@@ -430,7 +421,7 @@ Excel Type :
  </td>
                               </tr>
                               <tr> 
-                                <td valign="top">¡@</td>
+                                <td valign="top"></td>
                               </tr>
                             </table>
                           </form>

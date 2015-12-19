@@ -2,11 +2,11 @@
 <!--#include file ="js/OVERLIB.JS" -->
 <!--#include file ="js/OVERLIB_MINI.JS" -->
 <!--#include file ="js/select_date.JS" -->
-
 <% 
 
 ' check which page is it
 pageid=request("pageid")
+
 
 From_Date      = Request.Form("From_Date")
 To_Date        = Request.Form("To_Date")
@@ -14,8 +14,12 @@ Coupon_Type    = Request.Form("Coupon_Type")
 Station        = Request.Form("Station")
 Coupon_Batch   = Request.Form("Coupon_Batch")
 Coupon_Number  = Request.Form("Coupon_Number")
+Print_Excel    = Request.Form("Print_Excel")
 Face_Value     = Request.Form("Face_Value")
+Print_Excel    = Request.Form("Print_Excel")
 Excel_Type     = Request.Form("Excel_Type")
+
+
 
 
 %>
@@ -26,56 +30,23 @@ Excel_Type     = Request.Form("Excel_Type")
 <link rel="stylesheet" type="text/css" href="include/hse.css" />
 <SCRIPT language=JavaScript>
 <!--
-function delcheck(){
-k=0;
-document.fm1.action="execute1.asp"
-	if (document.fm1.mid!=null)
-	{
-		for(i=0;i<document.fm1.mid.length;i++)
-		{
-			if(document.fm1.mid[i].checked)
-			  {
-			  k=1;
-			  i=1;
-			  break;
-			  }
-		}
-		if(i==0)
-		{
-			if (!document.fm1.mid.checked)
-               k=0;
-			else
-               k=1;
-		}
-	}
-
-if (k==0)
-  alert("You must  select one record at least !");	
-else if (k==1)
- {
-  var msg = "Are you sure ?";
-  if (confirm(msg)==true)
-   {
-    document.fm1.whatdo.value="del_mtr";
-    document.fm1.submit();
-   }
- }
-
-}
-
-
-
 
 function gtpage(what)
 {
 document.fm1.pageid.value=what;
-document.fm1.action="master1.asp"
+document.fm1.action="rd_r_co1.asp"
 document.fm1.submit();
 }
 
 function findenum()
 {
-document.fm1.action="master1.asp"
+document.fm1.action="rd_r_co1.asp"
+document.fm1.submit();
+}
+
+function exportExcel()
+{
+document.fm1.action="rd_co_r_excel1.asp"
 document.fm1.submit();
 }
 //-->
@@ -128,19 +99,19 @@ document.fm1.submit();
           <td height="100%" align="middle">
 
 
- <table width="100%" border="0" cellpadding=0 cellspacing="0" bgcolor="#FFFFFF" height="100%">
+ <table width="100%" border="0" cellpadding=2 cellspacing="0" bgcolor="#FFFFFF" height="100%">
                 <tr>
                   <td valign="top" align="center" bgcolor="#E6EBEF">
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#E6EBEF" class="normal">
+                    <table width="100%" border="0" cellpadding="2" cellspacing="0" bgcolor="#E6EBEF" class="normal">
                      <tr> 
                           
                         <td height="28" align="center"><font color="#FF6600"><b>
-	Master Coupon</b></font></td>
+Redemption Raw Coupon</b></font></td>
                         </tr>
                         <tr> 
                           <td valign="top" align="center">
                             <form name=fm1 method=post>
-                            <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="normal">
+                            <table width="100%" border="0" cellpadding="4" cellspacing="0" bgcolor="#FFFFFF" class="normal">
 			 
                               <tr> 
                                 <td height="28"> 
@@ -155,94 +126,11 @@ document.fm1.submit();
         findnum=replace(findnum,"'","''")
    
 ' Start the queries
+         
+      set frs = server.createobject("adodb.recordset")
+      'response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
+	  frs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
 
-   
-      
-   fsql = "SELECT m.Product_Type as ProductType, * FROM MasterCoupon m INNER JOIN CouponRequest c "
-
-   fsql = fsql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
-
-   fsql = fsql & "AND cast(m.Face_Value as decimal(9,0))   = c.FaceValue AND m.Coupon_Number <="
-
-   fsql = fsql & "c.End_Range AND m.Coupon_Number >= c.Start_Range where 1 =1 " 
-
-
-   ' Check Date Range
-   if From_Date <> "" then
-
-   fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 101) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 101) "
-   
-   end if
-
-   ' Check Station
-   if Station <> "" then
-
-   fsql = fsql & " and m.RequestedID = '" & Station & "' "
-   
-   end if
-
-   ' Coupon Type
-   if Coupon_Type <> "" then
-
-   fsql = fsql & " and c.Product_Type = '" & Coupon_Type & "' "
-   
-   end if
-
-   ' Batch
-   if Coupon_Batch <> "" then
-
-   fsql = fsql & " and c.Batch = '" & Coupon_Batch & "' "
-   
-   end if
-
-   ' Face Value
-   if Face_Value <> "" then
-
-   fsql = fsql & " and c.FaceValue like '%" & Face_Value & "%' "
-   
-   end if
-
-   ' Check Coupon Number
-   if Coupon_Number <> "" then
-
-   fsql = fsql & " and m.Coupon_Number like '%" & Coupon_Number & "%' "
-   
-   end if
-
-  ' Check Excel type
-   if Excel_type <> "" then
-
-   fsql = fsql & " and c.Excel_type = '" & Excel_type & "' "
-   
-   end if
-
-   fsql = fsql & " order by m.ID desc"
-
-        'response.write fsql
-        'response.end
-
-' Setting the page
-
-        set frs=createobject("adodb.recordset")
-		frs.cursortype=1
-		frs.locktype=1
-        frs.open fsql,conn
-
-       if frs.RecordCount=0 then
-           response.write "<font color=red>No Record</font>"
-       else
-          findrecord=frs.recordcount
-          response.write "Total <font color=red>"&findrecord&"</font> Records ; Total <font color=blue>"
-
-         frs.PageSize = 10
-
-' Call the function to count the page.
-
-         call countpage(frs.PageCount,pageid)
-         end if
-	     'response.write "&nbsp;&nbsp;<input type='text' name='findnum' size='13' value='"&findnum&"'>"
-		 'response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"
-	   
 %>
 
 
@@ -252,7 +140,6 @@ Date From:
 To Date:
 <input type="text" name="To_Date" size="10" value="<% = To_Date %>">
 <a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
-
 Station
 <input type="text" name="Station" size="3" maxlength="3" value="<% = Station %>">
 Coupon Type
@@ -262,13 +149,25 @@ Batch
 Face Value
 <input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
 Coupon Number
-<input type="text" name="Coupon_Number" size="7" maxlength="6" value="<% = Coupon_Number %>">
+<input type="text" name="Coupon_Number" size="6" maxlength="6" value="<% = Coupon_Number %>">
+
+
+Print Excel: 
+	<select size="1" name="Print_Excel" class="common">
+            <option value="All">All</option>
+			<option value="N">No</option>
+			<option value="Y">Yes</option>
+
+	</select>
 Excel Type :
 <input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
-
 <input type="button" value="   Search   " onClick="findenum();" class="common">
-	   
 
+<% if From_Date <> "" Then %>
+
+<input type="button" value="   Export to Excel   " onClick="exportExcel();" class="common">
+
+<% End If %>
    </td>
       </tr>
          <tr> 
@@ -280,22 +179,21 @@ Excel Type :
 %>
 
 
-   <table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
-     <tr bgcolor="#DFDFDF">
-<td ></td>
+<table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
+<tr bgcolor="#DFDFDF">
+
 <td height="28">Present Date</td>
+<td height="28">Present Time</td>
+
 <td height="28">Station</td>
-<td>Face Value</td>
 <td height="28">Coupon<br/>Type</td>
 <td  height="28">Batch</td>
 <td  height="28">Coupon Number</td>
 <td  height="28">Product<br/>Type</td>
-<td>Digital</td>
 <td>Issue Date</td>
 <td >Expiry Date</td>
-<td >Machine No</td>
 <td>Excel<br/> Type</td>
-<td>Period</td>
+
 <td>Print Excel</td>
 <td>Print Excel Date</td>
 </tr>
@@ -304,71 +202,46 @@ Excel Type :
 
 
  i=0
- if frs.recordcount>0 then
-  frs.AbsolutePage = pageid
-  do while (frs.PageSize-i)
-   if frs.eof then exit do
-   i=i+1
-   if flage then
-     mycolor="#ffffff"
-   else
-	 mycolor="#efefef"
-   end if
+ 
+ 
+  do while not frs.EoF
   
 %>
    <tr>
-<td width="26">
-<input type="checkbox" name="mid" value="<% = frs("id") %>">
-</td>
 
-<td align=center width="95" height="28"><% = frs("Present_Date")%></td>
+<td align=center width="95" height="28"><% = FormatDateTime(frs("Present Date"),2)%></td>
+<td align=center width="95" height="28"><% = FormatDateTime(frs("Present Date"),4)%></td>
+
 <td  height="28">
-<% = frs("RequestedID") %>
+<% = frs("Station") %>
+</td>
+<td  height="28"><% = frs("Coupon Type") %>
 </td>
 
-<td >
-<% = frs("FaceValue") %>
+<td height="28"><% = frs("Batch") %>
 </td>
 
-<td  height="28"><% = frs("Coupon_Type") %>
-</td>
-
-<td height="28"><% = frs("Coupon_Batch") %>
-</td>
-
-<td  height="28"><% = frs("Coupon_number") %>
+<td  height="28"><% = frs("Coupon number") %>
 </td>
 
 <td  height="28">
-<% = frs("ProductType") %>
+<% = frs("Product Type") %>
 </td>
 
 <td >
-<% = frs("Digital") %>
+<% = frs("Issue Date") %>
+</td>
+
+<td >
+<% = frs("Expiry Date") %>
 </td>
 
 
 <td >
-<% = frs("Issue_Date") %>
-</td>
-
-<td >
-<% = frs("Expiry_Date") %>
-</td>
-
-<td >
-<% = frs("MachineNo") %>
+<% = frs("Excel Type") %>
 </td>
 
 
-
-<td >
-<% = frs("Excel_Type") %>
-</td>
-
-<td >
-<% = frs("Period") %>
-</td>
 
 <td >
 <% = frs("Status") %>
@@ -379,10 +252,10 @@ Excel Type :
 </td>
 </tr>
 <%
-   flage=not flage
+   
    frs.movenext
   loop
- end if
+ 
   %>
 
                                   </table>
@@ -417,7 +290,7 @@ Excel Type :
                               <tr> 
                                 <td height="28" align="center"> 
 <%
-   response.write "<input type='button' value='    Delete    ' onClick='delcheck();' class='common'>"
+   'response.write "<input type='button' value='    Delete    ' onClick='delcheck();' class='common'>"
    response.write "<input type=hidden value='' name=whatdo>"
    response.write "<input type=hidden value="&pageid&" name=pageid>"
 
@@ -430,7 +303,7 @@ Excel Type :
  </td>
                               </tr>
                               <tr> 
-                                <td valign="top">¡@</td>
+                                <td valign="top"></td>
                               </tr>
                             </table>
                           </form>

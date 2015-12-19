@@ -1,20 +1,18 @@
  <!--#include file="include/SQLConn.inc" -->
 <%
 
+   IPAddress = Request.ServerVariables("REMOTE_ADDR")
+
+   ScanDate = Now()
 
    Set Rs1 = Server.CreateObject("Adodb.Recordset")
    Set Rs2 = Server.CreateObject("Adodb.Recordset")
    Set Rs3 = Server.CreateObject("Adodb.Recordset")
  
-   StationID = Request("StationID")
-
    Barcode    = Request("Barcode")
 
    ProductType = Request("ProductType")
-
-   CarPlate   = Request("CarPlate")
-
-  
+ 
 
    response.write "Station ID:  " & Stationid & "<br>"
 
@@ -35,7 +33,7 @@
            Message = "驗證失敗 - 禮券無效 "
 
 
-    Response.Redirect  "CouponVerification2.asp?&ProductType="&ProductType&"&Color=2&Message="&Message
+    Response.Redirect  "CouponVerification.asp?&ProductType="&ProductType&"&Color=2&Message="&Message
       
  
    Else
@@ -48,7 +46,7 @@
         
           
 
-    Response.Redirect  "CouponVerification2.asp?&ProductType="&ProductType&"&Color=2&Message="&Message
+    Response.Redirect  "CouponVerification.asp?&ProductType="&ProductType&"&Color=2&Message="&Message
       
 
        End if
@@ -88,13 +86,13 @@
 
      
 
-          Rs3.Open ("Exec InsertCoupon '"&Barcode&"', '"&StationID&"','"&ProductType&"','"&CarPlate&"'"), Conn, 3, 1
+          Rs3.Open ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'"), Conn, 3, 1
 
 
           End if
 
 
-         Response.Redirect  "CouponVerification2.asp?&ProductType="&ProductType&"&Color="&Color&"&Message="&Message
+         Response.Redirect  "CouponVerification.asp?&ProductType="&ProductType&"&Color="&Color&"&Message="&Message
       
 
           Rs2.close
