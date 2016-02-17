@@ -13,9 +13,6 @@
 
    ProductType = Request("ProductType")
  
-
-   response.write "Station ID:  " & Stationid & "<br>"
-
    response.write "Barcode: " & Barcode & "<br>"
 
    'response.end
@@ -61,6 +58,8 @@
 
           Response.write ("Exec CheckCouponExist '"&Barcode&"'")
 
+          'response.end
+
      
          If Not Rs2.EoF Then
 
@@ -70,11 +69,18 @@
 
          StationName  = Rs2("StationName")
 
-         'response.write Present_Date
+         response.write Present_Date
          'response.end
+
          Color   = "2"
 
-         Message = "驗證失敗 - 重複使用! 禮券 " & Barcode & " 曾於 " & Present_Date & " 在"& StationName & "站驗證!"
+         Message = "驗證失敗-重複使用! 禮券 " & Barcode 
+
+         Message2 = " 曾於 " & Present_Date & " 在"& StationName & "站驗證!"
+
+
+         Response.Redirect  "CouponVerification.asp?&ProductType="&ProductType&"&Color="&Color&"&Message="&Message&"&Message2="&Message2
+      
          
        
          Else
@@ -84,16 +90,19 @@
 
           Color   = "1"
 
-     
-
-          Rs3.Open ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'"), Conn, 3, 1
+          Response.write ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"'")
 
 
-          End if
+          Rs3.Open ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"'"), Conn, 3, 1
 
 
-         Response.Redirect  "CouponVerification.asp?&ProductType="&ProductType&"&Color="&Color&"&Message="&Message
+          Response.Redirect  "CouponVerification.asp?&ProductType="&ProductType&"&Color="&Color&"&Message="&Message
       
+
+         End if
+
+
+       
 
           Rs2.close
           set Rs2 = nothing

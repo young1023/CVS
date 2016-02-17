@@ -2,12 +2,12 @@
 <%
    
 
-    IPAddress = Request("IPAddress")
+    Id = Request("Id")
 
 
-    If IPAddress <> "" then
+    If Id <> "" then
 
-      sql = "Select * from Station where IPAddress = '"& IPAddress &"'"
+      sql = "Select * from Station where stationid = '"& Id &"'"
 
       Set rs = Conn.Execute(sql)
 
@@ -23,6 +23,8 @@
     SoldToCode = rs("SoldToCode")
 
     SAPCode = rs("SAPCode")
+
+    IPAddress = rs("IPAddress")
 
     Outdoor = trim(rs("Outdoor"))
 
@@ -191,8 +193,9 @@ document.fm1.submit();
 <input type="button" value="  Submit  " onClick="dosubmit();" class="common">
 <input type="Reset" value="  Reset  " class="common">
 
-<%  If IPAddress <> "" Then %>
-<input type=hidden name=whatdo value='edit_st'>
+<%  If ID <> "" Then %>
+<input type=hidden name=whatdo value="edit_st">
+<input type=hidden name=id value="<% = ID %>">
 <% Else %>
 <input type=hidden name=whatdo value='add_st'>
 <%  end if %>

@@ -24,10 +24,10 @@ flag = trim(request.form("whatdo"))
 if flag = "add_pco" then
  
   Face_Value = Cint(replace(trim(request.form("Face_Value")),"'","''"))
-  Product_Type = Cint(replace(trim(request.form("Product_Type")),"'","''"))
+  Product_Type = replace(trim(request.form("Product_Type")),"'","''")
   Batch = Cint(replace(trim(request.form("Batch")),"'","''"))
-  Start_Range = Cint(replace(trim(request.form("Start_Range")),"'","''"))
-  End_Range = Cint(request.form("End_Range"))
+  Start_Range = replace(trim(request.form("Start_Range")),"'","''")
+  End_Range = request.form("End_Range")
   Digital = trim(request.form("Digital")) 
   Category = trim(request.form("Category"))
   Dealer = trim(request.form("Dealer")) 
@@ -54,7 +54,7 @@ if flag = "add_pco" then
      sql1 = sql1 & " and Cast(End_Range as float) > " &End_Range& ")"
 
      response.write sql1
-     response.end
+     'response.end
 
      Set rs1 = Conn.Execute(sql1)
 
@@ -199,7 +199,7 @@ elseif flag ="add_st" then
 
 elseif flag ="edit_st" then
 
-  
+  id       = request.form("id")
   station = replace(trim(request.form("station")),"'","''")
   ipaddress = replace(trim(request.form("ipaddress")),"'","''")
   StationName = replace(trim(request.form("StationName")),"'","''")
@@ -217,9 +217,9 @@ elseif flag ="edit_st" then
 
       sql = sql & "SoldToCode='"&SoldToCode&"',  ShipToCode='"&ShipToCode&"', "
 
-      sql = sql & "Outdoor="&Outdoor&" where IPAddress ='"& IPAddress &"'"
+      sql = sql & "Outdoor="&Outdoor&" where stationid ="& Id
 
-      'response.write sql
+      response.write sql
       'response.end
      conn.execute(sql)
      message="Station is edited."

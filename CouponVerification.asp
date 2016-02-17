@@ -1,6 +1,7 @@
 <!--#include file="include/SQLConn.inc" -->
 <%
 
+' Get the IP address of the client PC
 UserIPAddress = Request.ServerVariables("REMOTE_ADDR")
 'response.write UserIPAddress
 
@@ -11,7 +12,7 @@ sql1 = "Select Station , LoginUser From Station Where IPAddress ='" &UserIPAddre
 Set Rs1 = Conn.Execute(sql1)
 
 
-
+' Retrieve the product type. if there is no product type, set the product type to 54 - V Power
 ProductType = Request("ProductType")
 
 If ProductType = "" then
@@ -19,8 +20,6 @@ If ProductType = "" then
    ProductType = "54"
 
 End If
-
-
 
 %>
 
@@ -34,48 +33,6 @@ End If
 <meta name="viewport" content="user-scalable=no" />
 <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
 <!--#include file="include/JavaScript.js" -->
-<SCRIPT language=JavaScript>
-<!--
-onload=function(){ attachHandlers(); }
-
-function attachHandlers(){
-  var the_nums = document.getElementsByName("number");
-  for (var i=0; i < the_nums.length; i++) { the_nums[i].onclick=inputNumbers; }
-}
-
-function inputNumbers() {
-  var the_field = document.getElementById('bc');
-  var the_value = this.value;
-  switch (the_value) {
-    case '<' :
-      the_field.value = the_field.value.substr(0, the_field.value.length - 1);
-      break;
-    default : document.getElementById("bc").value += the_value;
-      break;
-  }
-  document.getElementById('bc').focus();
-  return true;
-}
-
-
-function ShowKey1(){   
-   var the_keypad1 = document.getElementById('keypad1');
-   the_keypad1.style.display ="block";
-
-}
-
-
-
-function stopEnterKey(evt) {
-        var evt = (evt) ? evt : ((event) ? event : null);
-        var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-        if ((evt.keyCode == 13) && (node.type == "text")) { return false; }
-    }
-    document.onkeypress = stopEnterKey;
-
-
-//-->
-</SCRIPT>
 <style>
 /*
   Hide radio button (the round disc)
@@ -93,7 +50,7 @@ input[type=radio] {
 input[type=radio] + label {
     display:inline-block;
     margin: -2px;
-    padding: 10px 80px;
+    padding: 10px 50px;
     background-color: #9fdf9f;
     text-align: center;
     text-shadow: 0 1px 1px rgba(255,255,255,0.75);
@@ -115,12 +72,6 @@ input[type=radio]:checked + label {
     border-color: #cc7a00;
 }
 
-.btns
-{  
-width: 30px;
-height:10px; 
-}
-
 </style>
 </HEAD>
 <body class="homepage" onload="document.barCodeForm.Barcode.focus();">
@@ -140,22 +91,23 @@ height:10px;
 
 <table width="80%" border="0"  cellpadding="10" cellspacing="0" class="Ver">
 
-
      <tr>
 
-       <td width="30%" >
+       <td width="25%" >
 
          <input type="radio" id="radio1" name="ProductType" value="54" <% If ProductType = "54" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
-         <label for="radio1">V  能量</label>
+         <label for="radio1">V 能量</label>
+
         </td>
 
-		<td width="30%" >
+		<td width="25%" >
 
          <input type="radio" id="radio2" name="ProductType" value="53" <% If ProductType = "53" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
          <label for="radio2" >無鉛</label>
+
         </td> 
 
-	    <td width="30%" >
+	    <td width="25%" >
 
          <input type="radio" id="radio3" name="ProductType" value="52" <% If ProductType = "52" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
          <label for="radio3">柴油</label>
@@ -164,29 +116,38 @@ height:10px;
         </td> 
 
   
+         <td width="25%" >
+
+ 
+         <input type="radio" id="radio4" name="ProductType" value="LP" <% If ProductType = "CR" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+
+          <label for="radio4">石油氣</label>
+
+      
+  
+        </td> 
 	 
      </tr>
 
-
-
+                                        
      <tr >
 
         <td >
 
-      
-         <input type="radio" id="radio4" name="ProductType" value="CR" <% If ProductType = "CR" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+         <input type="radio" id="radio7" name="ProductType" value="CR" <% If ProductType = "CR" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
 
-          <label for="radio4">便利店</label>
-
-        
+          <label for="radio7">便利店</label>      
 
         </td>
     	   
 
 	    <td >
+ 
 
          <input type="radio" id="radio5" name="ProductType" value="LB" <% If ProductType = "LB" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+
          <label for="radio5">機油</label>
+
         </td> 
 
 	    <td >
@@ -196,60 +157,41 @@ height:10px;
 
         </td> 
 
+
+        <td >
+   
+    
+        </td>
+
         </tr>
 
-
+ 
     <tr>
 
 	    <td>禮券號碼 
 
         </td> 
 
-		<td >
+		<td colspan="2">
 
 					
-<input name="Barcode" class="ver" type="text" autocomplete="off" value="" size="18" maxlength="15" id="bc" onkeypress="ShowKey1()">
+   <input name="Barcode" class="ver" type="text" autocomplete="off" value="" size="18" maxlength="16" id="bc" onkeypress="ShowKey1()">
 
          </td>
 
          <td >
 
- 
-	<input type="Submit" Name="Button" value="   確定   " style="background: #9fdf9f;border:1px solid #00ff00;font-size:46px">
+    <input name="StationID" type="hidden" value="<%=StationID%>">
 
+	<input type="Submit" Name="Button" value="   確定   " style="background: #9fdf9f;border:1px solid #00ff00;font-size:38px">
 
-
-    
-<div id="keypad1" style="width:135px;float:left;display:none;">
- 
-    <div id="row1">
-     <input type="button" name="number" value="1" id="_1" class="btns">
-     <input type="button" name="number" value="2" id="_2" class="btns">
-     <input type="button" name="number" value="3" id="_3" class="btns">
-    </div>
-    <div id="row2">
-     <input type="button" name="number" value="4" id="_4" class="btns">
-     <input type="button" name="number" value="5" id="_5" class="btns">
-     <input type="button" name="number" value="6" id="_6" class="btns">
-    </div>
-    <div id="row3">
-     <input type="button" name="number" value="7" id="_7" class="btns">
-     <input type="button" name="number" value="8" id="_8" class="btns">
-     <input type="button" name="number" value="9" id="_9" class="btns">
-    </div>
-    <div id="row4">
-     <input type="button" name="number" value="0" id="_0" class="btns">
-     <input type="button" name="number" value="<" id="chgsign" class="btns">
-    </div>
-   </div>
 
         </td>
 
      </tr>
 
-
+  
 </table>
-
 
 
 </form>
@@ -275,7 +217,7 @@ height:10px;
 
 %>
 
-<table width="80%" border="0"  cellpadding="30" cellspacing="2" bgcolor="<%=bgcolor%>" class="Message">
+<table width="80%" border="0"  cellpadding="20" cellspacing="2" bgcolor="<%=bgcolor%>" class="Message">
 
 
      <tr>
@@ -284,26 +226,21 @@ height:10px;
 
 
 
-
-
-
  <%
 
         Message = Request("Message")
+
+        Message2 = Request("Message2")
        
       
         If Message <> "" then
 
-%>
 
- 
-
+        Response.write Message & "<br/><br/>" 
 
 
-<%
+        Response.write Message2
 
-
-        Response.write Message
 
 
         End If

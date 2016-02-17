@@ -141,8 +141,16 @@ Weekly Report</b></font></td>
 ' Start the queries
          
       set frs = server.createobject("adodb.recordset")
-      'response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
+      response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
 	  frs.open ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
+
+
+' Calculate the total
+
+      set frs1 = server.createobject("adodb.recordset")
+      response.write  ("Exec WeeklyReport_Total '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
+	  frs1.open ("Exec WeeklyReport_Total '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
+
 
 %>
 
@@ -155,8 +163,8 @@ To Date:
 <a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 Print Excel: 
 	<select size="1" name="Print_Excel" class="common">
-			<option value="N">No</option>
-			<option value="Y">Yes</option>
+			<option value="N" <%If Print_Excel="N" Then%>Selected<%End If%>>No</option>
+			<option value="Y" <%If Print_Excel="Y" Then%>Selected<%End If%>>Yes</option>
 
 	</select>
 Excel Type :
@@ -218,6 +226,10 @@ Excel Type :
 <% = frs("Excel_Type") %>
 </td>
 
+<td  height="28">
+<% = frs("Station") %>
+</td>
+
 <td >
 <% = frs("ShipToCode") %>
 </td>
@@ -227,14 +239,59 @@ Excel Type :
 </td>
 
 </tr>
+
+
+
+
+ 
 <%
    
    frs.movenext
   loop
+
+%>
+
+    </table>
+
+<br>
+
+
+ <table border="0" cellpadding="1" width="40%" cellspacing="1" class="normal">
+
+     <tr bgcolor="#DFDFDF">
+
+<%
+
+    ' Total
+    do while not frs1.EoF
  
   %>
 
+  <tr>
+
+<td>Total Amount of Excel Type: <% = frs1("Excel_Type") %>
+</td>
+
+<td height="28"><% = frs1("Total") %>
+</td>
+
+  </tr>
+
+<%
+   
+   frs1.movenext
+  loop
+
+%>
+
+
+
                                   </table>
+
+
+
+
+
                                 </td>
                               </tr>
                               <tr> 
@@ -266,12 +323,13 @@ Excel Type :
                               <tr> 
                                 <td height="28" align="center"> 
 <%
-   response.write "<input type='button' value='    Delete    ' onClick='delcheck();' class='common'>"
    response.write "<input type=hidden value='' name=whatdo>"
    response.write "<input type=hidden value="&pageid&" name=pageid>"
 
-		  frs.close
+		      frs.close
 			  set frs=nothing
+              frs1.close
+			  set frs1=nothing
 			  conn.close
 			  set conn=nothing
 %>

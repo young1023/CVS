@@ -199,7 +199,7 @@ function dosubmit(){
 <input type="checkbox" name="mid" value="<% = frs("StationID") %>">
 </td>
 <td  height="28">
-<a href="newstation1.asp?Ipaddress=<%=frs("IPAddress")%>"><% = frs("Station") %></a>
+<a href="newstation1.asp?id=<%=frs("stationid")%>"><% = frs("Station") %></a>
 </td>
 <td  height="28"><% = frs("IPAddress") %>
 </td>
@@ -292,14 +292,14 @@ else if (k==1)
 function gtpage(what)
 {
 document.fm1.pageid.value=what;
-document.fm1.action="station.asp"
+document.fm1.action="station1.asp"
 document.fm1.submit();
 }
 
 function findenum()
 {
 document.fm1.pageid.value=1;
-document.fm1.action="station.asp"
+document.fm1.action="station1.asp"
 document.fm1.submit();
 }
 //-->
