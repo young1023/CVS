@@ -2,12 +2,12 @@
 <%
    
 
-    Id = Request("Id")
+    IPAddress = Request("IPAddress")
 
 
-    If Id <> "" then
+    If IPAddress <> "" then
 
-      sql = "Select * from Station where stationid = '"& Id &"'"
+      sql = "Select * from Station where IPAddress = '"& IPAddress &"'"
 
       Set rs = Conn.Execute(sql)
 
@@ -24,9 +24,9 @@
 
     SAPCode = rs("SAPCode")
 
-    IPAddress = rs("IPAddress")
-
     Outdoor = trim(rs("Outdoor"))
+
+'response.write rs("stationid")
 
     End if
 %>
@@ -57,8 +57,19 @@ if (document.fm1.IPAddress.value == "")
 document.fm1.submit();
 }
 
+function IPAddressKeyOnly(e) {
+    var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+    if (keyCode != 46 && keyCode > 31 && (keyCode < 48 || keyCode > 57))
+       return false;
+    return true;
+}
 
-
+function DigitOnly(e) {
+    var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+    if (keyCode > 31 && (keyCode < 48 || keyCode > 57))
+       return false;
+    return true;
+}
 //-->
 </SCRIPT>
 </head>
@@ -124,13 +135,13 @@ document.fm1.submit();
 
  <tr><td>Station: </td>
       <td>
-<input name="Station" type=text value="<% = station %>">	    
+<input name="Station" type=text value="<% = station %>" onkeypress="return DigitOnly(event)">	    
 </td>
    </tr>
  <tr>
 <td>IP Addres:</td>
 <td>
-<input name="IPAddress" type=text value="<% =IPAddress %>">	    
+<input name="IPAddress" type=text value="<% =IPAddress %>" onkeypress="return IPAddressKeyOnly(event)">	    
 </td>
 </tr>
 
@@ -142,7 +153,7 @@ document.fm1.submit();
 
 <tr><td>Machine No:</td>
       <td>
-<input name="MachineNo" type=text value="<% =MachineNo %>">	    
+<input name="MachineNo" type=text value="<% =MachineNo %>" onkeypress="return DigitOnly(event)">	    
 </td>
    </tr>
 
@@ -193,9 +204,8 @@ document.fm1.submit();
 <input type="button" value="  Submit  " onClick="dosubmit();" class="common">
 <input type="Reset" value="  Reset  " class="common">
 
-<%  If ID <> "" Then %>
-<input type=hidden name=whatdo value="edit_st">
-<input type=hidden name=id value="<% = ID %>">
+<%  If IPAddress <> "" Then %>
+<input type=hidden name=whatdo value='edit_st'>
 <% Else %>
 <input type=hidden name=whatdo value='add_st'>
 <%  end if %>

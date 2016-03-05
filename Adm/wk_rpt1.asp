@@ -10,8 +10,23 @@ pageid=request("pageid")
 
 
 From_Date   = Request.Form("From_Date")
+
+if From_Date = "" then
+   From_Date = formatdatetime(now(),2) 
+end if
+
 To_Date     = Request.Form("To_Date")
+
+if To_Date = "" then
+   To_Date = formatdatetime(now(),2) 
+end if
+
 Print_Excel = Request.Form("Print_Excel")
+
+if Print_Excel = "" Then
+   Print_Excel = "N"
+End If
+
 Excel_Type  = Request.Form("Excel_Type")
 whatdo      = Request.Form("Whatdo")
 
@@ -19,7 +34,7 @@ If whatdo = "printexcel" Then
 
 
       set rs = server.createobject("adodb.recordset")
-      response.write  ("Exec PrintExcel '"&From_Date&"', '"&To_Date&"', '"&Excel_Type&"' ") 
+      'response.write  ("Exec PrintExcel '"&From_Date&"', '"&To_Date&"', '"&Excel_Type&"' ") 
 	  rs.open ("Exec PrintExcel '"&From_Date&"', '"&To_Date&"', '"&Excel_Type&"' ") ,  conn,3,1
 
 
@@ -144,14 +159,6 @@ Weekly Report</b></font></td>
       response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
 	  frs.open ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
 
-
-' Calculate the total
-
-      set frs1 = server.createobject("adodb.recordset")
-      response.write  ("Exec WeeklyReport_Total '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
-	  frs1.open ("Exec WeeklyReport_Total '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
-
-
 %>
 
 
@@ -223,10 +230,16 @@ Excel Type :
 </td>
 
 <td  height="28">
-<% = frs("Excel_Type") %>
+<%
+   If frs("Excel_Type") <> "" then
+
+     Response.Write frs("Excel_Type")
+
+    End If
+%>
 </td>
 
-<td  height="28">
+<td >
 <% = frs("Station") %>
 </td>
 
@@ -239,19 +252,29 @@ Excel Type :
 </td>
 
 </tr>
-
-
-
-
- 
 <%
    
    frs.movenext
   loop
 
+ 
+  %>
+
+                                  </table>
+
+<%
+
+
+      ' Calculate the total
+
+      set frs1 = server.createobject("adodb.recordset")
+      'response.write  ("Exec WeeklyReport_Total '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
+      frs1.open ("Exec WeeklyReport_Total '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
+
+
 %>
 
-    </table>
+
 
 <br>
 
@@ -290,8 +313,6 @@ Excel Type :
 
 
 
-
-
                                 </td>
                               </tr>
                               <tr> 
@@ -326,10 +347,8 @@ Excel Type :
    response.write "<input type=hidden value='' name=whatdo>"
    response.write "<input type=hidden value="&pageid&" name=pageid>"
 
-		      frs.close
+		  frs.close
 			  set frs=nothing
-              frs1.close
-			  set frs1=nothing
 			  conn.close
 			  set conn=nothing
 %>

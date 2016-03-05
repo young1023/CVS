@@ -28,19 +28,15 @@ Excel_Type     = Request.Form("Excel_Type")
 
 
 '**************
-'Initialisation
-'**************
-Const adOpenStatic = 3
-Const adLockReadOnly = 1
-Const adCmdText = &H0001
+
 	
 
 ' Create a server recordset object
 
       set rs = server.createobject("adodb.recordset")
       'response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
-	  rs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
-
+      rs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
+        
 %>
 
 <html>
@@ -83,9 +79,7 @@ TD.caption
 <td  height="28">Batch</td>
 <td  height="28">Coupon Number</td>
 <td  height="28">Product<br/>Type</td>
-<td >Car Plate no.</td>
 <td  height="28">Sale<br/>Amount</td>
-<td  height="28">Sale<br/>Litre</td>
 <td>Issue Date</td>
 <td >Expiry Date</td>
 <td>Excel<br/> Type</td>
@@ -125,16 +119,8 @@ do while not rs.eof
 <% = rs("Product Type") %>
 </td>
 
-<td >
-<% = rs("Car no.") %>
-</td>
-
 <td>
 <% = rs("Sale Amount") %> 
-</td>
-
-<td >
-<% '= rs("SaleLitre") %>
 </td>
 
 <td >

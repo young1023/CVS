@@ -21,7 +21,7 @@ StationID = Rs1("Station")
 
 Else 
 
-Alert = "編號未設置, 請提供此電腦的 IP 地址 [ " & UserIPAddress & " ] 給系統管理員"
+'Alert = "編號未設置, 請提供此電腦的 IP 地址 [ " & UserIPAddress & " ] 給系統管理員"
 
 
 End If
@@ -112,7 +112,7 @@ End If
 		
 <% 
 
-If  StationID = 101 then
+If  StationID = 104  then
 
     Alert = "No unauthority PC is allowed to access the system."
 

@@ -34,12 +34,6 @@ function dosubmit(){
    document.fm1.CouponType.focus();
    return false;
   }
-if (document.fm1.ProductType.value == "")
-  {
-   alert("Please input product type.");
-   document.fm1.ProductType.focus();
-   return false;
-  }
 
 document.fm1.submit();
 }
@@ -116,7 +110,16 @@ document.fm1.submit();
  <tr>
 <td>Product Type:</td>
 <td>
-<input name="ProductType" type=text value="<% = ProductType %>">	    
+<select size="1" name="ProductType" class="common">
+			<option value="54" <%if ProductType = "54" then%>Selected<%End If%>>V 能量</option>
+			<option value="53" <%if ProductType = "53" then%>Selected<%End If%>>無鉛</option>
+			<option value="52" <%if ProductType = "52" then%>Selected<%End If%>>柴油</option>
+			<option value="55" <%if ProductType = "55" then%>Selected<%End If%>>石油氣</option>
+            <option value="CS" <%if ProductType = "CS" then%>Selected<%End If%>>便利店</option>
+            <option value="LB" <%if ProductType = "LB" then%>Selected<%End If%>>機油</option>
+            <option value="CW" <%if ProductType = "CW" then%>Selected<%End If%>>洗車</option>
+	</select> 	
+  
 </td>
 </tr>
      
@@ -135,7 +138,7 @@ document.fm1.submit();
 <input type="button" value="  Submit  " onClick="dosubmit();" class="common">
 <input type="Reset" value="  Reset  " class="common">
 
-<%  If IPAddress <> "" Then %>
+<%  If ProductType <> "" Then %>
 <input type=hidden name=whatdo value='edit_cp'>
 <% Else %>
 <input type=hidden name=whatdo value='add_cp'>

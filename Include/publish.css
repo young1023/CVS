@@ -16,17 +16,17 @@ left: 200;
 
 a { 
   text-decoration:none;
-  font-size:26px; 
+  font-size:16px; 
 }
 
 Table.Report
 { 
   position: relative;
-  top: 120;
+  top:80;
   border: 0; 
   text-decoration:none;
   font-family: arial; 
-  font-size:16px; 
+  font-size:10px; 
 } 
 
 Table.DailyReport
@@ -34,7 +34,7 @@ Table.DailyReport
   border: 0; 
   text-decoration:none;
   font-family: arial; 
-  font-size:14px; 
+  font-size:10px; 
   text-align: center;
 } 
 
@@ -113,9 +113,9 @@ input.ver
 
 }
 
-.page-break  { display: none; }
-
-
+.example {
+            page-break-after: always;
+        }
 
 
 
@@ -140,20 +140,21 @@ table
 table, td
 {
      padding: 2px 2px 2px 2px ;
-     border:1px dotted black;
+     border: 1pt dotted #000000;
      white-space: nowrap;
      text-align: center;
      font-size:10px;
      
 }
 
-Table.DailyReport
+Table.DailyReport 
 { 
   border: 0; 
   text-decoration:none;
   font-family: arial; 
   font-size:14px; 
   text-align: center;
+
 } 
 
 .noprint {
@@ -180,18 +181,6 @@ select
 
 }
 
-div.page
-{
-page-break-after: always;
-page-break-inside: avoid;
-}
-
-
-.page-break  
-{ 
- 
-page-break-before: always; 
-}
 
 
 .popup_middle
@@ -199,7 +188,6 @@ page-break-before: always;
  visibility:hidden;
 
 }
-
 
 
 

@@ -1,18 +1,11 @@
 <!--#include file="include/SQLConn.inc" -->
-<% 
-
-' check which page is it
-pageid=request("pageid")
-
-
-%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
 <title>Shell CVS Administration</title>
 <link rel="stylesheet" type="text/css" href="include/hse.css" />
 <SCRIPT language=JavaScript>
-<!-- 
+<!--
 function dosubmit(){
  document.fm1.action="newcoupon1.asp"; 
  document.fm1.submit();
@@ -96,12 +89,11 @@ function dosubmit(){
    
 ' Start the queries
       
-       fsql = "select * from CouponType where 1 =1 "
+       fsql = "select * from CouponType where 1 =1  "
 
-       if findnum <> "" Then
+       if findnum <> "" then
 
-
-       fsql = fsql & " and (CouponType = '" & findnum & "' or ProductType = '" & findnum & "')"
+       fsql = fsql & "and (CouponType like '%" & findnum &"%' or ProductTypes like '%" & findnum &"%') "
 
        end if
 
@@ -121,7 +113,7 @@ function dosubmit(){
            response.write "<font color=red>No Record</font>"
        else
           findrecord=frs.recordcount
-          response.write "Total <font color=red>"&findrecord&"</font> Records"
+          response.write "Total <font color=red>"&findrecord&"</font> Records ; Total <font color=blue>"
 
          frs.PageSize = 10
 
@@ -147,9 +139,12 @@ function dosubmit(){
    <table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
      <tr bgcolor="#DFDFDF">
 <td width="26"></td>
-<td height="28">Coupon Type</td>
+<td height="28">Coupon type</td>
 
-<td height="28">Product type</td>
+<td height="28">Product Type</td>
+
+
+
 
 </tr>
                                     <%
@@ -171,13 +166,16 @@ function dosubmit(){
 %>
    <tr>
 <td width="26">
-<input type="checkbox" name="mid" value="<% = frs("ID") %>">
+<input type="checkbox" name="mid" value="<% = frs("id") %>">
 </td>
 <td  height="28">
-<a href="newcoupon1.asp?ID=<%=frs("ID")%>"><% = frs("CouponType") %></a>
+<% = frs("CouponType") %>
 </td>
 <td  height="28"><% = frs("ProductType") %>
 </td>
+
+
+
 
 </tr>
 <%
@@ -286,9 +284,7 @@ document.fm1.submit();
                                                          
  </td>
                               </tr>
-                              <tr> 
-                                <td valign="top">　</td>
-                              </tr>
+                        
                             </table>
                           </form>
 

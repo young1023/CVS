@@ -24,7 +24,7 @@ Master List</a>
 Return Coupon</a>
 </td>
 <td align="right">
-<a href="rd_co1.asp" title="Redemption coupon" style="TEXT-DECORATION: none">
+<a href="rd_co2.asp" title="Redemption coupon" style="TEXT-DECORATION: none">
  Redemption Coupon</a>
 </td>
 <td align="right">

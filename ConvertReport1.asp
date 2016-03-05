@@ -148,10 +148,12 @@ Total = Total + frs("Face_Value")
 </td>
 
 <td>
-<% = frs("Product_Type") %>
+<% = frs("ProductType") %>
 </td>
 
+
 <td>
+<% = frs("MachineNo") %>
 
 </td>
 

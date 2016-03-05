@@ -88,6 +88,8 @@ if (document.fm1.Issue_date.value == "")
    return false;
   }
 
+
+
 document.fm1.submit();
 }
 
@@ -155,10 +157,6 @@ document.fm1.submit();
       <td colspan="2" class="BlueClr"><font size="5" face="Times New Roman, Times, serif">Create Pro Coupon </font></td>
     </tr>
     <tr> 
-      <td width="35%"> </td>
-      <td width="65%" align="right">Today is <% = submit_date %></td>
-    </tr>
-    <tr> 
       <td colspan="2"></td>
     </tr>
   <tr> 
@@ -169,7 +167,7 @@ document.fm1.submit();
       <td colspan="2" bordercolor="#999966" class="ValidHead"></td>
     </tr>
 
- <tr><td>Face Value: </td>
+ <tr><td width="30%">Face Value: </td>
       <td>
 <input name="Face_Value" type=text value="">	    
 </td>
@@ -230,13 +228,13 @@ document.fm1.submit();
 <input name="Canopy_Disc" type=text value="">	    
 </td>
    </tr>
-<tr><td>Expiry Date: (dd-mm-yyyy)</td>
+<tr><td>Expiry Date: (mm-dd-yyyy)</td>
       <td>
 <input name="Expiry_Date" type=text value="">
 <a href="javascript:show_calendar('fm1.Expiry_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 </td>
    </tr>
-<tr><td>Issue Date: (dd-mm-yyyy)
+<tr><td>Issue Date: (mm-dd-yyyy)
 </td>
       <td>
 <input name="Issue_date" type=text value="">

@@ -74,7 +74,7 @@ input[type=radio]:checked + label {
 
 </style>
 </HEAD>
-<body class="homepage" onload="document.barCodeForm.Barcode.focus();">
+<body class="homepage">
 
 <!--#include file="include/header.inc" -->
 
@@ -119,7 +119,7 @@ input[type=radio]:checked + label {
          <td width="25%" >
 
  
-         <input type="radio" id="radio4" name="ProductType" value="LP" <% If ProductType = "CR" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+         <input type="radio" id="radio4" name="ProductType" value="55" <% If ProductType = "55" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
 
           <label for="radio4">¥Ûªo®ð</label>
 
@@ -134,7 +134,7 @@ input[type=radio]:checked + label {
 
         <td >
 
-         <input type="radio" id="radio7" name="ProductType" value="CR" <% If ProductType = "CR" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+         <input type="radio" id="radio7" name="ProductType" value="CS" <% If ProductType = "CS" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
 
           <label for="radio7">«K§Q©±</label>      
 
@@ -158,10 +158,7 @@ input[type=radio]:checked + label {
         </td> 
 
 
-        <td >
-   
-    
-        </td>
+        <td ></td>
 
         </tr>
 
@@ -175,7 +172,7 @@ input[type=radio]:checked + label {
 		<td colspan="2">
 
 					
-   <input name="Barcode" class="ver" type="text" autocomplete="off" value="" size="18" maxlength="16" id="bc" onkeypress="ShowKey1()">
+  <input name="Barcode" class="ver" type="text" autocomplete="off" value="" size="18" onblur="this.focus()" autofocus maxlength="16" id="bc">
 
          </td>
 
@@ -236,7 +233,7 @@ input[type=radio]:checked + label {
         If Message <> "" then
 
 
-        Response.write Message & "<br/><br/>" 
+        Response.write Message & "<br/>" 
 
 
         Response.write Message2

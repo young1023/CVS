@@ -156,9 +156,11 @@ document.fm1.submit();
    
 ' Start the queries
 
-   
+    Search_No =  pageid * 10 + 1000
+
+   fsql = "SELECT  Top " & Search_No
       
-   fsql = "SELECT m.Product_Type as ProductType, * FROM MasterCoupon m INNER JOIN CouponRequest c "
+   fsql = fsql & " m.Product_Type as ProductType, * FROM MasterCoupon m Left JOIN CouponRequest c "
 
    fsql = fsql & "ON m.Coupon_Type = c.Product_Type AND m.Coupon_Batch = c.Batch  "
 
@@ -170,7 +172,7 @@ document.fm1.submit();
    ' Check Date Range
    if From_Date <> "" then
 
-   fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 101) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 101) "
+   fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 111) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 111) "
    
    end if
 
@@ -216,9 +218,9 @@ document.fm1.submit();
    
    end if
 
-   fsql = fsql & " order by m.ID desc"
+   fsql = fsql & " order by m.present_date desc"
 
-        'response.write fsql
+        response.write fsql
         'response.end
 
 ' Setting the page
@@ -232,13 +234,13 @@ document.fm1.submit();
            response.write "<font color=red>No Record</font>"
        else
           findrecord=frs.recordcount
-          response.write "Total <font color=red>"&findrecord&"</font> Records ; Total <font color=blue>"
+         ' response.write "Total <font color=red>"&findrecord&"</font> Records ; Total <font color=blue>"
 
          frs.PageSize = 10
 
 ' Call the function to count the page.
 
-         call countpage(frs.PageCount,pageid)
+        ' call countpage(frs.PageCount,pageid)
          end if
 	     'response.write "&nbsp;&nbsp;<input type='text' name='findnum' size='13' value='"&findnum&"'>"
 		 'response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"

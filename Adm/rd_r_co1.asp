@@ -9,19 +9,22 @@ pageid=request("pageid")
 
 
 From_Date      = Request.Form("From_Date")
+if From_Date = "" then
+   From_Date = formatdatetime(now(),2) 
+end if
+
 To_Date        = Request.Form("To_Date")
+
+if To_Date = "" then
+   To_Date = formatdatetime(now(),2)
+end if
 Coupon_Type    = Request.Form("Coupon_Type")
 Station        = Request.Form("Station")
 Coupon_Batch   = Request.Form("Coupon_Batch")
 Coupon_Number  = Request.Form("Coupon_Number")
 Print_Excel    = Request.Form("Print_Excel")
 Face_Value     = Request.Form("Face_Value")
-Print_Excel    = Request.Form("Print_Excel")
 Excel_Type     = Request.Form("Excel_Type")
-
-
-
-
 %>
 <html>
 <head>
@@ -127,10 +130,72 @@ Redemption Raw Coupon</b></font></td>
    
 ' Start the queries
          
-      set frs = server.createobject("adodb.recordset")
-      response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
-	  frs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
+              'set frs = server.createobject("adodb.recordset")
+             'response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
+	     'response.end
+             'frs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
+      
+      Search_No =  pageid * 10 + 1000
 
+      fsql = "SELECT  Top " & Search_No
+
+      fsql = fsql & " Convert(datetime, Present_Date,111) as [Present Date] , "
+
+      fsql = fsql & " Convert(datetime, Present_Date,111) as [Present Time] , "
+
+      fsql = fsql & " m.RequestedID as Station, m.Coupon_Type as [Coupon Type], m.Coupon_Batch as [Batch],"
+
+      fsql = fsql & " m.Coupon_Number as [Coupon Number], Convert(varchar,c.Issue_Date,111) as [Issue Date], "
+
+      fsql = fsql & " m.SaleAmount as [Sale Amount], Convert(varchar, c.Expiry_Date,111) as [Expiry Date], "
+
+      fsql = fsql & " c.Excel_Type as [Excel type], m.Product_Type as [Product Type], m.Status, m.Creation_Date"
+
+      fsql = fsql & " From MasterCoupon m Left Join CouponRequest c on m.Coupon_Type = c.Product_Type and "
+
+      fsql = fsql & " m.Coupon_batch = c.Batch and Cast(m.Face_Value as float) = Cast(c.FaceValue as float) and "
+
+      fsql = fsql & " c.Start_Range <= m.Coupon_Number and c.End_Range >= m.Coupon_Number where "
+
+      fsql = fsql & " (Datediff(day, Present_Date, '"&From_Date&"') < = 0 or '"&From_Date&"' = '') "
+
+      fsql = fsql & " and (Datediff(day, Present_Date, '"&To_Date&"') >= 0 or '"&To_Date&"' = '') "
+
+      fsql = fsql & " and (m.RequestedID = '"&Station&"'  or '"&Station&"' = '') and "
+
+      fsql = fsql & " (m.Coupon_Type = '"&Coupon_Type&"'  or '"&Coupon_Type&"' = '') and "
+
+      fsql = fsql & " (m.Coupon_Batch = '"&Coupon_Batch&"' or '"&Coupon_Batch&"' = '') and "
+
+      fsql = fsql & " (m.Face_Value = '"&Face_Value&"' or '"&Face_Value&"' = '') and "
+
+      fsql = fsql & " (m.Coupon_Number = '"&Coupon_Number&"' or '"&Coupon_Number&"' = '') and "
+
+      fsql = fsql & " (c.Excel_Type = '"&Excel_Type&"' or '"&Excel_Type&"' = '') and "
+
+      fsql = fsql & " (m.Status = '"&Status&"' or '"&Status&"' = '') Order by Present_Date Desc "
+
+    
+      'response.write fsql
+      'response.end
+
+     ' Setting the page
+
+        set frs=createobject("adodb.recordset")
+		frs.cursortype=1
+		frs.locktype=1
+        frs.open fsql,conn
+
+       if frs.RecordCount=0 then
+           response.write "<font color=red>No Record</font>"
+       else
+          findrecord=frs.recordcount
+          'response.write "Total <font color=red>"&findrecord&"</font> Records ; Total <font color=blue>"
+
+         frs.PageSize = 10
+       end if
+
+             
 %>
 
 
@@ -190,9 +255,6 @@ Excel Type :
 <td  height="28">Batch</td>
 <td  height="28">Coupon Number</td>
 <td  height="28">Product<br/>Type</td>
-<td >Car Plate no.</td>
-<td  height="28">Sale<br/>Amount</td>
-<td  height="28">Sale<br/>Litre</td>
 <td>Issue Date</td>
 <td >Expiry Date</td>
 <td>Excel<br/> Type</td>
@@ -200,14 +262,23 @@ Excel Type :
 <td>Print Excel</td>
 <td>Print Excel Date</td>
 </tr>
+                                   
+ 
                                     <%
 
 
 
  i=0
- 
- 
-  do while not frs.EoF
+ if frs.recordcount>0 then
+  frs.AbsolutePage = pageid
+  do while (frs.PageSize-i)
+   if frs.eof then exit do
+   i=i+1
+   if flage then
+     mycolor="#ffffff"
+   else
+	 mycolor="#efefef"
+   end if
   
 %>
    <tr>
@@ -229,18 +300,6 @@ Excel Type :
 
 <td  height="28">
 <% = frs("Product Type") %>
-</td>
-
-<td >
-<% = frs("Car no.") %>
-</td>
-
-<td>
-<% = frs("Sale Amount") %> 
-</td>
-
-<td >
-<% '= frs("SaleLitre") %>
 </td>
 
 <td >
@@ -267,10 +326,10 @@ Excel Type :
 </td>
 </tr>
 <%
-   
+   'response.end 
    frs.movenext
   loop
- 
+  end if
   %>
 
                                   </table>
@@ -281,7 +340,7 @@ Excel Type :
 
                                   <%
 	 if frs.recordcount>0 then
-             call countpage(frs.PageCount,pageid)
+            call countpage(frs.PageCount,pageid)
 			 response.write "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 			 if Clng(pageid)<>1 then
                  response.write " <a href=javascript:gtpage('1') style='cursor:hand' >First</a> "
@@ -305,7 +364,7 @@ Excel Type :
                               <tr> 
                                 <td height="28" align="center"> 
 <%
-   response.write "<input type='button' value='    Delete    ' onClick='delcheck();' class='common'>"
+   'response.write "<input type='button' value='    Delete    ' onClick='delcheck();' class='common'>"
    response.write "<input type=hidden value='' name=whatdo>"
    response.write "<input type=hidden value="&pageid&" name=pageid>"
 
@@ -318,7 +377,7 @@ Excel Type :
  </td>
                               </tr>
                               <tr> 
-                                <td valign="top">¡@</td>
+                                <td valign="top"></td>
                               </tr>
                             </table>
                           </form>
@@ -343,7 +402,7 @@ Excel Type :
 
   ' function
   Sub countpage(PageCount,pageid)
-  response.write pagecount&"</font> Pages "
+  'response.write pagecount&"</font> Pages "
 	   if PageCount>=1 and PageCount<=10 then
 		 for i=1 to PageCount
 		   if (pageid-i =0) then

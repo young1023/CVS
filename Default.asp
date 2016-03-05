@@ -136,9 +136,9 @@ function ShowKey2(){
         </td> 
 
 		<td >
-
-			<input name="UserID" ID="UserID" type=text value="" class="ver" size="10" <%If Alert<>"" Then%>Readonly<%End If%> autocomplete="off" onfocus="ShowKey1()">
-
+<%If Alert = "" Then%>
+			<input name="UserID" ID="UserID" type=text value="" class="ver" size="10"  autocomplete="off" onfocus="ShowKey1()">
+<%End If%>
         </td>
 
         <td>
@@ -234,6 +234,8 @@ function ShowKey2(){
 
 </form>
 
+<br/><br/><br/>
+
 <div class="Message">
 
  <%
@@ -244,7 +246,7 @@ function ShowKey2(){
 
         End If
 
-        response.write Alert
+        response.write  Alert
 
   %>
 

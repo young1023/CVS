@@ -4,11 +4,15 @@
 
 UserIPAddress = Request.ServerVariables("REMOTE_ADDR")
 
+sql = "Select station from station where IPAddress ='" &UserIPAddress& "'"
+
+set rs = conn.execute(sql) 
+
 Set Rs1 = Server.CreateObject("Adodb.Recordset")
   
 sql1 = "Select * From Station s Left Join CVSUser u on "
 
-sql1 = sql1 & " s.LoginUser = u.UserName Where IPAddress ='" &UserIPAddress& "'"
+sql1 = sql1 & " s.LoginUser = u.UserName Where station ='" &rs("station")& "'"
 
 Set Rs1 = Conn.Execute(sql1)
 
@@ -166,7 +170,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
   ' ********************
    if Barcode <> "" then
 
-       If len(Barcode) = 15 then
+       If len(Barcode) > 14 then
 
        fsql = fsql & " and Coupon_Number = '"& Coupon_Number &"'"
 
@@ -232,7 +236,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
           response.write "¦@¦³ <font color=red>"&findrecord&"</font> ±ø¬ö¿ý ;"
 
   
-         frs.PageSize = 100
+         frs.PageSize = 200
 
          call countpage(frs.PageCount,pageid)
 
@@ -559,22 +563,22 @@ document.fm1.submit();
 <%
 	 if frs.recordcount>0 then
              call countpage(frs.PageCount,pageid)
-			 response.write "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+			 'response.write "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 			 if Clng(pageid)<>1 then
-                 response.write " <a href=javascript:gtpage('1') style='cursor:hand' >First</a> "
-                 response.write " <a href=javascript:gtpage('"&(pageid-1)&"') style='cursor:hand' >Previous</a> "
+                 'response.write " <a href=javascript:gtpage('1') style='cursor:hand' >First</a> "
+                 'response.write " <a href=javascript:gtpage('"&(pageid-1)&"') style='cursor:hand' >Previous</a> "
 			 else
-                 response.write " First "
-                 response.write " Previous "
+                 'response.write " First "
+                 'response.write " Previous "
 			 end if
 	         if Clng(pageid)<>Clng(frs.PageCount) then
-                 response.write " <a href=javascript:gtpage('"&(pageid+1)&"') style='cursor:hand' >Next</a> "
-                 response.write " <a href=javascript:gtpage('"&frs.PageCount&"') style='cursor:hand' >Last</a> "
+                 'response.write " <a href=javascript:gtpage('"&(pageid+1)&"') style='cursor:hand' >Next</a> "
+                 'response.write " <a href=javascript:gtpage('"&frs.PageCount&"') style='cursor:hand' >Last</a> "
              else
-                 response.write " Next "
-                 response.write " Last "
+                 'response.write " Next "
+                 'response.write " Last "
 			 end if
-	         response.write "&nbsp;&nbsp;"
+	         'response.write "&nbsp;&nbsp;"
 	 end if
 %>
 </span>

@@ -1,9 +1,6 @@
 <!--#include file="include/SQLConn.inc" -->
 <% 
 
-' check which page is it
-page_id=request("page_id")
-
 
 %>
 <html>
@@ -36,6 +33,7 @@ function dosubmit(){
  document.fm1.action="newstation1.asp"; 
  document.fm1.submit();
 }
+
 
 
 //-->
@@ -117,6 +115,12 @@ function dosubmit(){
       
        fsql = "select * from Station where 1 =1  "
 
+       if findnum <> "" then
+
+       fsql = fsql & "and (station like '%" & findnum &"%' or IPAddress like '%" & findnum &"%') "
+
+       end if
+
        fsql = fsql & " order by Station desc"
 
         'response.write fsql
@@ -196,10 +200,10 @@ function dosubmit(){
 %>
    <tr>
 <td width="26">
-<input type="checkbox" name="mid" value="<% = frs("StationID") %>">
+<input type="checkbox" name="mid" value="<% = frs("IPAddress") %>">
 </td>
 <td  height="28">
-<a href="newstation1.asp?id=<%=frs("stationid")%>"><% = frs("Station") %></a>
+<a href="newstation1.asp?Ipaddress=<%=frs("IPAddress")%>"><% = frs("Station") %></a>
 </td>
 <td  height="28"><% = frs("IPAddress") %>
 </td>
