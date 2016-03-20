@@ -24,6 +24,7 @@ flag = trim(request.form("whatdo"))
 if flag = "add_pco" then
  
   Face_Value = replace(trim(request.form("Face_Value")),"'","''")
+  
   Product_Type = replace(trim(request.form("Product_Type")),"'","''")
   Batch = replace(trim(request.form("Batch")),"'","''")
   Start_Range = replace(trim(request.form("Start_Range")),"'","''")
@@ -33,36 +34,13 @@ if flag = "add_pco" then
   End_Range1   = int(End_Range)
   Digital = trim(request.form("Digital")) 
   Category = trim(request.form("Category"))
-
-  ' Default value
-  if Category = "" Then
-       Category = "F"
-  End If
-  
   Dealer = trim(request.form("Dealer")) 
   Canopy_Disc = trim(request.form("Canopy_Disc")) 
-
- ' Default value
-  if Canopy_Disc = "" Then
-       Canopy_Disc = "N"
-  End If
-  
   Expiry_Date = trim(request.form("Expiry_Date")) 
   Issue_Date = trim(request.form("Issue_Date"))
   Completed = trim(request.form("Completed")) 
-
- ' Default value
-  if Completed = "" Then
-       Completed = "N"
-  End If
-
   Excel_Type = trim(request.form("Excel_Type")) 
   Effective_Date = trim(request.form("Effective_Date")) 
-
- ' Default value
-  if Effective_Date = "" Then
-       Effective_Date = Issue_Date
-  End If
  
   sql1 = "Select count(1) as Tcount From CouponRequest Where Cast(FaceValue as float) = "& int(Face_Value)
 
@@ -247,7 +225,7 @@ elseif flag ="edit_st" then
   MachineNo = replace(trim(request.form("MachineNo")),"'","''")
   SAPCode = replace(trim(request.form("SAPCode")),"'","''")
   ShipToCode = replace(trim(request.form("ShipToCode")),"'","''")
-  SoldToCode = replace(trim(request.form("SoldToCode")),"'","''")
+  SoldToCode = request.form("SoldToCode")
   Outdoor    = request.form("Outdoor")
 
       sql = "Update station set station='"&station&"', "

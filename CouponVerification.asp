@@ -214,7 +214,7 @@ input[type=radio]:checked + label {
 
 %>
 
-<table width="80%" border="0"  cellpadding="20" cellspacing="2" bgcolor="<%=bgcolor%>" class="Message">
+<table width="80%" border="0"  cellpadding="20" cellspacing="2" bgcolor="<%=bgcolor%>" id="Message">
 
 
      <tr>

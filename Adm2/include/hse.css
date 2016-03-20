@@ -1,0 +1,271 @@
+@charset "big5";
+.HSEBlue
+{
+    BACKGROUND-COLOR: #9fd0f0
+}
+.NavyBlue
+{
+    BACKGROUND-COLOR: #080063
+}
+A
+{
+    COLOR: Black;
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial;
+    FONT-SIZE: 11px
+}
+A:hover
+{
+    COLOR: orange;
+}
+
+
+
+TABLE.Common
+{
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+	FONT-SIZE: 11px
+}
+TABLE.TitleBar
+{
+    COLOR: #FFFFFF;
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial;
+    FONT-WEIGHT: Bold;
+    FONT-SIZE: 11px    
+}
+TD.NaviBar
+{
+    COLOR: blue;
+    FONT-SIZE: 9px;
+    
+}
+TD.BlueClr
+{
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial;
+    COLOR: #080063;
+    FONT-SIZE: 10px 
+    TEXT-ALIGN: left 
+    CURSOR: hand  
+    text-decoration:none
+}
+TD.RedClr
+{
+    COLOR: #F50448;
+    FONT-SIZE: 9px   
+}
+INPUT.Button
+{
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial;
+    FONT-SIZE: xx-small;
+    COLOR: #080063;
+    BACKGROUND: #FFFFFF;
+    CURSOR: hand       
+}
+INPUT.Go
+{
+    FONT-FAMILY: 'MS Sans Serif', Arial;
+    FONT-SIZE: 12px;
+    FONT-WEIGHT: Bold;
+    COLOR: white;
+    BACKGROUND: #00CE00;
+    CURSOR: hand       
+}
+
+TABLE.Grid
+{
+    BACKGROUND-COLOR: gray;
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial;
+}
+TD.HeadTitle
+{
+    BACKGROUND-COLOR: white;
+    COLOR: #080063;
+    FONT-WEIGHT: Bold;
+    FONT-SIZE: 11px
+}
+TD.Head
+{
+    BACKGROUND-COLOR: #080063;
+    COLOR: white;
+    FONT-WEIGHT: Bold;
+    FONT-SIZE: 11px;
+    TEXT-ALIGN: center    
+}
+TD.Head-L
+{
+    BACKGROUND-COLOR: #080063;
+    COLOR: white;
+    FONT-WEIGHT: Bold;
+    FONT-SIZE: 11px;
+    TEXT-ALIGN: left    
+}
+TD.Head-R
+{
+    BACKGROUND-COLOR: #080063;
+    COLOR: white;
+    FONT-WEIGHT: Bold;
+    FONT-SIZE: 11px;
+    TEXT-ALIGN: right    
+}
+
+TD.Common
+{
+    BACKGROUND-COLOR: #FFFFE6;
+    COLOR: black;
+    FONT-SIZE: 11px
+}
+TD.Error1
+{
+    BACKGROUND-COLOR: #00EE3C;
+    COLOR: black;
+    FONT-SIZE: 11px
+}
+TD.Error2
+{
+    BACKGROUND-COLOR: #FFE26F;
+    COLOR: black;
+    FONT-SIZE: 11px
+}
+TD.Error3
+{
+    BACKGROUND-COLOR: #EE0000;
+    COLOR: white;
+    FONT-SIZE: 11px
+}
+TD.Total
+{
+    BACKGROUND-COLOR: #FFFFE6;
+    COLOR: black;
+    FONT-SIZE: 11px;
+    HEIGHT: 18px;
+    FONT-WEIGHT: Bold
+}
+
+TD.Blank
+{
+    BACKGROUND-COLOR: white;
+    HEIGHT: 11px        
+}
+
+INPUT
+{
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+    COLOR: black;
+    FONT-SIZE: 10px;
+    TEXT-ALIGN: left    
+}
+
+INPUT.common
+{
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+    COLOR: black;
+    FONT-SIZE: 10px;
+    TEXT-ALIGN: center    
+}
+
+textarea
+{
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+    COLOR: black;
+    FONT-SIZE: 10px;
+    TEXT-ALIGN: left    
+}
+
+
+SELECT.Common
+{
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+    COLOR: black;
+    FONT-SIZE: 10px
+}
+
+
+INPUT.small
+{
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+    COLOR: black;
+    FONT-SIZE: 8px;
+    TEXT-ALIGN: center    
+}
+
+
+}
+TD.Desc
+{
+    BACKGROUND-COLOR: none;
+    COLOR: #080063;
+    FONT-SIZE: 11px;
+}
+
+
+
+TABLE.ValidTitle
+{
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial;
+    FONT-SIZE: 11px;
+}
+TD.ValidHead
+{
+    BACKGROUND-COLOR: #FFFFE6;
+    COLOR: black;
+    FONT-SIZE: 11px;
+}
+
+
+TABLE.Normal
+{
+    BORDER-TOP: #9fd0f0 solid 1px;
+    BORDER-LEFT: #9fd0f0 solid 1px;
+    BORDER-RIGHT: #9fd0f0 solid 1px;
+    BORDER-BOTTOM: #9fd0f0 solid 1px;    
+    
+    COLOR: black;
+    FONT-SIZE: 11px;
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+}
+
+TABLE.dash
+{
+  
+    
+    COLOR: black;
+    FONT-SIZE: 11px;
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+    FONT-SIZE: 10px;
+}
+
+TABLE.full
+{
+    BORDER: #808080 solid 1px;    
+    COLOR: black;
+    FONT-SIZE: 11px;
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+}
+
+TABLE.Chart
+{
+    BORDER-TOP: #FFFFFF solid 1px;
+    BORDER-LEFT: #000000 solid 1px;
+    BORDER-RIGHT: #FFFFFF solid 1px;
+    BORDER-BOTTOM: #000000 solid 1px;    
+    
+    COLOR: black;
+    FONT-SIZE: 11px;
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+}
+
+TABLE.Legend
+{
+    BORDER-TOP: #808080 solid 1px;
+    BORDER-LEFT: #808080 solid 1px;
+    BORDER-RIGHT: #808080 solid 1px;
+    BORDER-BOTTOM: #808080 solid 1px;    
+    
+    COLOR: black;
+    FONT-SIZE: 9px;
+    FONT-FAMILY: Verdana, 'MS Sans Serif', Arial
+}
+
+IMG.Link
+{
+    CURSOR: hand       
+}

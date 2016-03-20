@@ -4,13 +4,14 @@
 <!--#include file ="js/select_date.JS" -->
 <% 
 
+
 ' check which page is it
 pageid=request("pageid")
 
 
 From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date = formatdatetime(now(),2) 
+   From_Date = formatdatetime((now() - 7) ,2) 
 end if
 
 To_Date        = Request.Form("To_Date")
@@ -18,12 +19,14 @@ To_Date        = Request.Form("To_Date")
 if To_Date = "" then
    To_Date = formatdatetime(now(),2)
 end if
+
 Coupon_Type    = Request.Form("Coupon_Type")
 Station        = Request.Form("Station")
 Coupon_Batch   = Request.Form("Coupon_Batch")
 Coupon_Number  = Request.Form("Coupon_Number")
 Print_Excel    = Request.Form("Print_Excel")
 Face_Value     = Request.Form("Face_Value")
+Print_Excel    = Request.Form("Print_Excel")
 Excel_Type     = Request.Form("Excel_Type")
 %>
 <html>
@@ -43,6 +46,18 @@ document.fm1.submit();
 
 function findenum()
 {
+if (document.fm1.From_Date.value == "")
+  {
+   alert("Please input From Date.");
+   document.fm1.From_Date.focus();
+   return false;
+  }
+if (document.fm1.To_Date.value == "")
+  {
+   alert("Please input To Date.");
+   document.fm1.To_Date.focus();
+   return false;
+  }
 document.fm1.action="rd_r_co1.asp"
 document.fm1.submit();
 }
@@ -52,6 +67,110 @@ function exportExcel()
 document.fm1.action="rd_co_r_excel1.asp"
 document.fm1.submit();
 }
+
+
+function dateCheck(inputText) {
+
+         debugger;
+
+         var dateFormat = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/;
+
+          var flag = 1;
+
+
+         if (inputText.value.match(dateFormat)) {
+
+           var inputFormat1 = inputText.value.split('/');
+
+             var inputFormat2 = inputText.value.split('-');
+
+             linputFormat1 = inputFormat1.length;
+
+             linputFormat2 = inputFormat2.length;
+
+ 
+
+             if (linputFormat1 > 1) {
+
+                 var pdate = inputText.value.split('/');
+
+             }
+
+             else if (linputFormat2 > 1) {
+
+                 var pdate = inputText.value.split('-');
+
+             }
+
+             var date = parseInt(pdate[0]);
+
+             var month = parseInt(pdate[1]);
+
+             var year = parseInt(pdate[2]);
+
+ 
+
+             var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+             if (month == 1 || month > 2) {
+
+                 if (date > ListofDays[month - 1]) {
+
+                     alert("Invalid date format!");
+
+                     return false;
+
+                 }
+
+             }
+
+ 
+
+             if (month == 2) {
+
+                 var leapYear = false;
+
+ 
+
+                 if ((!(year % 4) && year % 100) || !(year % 400)) {
+
+                     leapYear = true;
+
+ 
+
+                 }
+
+                 if ((leapYear == false) && (date >= 29)) {
+
+                     alert("Invalid date format!");
+
+                     return false;
+
+                 }
+
+                 if ((leapYear == true) && (date > 29)) {
+
+                     alert("Invalid date format!");
+
+                     return false;
+
+                 }
+
+             }
+
+         }
+
+         else {
+
+             alert("Invalid date format!");
+
+             return false;
+
+         }
+
+     }
+
+
 //-->
 </script>
 </head>
@@ -119,6 +238,9 @@ Redemption Raw Coupon</b></font></td>
                               <tr> 
                                 <td height="28"> 
 <% 
+
+
+
 ' By getting the pageid, the system knows which page to go.
 
 		pageid=trim(request.form("pageid"))
@@ -167,16 +289,16 @@ Redemption Raw Coupon</b></font></td>
 
       fsql = fsql & " (m.Coupon_Batch = '"&Coupon_Batch&"' or '"&Coupon_Batch&"' = '') and "
 
-      fsql = fsql & " (Cast(m.Face_Value as float)= '"&Face_Value&"' or '"&Face_Value&"' = '') and "
+      fsql = fsql & " (m.Face_Value = '"&Face_Value&"' or '"&Face_Value&"' = '') and "
 
       fsql = fsql & " (m.Coupon_Number = '"&Coupon_Number&"' or '"&Coupon_Number&"' = '') and "
 
       fsql = fsql & " (c.Excel_Type = '"&Excel_Type&"' or '"&Excel_Type&"' = '') and "
 
-      fsql = fsql & " (m.Status = '"&Status&"' or '"&Status&"' = '') Order by Present_Date Desc "
+     fsql = fsql & " (m.Status = '"&Print_Excel&"' or '"&Print_Excel&"' = '') Order by Present_Date Desc "
 
     
-      response.write fsql
+      'response.write fsql
       'response.end
 
      ' Setting the page
@@ -200,10 +322,10 @@ Redemption Raw Coupon</b></font></td>
 
 
 Date From:
-<input type="text" name="From_Date" size="10" value="<% = From_Date %>">
+<input type="text" name="From_Date" size="10" value="<% = From_Date %>" onkeyup="dateCheck(document.fm1.From_Date);">
 <a href="javascript:show_calendar('fm1.From_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 To Date:
-<input type="text" name="To_Date" size="10" value="<% = To_Date %>">
+<input type="text" name="To_Date" size="10" value="<% = To_Date %>" onkeyup="dateCheck(document.fm1.To_Date);">
 <a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 Station
 <input type="text" name="Station" size="3" maxlength="3" value="<% = Station %>">
@@ -219,9 +341,9 @@ Coupon Number
 
 Print Excel: 
 	<select size="1" name="Print_Excel" class="common">
-            <option value="All">All</option>
-			<option value="N">No</option>
-			<option value="Y">Yes</option>
+            <option value="" <%if Print_Excel="" Then%>Selected<%End If%>>All</option>
+			<option value="N" <%if Print_Excel="N" Then%>Selected<%End If%>>No</option>
+			<option value="Y" <%if Print_Excel="Y" Then%>Selected<%End If%>>Yes</option>
 
 	</select>
 Excel Type :
@@ -251,6 +373,8 @@ Excel Type :
 <td height="28">Present Time</td>
 
 <td height="28">Station</td>
+
+<td height="28">Sale Amount</td>
 <td height="28">Coupon<br/>Type</td>
 <td  height="28">Batch</td>
 <td  height="28">Coupon Number</td>
@@ -289,6 +413,11 @@ Excel Type :
 <td  height="28">
 <% = frs("Station") %>
 </td>
+
+<td  height="28">
+<% = frs("Sale Amount") %>
+</td>
+
 <td  height="28"><% = frs("Coupon Type") %>
 </td>
 

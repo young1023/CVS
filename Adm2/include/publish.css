@@ -14,10 +14,7 @@ top: 20;
 left: 200; 
 }
 
-a { 
-  text-decoration:none;
-  font-size:26px; 
-}
+a { text-decoration:none }
 
 Table.Report
 { 
@@ -42,28 +39,22 @@ Table.DailyReport
 Table.Login
 { 
   position: relative;
-  top: 180; 
+  top: 200; 
   border: 0; 
   font-family: arial; 
-  font-size:30px; 
+  font-size:16px; 
 } 
 
 /* Form */
 Table.Ver
 { 
   position: relative;
-  top: 80; 
-  border: 0;
-  text-align: center; 
+  top: 100; 
+  border: 0; 
   font-family: arial; 
-  font-size:38px; 
+  font-size:16px; 
 } 
 
-
-#popup_middle {
-
-    visibility: hidden;
-}
 
 th { 
   background-color:yellow; 
@@ -77,26 +68,16 @@ tr td{
 .Message
 { 
   position: relative; 
-  top: 120; 
-  left: 0; 
-  font-size:36px; 
-
+  top: 250; 
+  left: 400; 
+  color:red
 }  
 
-#Message
-{ 
-  position: relative; 
-  top: 120; 
-  left: 0; 
-  font-size:36px; 
-
-} 
-
 /* Button */
-#button1
+.button
 {
    font-family: arial; 
-   font-size:24px; 
+   font-size:14px; 
 
 }
 
@@ -106,14 +87,6 @@ input, select, textarea
    font-family: arial; 
    font-size:16px;
 }
-
-
-input.ver 
-{
-   font-family: arial; 
-   font-size:26px;
-}
-
 
 
 .reportdate
@@ -203,12 +176,4 @@ page-break-before: always;
 }
 
 
-.popup_middle
-{
- visibility:hidden;
-
 }
-
-
-
-

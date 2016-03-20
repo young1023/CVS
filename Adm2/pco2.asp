@@ -1,7 +1,13 @@
 <!--#include file="include/SQLConn.inc" -->
-<!--#include file ="js/OVERLIB.JS" -->
-<!--#include file ="js/OVERLIB_MINI.JS" -->
-<!--#include file ="js/select_date.JS" -->
+<% 
+
+    RequestID = Request("ID")
+
+    sql = "Select * From CouponRequest where RequestID = "&RequestID
+
+    Set Rs = Conn.Execute(sql)
+
+%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
@@ -10,7 +16,7 @@
 <SCRIPT language=JavaScript>
 <!--
 function dosubmit(){
- document.fm1.action="execute1.asp";
+ document.fm1.action="execute1.asp?id=<%=RequestID%>";
  
  if (document.fm1.Face_Value.value == "")
   {
@@ -18,84 +24,12 @@ function dosubmit(){
    document.fm1.Face_Value.focus();
    return false;
   }
-var x = document.fm1.Face_Value.value
- if (isNaN(x)) 
-  {
-    alert("Please input numbers.");
-    document.fm1.Face_Value.focus();
-    return false;
-  }
- if (x.length!=3) 
-  {
-    alert("Face Value should be 3 digits.");
-    document.fm1.Face_Value.focus();
-    return false;
-  }
 if (document.fm1.Product_Type.value == "")
   {
    alert("Please input coupon type.");
    document.fm1.Product_Type.focus();
    return false;
   }
-var y = document.fm1.Product_Type.value
- if (isNaN(y)) 
-  {
-    alert("Please input numbers.");
-    return false;
-  }
-if (document.fm1.Batch.value == "")
-  {
-   alert("Please input Batch.");
-   document.fm1.Batch.focus();
-   return false;
-  }
-var z = document.fm1.Batch.value
- if (isNaN(z)) 
-  {
-    alert("Please input numbers.");
-    return false;
-  }
-if (document.fm1.Start_Range.value == "")
-  {
-   alert("Please input Start Range.");
-   document.fm1.Start_Range.focus();
-   return false;
-  }
-var s = document.fm1.Start_Range.value
- if (isNaN(s)) 
-  {
-    alert("Please input numbers.");
-    return false;
-  }
-if (document.fm1.End_Range.value == "")
-  {
-   alert("Please input End Range.");
-   document.fm1.End_Range.focus();
-   return false;
-  }
-var e = document.fm1.End_Range.value
- if (isNaN(e)) 
-  {
-    alert("Please input numbers.");
-    return false;
-  }
-
-if (document.fm1.Expiry_Date.value == "")
-  {
-   alert("Please input Expiry Date.");
-   document.fm1.Expiry_Date.focus();
-   return false;
-  }
-
-
-if (document.fm1.Issue_date.value == "")
-  {
-   alert("Please input Issue date.");
-   document.fm1.Issue_date.focus();
-   return false;
-  }
-
-
 
 document.fm1.submit();
 }
@@ -105,13 +39,9 @@ document.fm1.submit();
 
 //-->
 </SCRIPT>
-
-<script language="JavaScript" src="include\ts_picker.js">
-</script>
 </head>
 
 <body leftmargin="0" topmargin="0" >
-<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <!--#include file="include/header.inc" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -161,7 +91,11 @@ document.fm1.submit();
 
   <table width="99%" border="0" class="normal">
     <tr> 
-      <td colspan="2" class="BlueClr"><font size="5" face="Times New Roman, Times, serif">Create Pro Coupon </font></td>
+      <td colspan="2" class="BlueClr"><font size="5" face="Times New Roman, Times, serif">Edit Pro Coupon </font></td>
+    </tr>
+    <tr> 
+      <td width="35%"> </td>
+      <td width="65%" align="right"></td>
     </tr>
     <tr> 
       <td colspan="2"></td>
@@ -174,32 +108,32 @@ document.fm1.submit();
       <td colspan="2" bordercolor="#999966" class="ValidHead"></td>
     </tr>
 
- <tr><td width="30%">Face Value: </td>
+ <tr><td>Face Value: </td>
       <td>
-<input name="Face_Value" type=text value="" >	    
+<input name="Face_Value" type=text value="<% = rs("FaceValue") %>">	    
 </td>
    </tr>
  <tr>
 <td>Type:</td>
 <td>
-<input name="Product_Type" type=text value="">	    
+<input name="Product_Type" type=text value="<% = rs("Product_Type") %>">	    
 </td>
 </tr>
      
  <tr><td>Batch: </td>
       <td>
-<input name="Batch" type=text value="">	    
+<input name="Batch" type=text value="<% = rs("Batch") %>">	    
 </td>
    </tr>
 
 <tr><td>Start Range:</td>
       <td>
-<input name="Start_Range" type=text value="">	    
+<input name="Start_Range" type=text value="<% = rs("Start_Range") %>">	    
 </td>
    </tr>
 <tr><td>End Range:</td>
       <td>
-<input name="End_Range" type=text value="">	    
+<input name="End_Range" type=text value="<% = rs("End_Range") %>">	    
 </td>
    </tr>
 
@@ -213,8 +147,8 @@ document.fm1.submit();
 <tr><td>Digital Coupon:</td>
       <td>
 <select size="1" name="Digital" class="common">
-			<option value="N">No</option>
-			<option value="Y">Yes</option>
+			<option value="N" <%if Trim(rs("Digital"))="N" Then %>Selected<%End If%>>No</option>
+			<option value="Y" <%if Trim(rs("Digital"))="Y" Then %>Selected<%End If%>>Yes</option>
 
 	</select>    
 </td>
@@ -222,48 +156,42 @@ document.fm1.submit();
 
 <tr><td>Category:</td>
       <td>
-<input name="Category" type=text value="">	    
+<input name="Category" type=text value="<% = rs("Category") %>">	    
 </td>
    </tr>
 <tr><td>Dealer A/C:</td>
       <td>
-<input name="Dealer" type=text value="">	    
+<input name="Dealer_AC" type=text value="<% = rs("Dealer") %>">	    
 </td>
    </tr>
 <tr><td>Canopy Disc:</td>
       <td>
-<input name="Canopy_Disc" type=text value="">	    
+<input name="Canopy_Disc" type=text value="<% = rs("Canopy_Copy_Disc") %>">	    
 </td>
    </tr>
-<tr><td>Expiry Date: (mm-dd-yyyy)</td>
+<tr><td>Expiry Date: (mm/dd/yyyy)</td>
       <td>
-<input name="Expiry_Date" type=text value="">
-<a href="javascript:show_calendar('fm1.Expiry_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
+<input name="Expiry_Date" type=text value="<% = rs("Expiry_Date") %>">	    
 </td>
    </tr>
-<tr><td>Issue Date: (mm-dd-yyyy)
-</td>
+<tr><td>Issue Date: (mm/dd/yyyy)</td>
       <td>
-<input name="Issue_date" type=text value="">
-<a href="javascript:show_calendar('fm1.Issue_date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
-
+<input name="Issue_date" type=text value="<% = rs("Issue_Date") %>">	    
 </td>
    </tr>
 <tr><td>Completed:</td>
       <td>
-<input name="Completed" type=text value="">	    
+<input name="Completed" type=text value="<% = rs("Completed") %>">	    
 </td>
    </tr>
 <tr><td>Excel Type:</td>
       <td>
-<input name="Excel_Type" type=text value="">	    
+<input name="Excel_Type" type=text value="<% = rs("Excel_Type") %>">	    
 </td>
    </tr>
-<tr><td>Effective Date:</td>
+<tr><td>Effective Date: (mm/dd/yyyy)</td>
       <td>
-<input name="Effective_Date" type=text value="">
-<a href="javascript:show_calendar('fm1.Effective_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
-	    
+<input name="Effective_Date" type=text value="<% = rs("Effective_Date") %>">	    
 </td>
    </tr>
 	<tr>
@@ -278,8 +206,7 @@ document.fm1.submit();
                                         <td colspan="2" align="center"> 
 
 <input type="button" value="  Submit  " onClick="dosubmit();" class="common">
-<input type="Reset" value="  Reset  " class="common">
-<input type=hidden name=whatdo value='add_pco'>
+<input type=hidden name=whatdo value="edit_pco">
 
 </td>
 </tr>

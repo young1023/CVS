@@ -5,19 +5,33 @@
 
    ScanDate = Now()
 
+
+
    Set Rs0 = Server.CreateObject("Adodb.Recordset")
    Set Rs1 = Server.CreateObject("Adodb.Recordset")
    Set Rs2 = Server.CreateObject("Adodb.Recordset")
    Set Rs3 = Server.CreateObject("Adodb.Recordset")
  
-   Barcode    = Request("Barcode")
+   Barcode    = trim(Request("Barcode"))
 
-   ProductType = Request("ProductType")
+   ProductType = trim(Request("ProductType"))
+
+
+    ' Check digit 
+    If Barcode = "Invalid" Then
+
+           Message = "驗證失敗 - 禮券號碼不正確, 請重試! "
+
+
+    Response.Redirect  "CouponVerification.asp?&ProductType="&ProductType&"&Color=2&Message="&Message
+      
+ 
+     End If
  
 
-   'response.write "Station ID:  " & Stationid & "<br>"
+   response.write "Station ID:  " & Stationid & "<br>"
 
-   'response.write "Barcode: " & Barcode & "<br>"
+   response.write "Barcode: " & Barcode & "<br>"
 
    'response.end
 
@@ -27,7 +41,7 @@
   
    Rs0.open ("Exec Check_CouponType '"&Barcode&"', '"&ProductType&"'") ,  conn,3,1
 
-   'Response.write ("Exec Check_CouponType '"&Barcode&"', '"&ProductType&"'")
+   Response.write ("Exec Check_CouponType '"&Barcode&"', '"&ProductType&"'")
 
    'Response.end
 
@@ -83,39 +97,59 @@
 
           Response.write ("Exec CheckCouponExist '"&Barcode&"'")
 
-     
-         If Rs2.EoF Then
+         ' If there is record
+         If Not Rs2.EoF Then
+
+
 
  
-          Message = "驗證成功!"
 
-          Color   = "1"
+               Present_Date = Rs2("Present_Date")
 
-          Response.write ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'")
+               RequestedID  = Rs2("RequestedID")
 
-
-          Rs3.Open ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'"), Conn, 3, 1
-
-
-         Response.Redirect  "CouponVerification.asp?ProductType="&ProductType&"&Color="&Color&"&Message="&Message
-      
-    
-         Else
-
-         Present_Date = Rs2("Present_Date")
-
-         RequestedID  = Rs2("RequestedID")
-
-         StationName  = Rs2("StationName")
+               StationName  = Rs2("StationName")
 
          'response.write Present_Date
          'response.end
-         Color   = "2"
+              Color   = "2"
 
-         Message = "驗證失敗 - 重複使用! 禮券 " & Barcode & " 曾於 " & Present_Date & " 在"& StationName & "站驗證!"
+              Message = "驗證失敗 - 重複使用! 禮券 " & Barcode '& " 曾於 " & Present_Date & " 在"& StationName & "站驗證!"
+
+              Message2 = " 曾於 " & Present_Date & " 在"& StationName & "站驗證!"
+
+              Response.Redirect  "CouponVerification.asp?ProductType="&ProductType&"&Color="&Color&"&Message="&Message&"&Message2="&Message2
 
 
-         Response.Redirect  "CouponVerification.asp?ProductType="&ProductType&"&Color="&Color&"&Message="&Message
+ 
+         Else
+
+          Rs3.Open ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'"), Conn, 3, 1
+
+              ' If record is inserted.
+              If Not Rs3.EoF Then  
+
+                  Message = "驗證成功!  號碼: " &  Rs3("Coupon_number") 
+  
+                  Message2 = "  時間: " & Rs3("Present_Date")
+
+                   Color   = "1"
+
+                   Response.Redirect  "CouponVerification.asp?ProductType="&ProductType&"&Color="&Color&"&Message="&Message&"&Message2="&Message2
+      
+                    Else
+
+
+                Message = "系統出錯 - 請重試! "
+               
+
+                Response.Redirect  "CouponVerification.asp?ProductType="&ProductType&"&Color=2&Message="&Message
+             
+
+
+              End if
+    
+       
       
 
        

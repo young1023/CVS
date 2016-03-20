@@ -4,7 +4,10 @@
 function doLogin(){
 
    document.fm1.action="Login.asp";
-     
+   
+   
+
+   
    if (document.fm1.UserID.value == "")
 {
    alert("請輸入用戶編號.");
@@ -28,45 +31,15 @@ function doLogin(){
 function mod10CheckDigit() {
 //Get barCode field value, Strip all characters
 //except numbers Repopulate field w/ new value
-
-
 bc = document.barCodeForm.Barcode.value
+barcode1 = document.barCodeForm.Barcode.value
 checkdigit = bc.substr(3,1);
 bc = bc.replace(/[^0-9]+/g,'');
-//bc = bc.replace(/^\s+|\s+$/gm,'');
 document.barCodeForm.Barcode.value = bc;
 total = 0;
-checkdigit2 = null;
-
-// if coupon has 0 digits
-if (bc.length==0){
-document.barCodeForm.Barcode.focus();
-return false;
-}
-
-// disable double submit
-barCodeForm.Button.disabled = true;
-
-
-
-// hide the message box
-
-document.getElementById("Message").style.display="none";
-
-
-// if coupon has 16 digits
-if (bc.length==16){
-
-// get the check digit at 16th digit
-checkdigit2 = bc.substr(15,1);
-// change the coupon length back to 15th digits for the calculation
-bc = bc.substr(0,15)
-
-}
-
 //Get Even Numbers
 for (i=bc.length-2; i>=0; i=i-2) {
-if (i != 3 ){
+if (i != 3){
 tempeven = parseInt(bc.substr(i,1)) ;
 if (tempeven > 9) {
 tempeven = tempeven - 9;
@@ -86,33 +59,36 @@ total = total + temp;
 //Determine the checksum. if modDigit = 10, modDigit = 0
 modDigit = (10 - ((total + 17) % 10)) % 10;
 
+var CouponType = bc.substr(4,2);
+var ProductType = document.getElementById("ProductType");
+
+if (CouponType == 73 || CouponType == 83){
+if (ProductType.options[ProductType.selectedIndex].value === "CS"){
+alert("驗證失敗 - 類型不對!");
+return false;
+}
+}
+
+if (CouponType == 24){
+if (ProductType.options[ProductType.selectedIndex].value != 54){
+alert("驗證失敗 - 類型不對!");
+return false;
+}
+}
 
 if (checkdigit != modDigit){
-//alert("驗證失敗 - 禮券無效!");
-document.barCodeForm.Barcode.value = "Invalid";
-//document.barCodeForm.Barcode.focus();
-//return false;
-
-}
-
-
-if (checkdigit2 !== null){
-//Determine the 2nd checksum. if modDigit = 10, modDigit = 0
-modDigit2 = (10 - ((total + 23) % 10)) % 10;
-// if the 2nd check digit does not equal
-if (checkdigit2 != modDigit2){
-//alert("驗證失敗 - 禮券無效!");
-document.barCodeForm.Barcode.value = "Invalid";
-//document.barCodeForm.Barcode.focus();
-//return false;
-}
+alert("驗證失敗 - 禮券無效!");
+return false;
 }
 
 
 //Populate the modDigit field with the value
+//document.barCodeForm.barCodeShow.value = barcode1;
 document.barCodeForm.action="execute.asp";
 document.barCodeForm.submit();
+//return false;
 }
+
 
 
 

@@ -156,7 +156,7 @@ document.fm1.submit();
    
 ' Start the queries
 
-    Search_No =  pageid * 10 + 1000
+    Search_No =  pageid * 100 
 
    fsql = "SELECT  Top " & Search_No
       
@@ -218,9 +218,9 @@ document.fm1.submit();
    
    end if
 
-   fsql = fsql & " order by m.present_date desc"
+   fsql = fsql & " order by m.id desc"
 
-        response.write fsql
+        'response.write fsql
         'response.end
 
 ' Setting the page

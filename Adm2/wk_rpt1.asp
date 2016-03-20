@@ -2,29 +2,47 @@
 <!--#include file ="js/OVERLIB.JS" -->
 <!--#include file ="js/OVERLIB_MINI.JS" -->
 <!--#include file ="js/select_date.JS" -->
+
 <% 
 
 ' check which page is it
 pageid=request("pageid")
 
 
-From_Date      = Request.Form("From_Date")
+From_Date   = Request.Form("From_Date")
+
 if From_Date = "" then
    From_Date = formatdatetime(now(),2) 
 end if
 
-To_Date        = Request.Form("To_Date")
+To_Date     = Request.Form("To_Date")
 
 if To_Date = "" then
-   To_Date = formatdatetime(now(),2)
+   To_Date = formatdatetime(now(),2) 
 end if
-Coupon_Type    = Request.Form("Coupon_Type")
-Station        = Request.Form("Station")
-Coupon_Batch   = Request.Form("Coupon_Batch")
-Coupon_Number  = Request.Form("Coupon_Number")
-Print_Excel    = Request.Form("Print_Excel")
-Face_Value     = Request.Form("Face_Value")
-Excel_Type     = Request.Form("Excel_Type")
+
+Print_Excel = Request.Form("Print_Excel")
+
+if Print_Excel = "" Then
+   Print_Excel = "N"
+End If
+
+Excel_Type  = Request.Form("Excel_Type")
+whatdo      = Request.Form("Whatdo")
+
+If whatdo = "printexcel" Then
+
+
+      set rs = server.createobject("adodb.recordset")
+      'response.write  ("Exec PrintExcel '"&From_Date&"', '"&To_Date&"', '"&Excel_Type&"' ") 
+	  rs.open ("Exec PrintExcel '"&From_Date&"', '"&To_Date&"', '"&Excel_Type&"' ") ,  conn,3,1
+
+
+
+
+End if
+
+
 %>
 <html>
 <head>
@@ -37,19 +55,26 @@ Excel_Type     = Request.Form("Excel_Type")
 function gtpage(what)
 {
 document.fm1.pageid.value=what;
-document.fm1.action="rd_r_co1.asp"
+document.fm1.action="wk_rpt1.asp"
 document.fm1.submit();
 }
 
 function findenum()
 {
-document.fm1.action="rd_r_co1.asp"
+document.fm1.action="wk_rpt1.asp"
 document.fm1.submit();
 }
 
 function exportExcel()
 {
-document.fm1.action="rd_co_r_excel1.asp"
+document.fm1.action="wk_rpt_excel1.asp"
+document.fm1.submit();
+}
+
+function updateExcel()
+{
+document.fm1.action="wk_rpt1.asp"
+document.fm1.whatdo.value="printexcel"
 document.fm1.submit();
 }
 //-->
@@ -109,7 +134,7 @@ document.fm1.submit();
                      <tr> 
                           
                         <td height="28" align="center"><font color="#FF6600"><b>
-Redemption Raw Coupon</b></font></td>
+Weekly Report</b></font></td>
                         </tr>
                         <tr> 
                           <td valign="top" align="center">
@@ -130,72 +155,10 @@ Redemption Raw Coupon</b></font></td>
    
 ' Start the queries
          
-              'set frs = server.createobject("adodb.recordset")
-             'response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
-	     'response.end
-             'frs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
-      
-      Search_No =  pageid * 10 + 1000
+      set frs = server.createobject("adodb.recordset")
+      response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
+	  frs.open ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
 
-      fsql = "SELECT  Top " & Search_No
-
-      fsql = fsql & " Convert(datetime, Present_Date,111) as [Present Date] , "
-
-      fsql = fsql & " Convert(datetime, Present_Date,111) as [Present Time] , "
-
-      fsql = fsql & " m.RequestedID as Station, m.Coupon_Type as [Coupon Type], m.Coupon_Batch as [Batch],"
-
-      fsql = fsql & " m.Coupon_Number as [Coupon Number], Convert(varchar,c.Issue_Date,111) as [Issue Date], "
-
-      fsql = fsql & " m.SaleAmount as [Sale Amount], Convert(varchar, c.Expiry_Date,111) as [Expiry Date], "
-
-      fsql = fsql & " c.Excel_Type as [Excel type], m.Product_Type as [Product Type], m.Status, m.Creation_Date"
-
-      fsql = fsql & " From MasterCoupon m Left Join CouponRequest c on m.Coupon_Type = c.Product_Type and "
-
-      fsql = fsql & " m.Coupon_batch = c.Batch and Cast(m.Face_Value as float) = Cast(c.FaceValue as float) and "
-
-      fsql = fsql & " c.Start_Range <= m.Coupon_Number and c.End_Range >= m.Coupon_Number where "
-
-      fsql = fsql & " (Datediff(day, Present_Date, '"&From_Date&"') < = 0 or '"&From_Date&"' = '') "
-
-      fsql = fsql & " and (Datediff(day, Present_Date, '"&To_Date&"') >= 0 or '"&To_Date&"' = '') "
-
-      fsql = fsql & " and (m.RequestedID = '"&Station&"'  or '"&Station&"' = '') and "
-
-      fsql = fsql & " (m.Coupon_Type = '"&Coupon_Type&"'  or '"&Coupon_Type&"' = '') and "
-
-      fsql = fsql & " (m.Coupon_Batch = '"&Coupon_Batch&"' or '"&Coupon_Batch&"' = '') and "
-
-      fsql = fsql & " (Cast(m.Face_Value as float)= '"&Face_Value&"' or '"&Face_Value&"' = '') and "
-
-      fsql = fsql & " (m.Coupon_Number = '"&Coupon_Number&"' or '"&Coupon_Number&"' = '') and "
-
-      fsql = fsql & " (c.Excel_Type = '"&Excel_Type&"' or '"&Excel_Type&"' = '') and "
-
-      fsql = fsql & " (m.Status = '"&Status&"' or '"&Status&"' = '') Order by Present_Date Desc "
-
-    
-      response.write fsql
-      'response.end
-
-     ' Setting the page
-
-        set frs=createobject("adodb.recordset")
-		frs.cursortype=1
-		frs.locktype=1
-        frs.open fsql,conn
-
-       if frs.RecordCount=0 then
-           response.write "<font color=red>No Record</font>"
-       else
-          findrecord=frs.recordcount
-          'response.write "Total <font color=red>"&findrecord&"</font> Records ; Total <font color=blue>"
-
-         frs.PageSize = 10
-       end if
-
-             
 %>
 
 
@@ -205,23 +168,10 @@ Date From:
 To Date:
 <input type="text" name="To_Date" size="10" value="<% = To_Date %>">
 <a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
-Station
-<input type="text" name="Station" size="3" maxlength="3" value="<% = Station %>">
-Coupon Type
-<input type="text" name="Coupon_Type" size="2" maxlength="2" value="<% = Coupon_Type %>">
-Batch
-<input type="text" name="Coupon_Batch" size="3" maxlength="3" value="<% = Coupon_Batch %>">
-Face Value
-<input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
-Coupon Number
-<input type="text" name="Coupon_Number" size="6" maxlength="6" value="<% = Coupon_Number %>">
-
-
 Print Excel: 
 	<select size="1" name="Print_Excel" class="common">
-            <option value="All">All</option>
-			<option value="N">No</option>
-			<option value="Y">Yes</option>
+			<option value="N" <%If Print_Excel="N" Then%>Selected<%End If%>>No</option>
+			<option value="Y" <%If Print_Excel="Y" Then%>Selected<%End If%>>Yes</option>
 
 	</select>
 Excel Type :
@@ -231,6 +181,7 @@ Excel Type :
 <% if From_Date <> "" Then %>
 
 <input type="button" value="   Export to Excel   " onClick="exportExcel();" class="common">
+<input type="button" value="   Update all to print Excel   " onClick="updateExcel();" class="common">
 
 <% End If %>
    </td>
@@ -244,95 +195,124 @@ Excel Type :
 %>
 
 
-<table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
-<tr bgcolor="#DFDFDF">
+   <table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
+     <tr bgcolor="#DFDFDF">
 
-<td height="28">Present Date</td>
-<td height="28">Present Time</td>
-
-<td height="28">Station</td>
-<td height="28">Coupon<br/>Type</td>
-<td  height="28">Batch</td>
-<td  height="28">Coupon Number</td>
-<td  height="28">Product<br/>Type</td>
-<td>Issue Date</td>
-<td >Expiry Date</td>
-<td>Excel<br/> Type</td>
-
-<td>Print Excel</td>
-<td>Print Excel Date</td>
+<td height="28">From Date</td>
+<td height="28">To Date</td>
+<td height="28">(Sum) Total / Amount (Sum)</td>
+<td  height="28">Print Excel</td>
+<td  height="28">Excel Type</td>
+<td  height="28">Station</td>
+<td >Ship To Code</td>
+<td  height="28">Sold to Code</td>
 </tr>
-                                   
- 
                                     <%
 
 
 
  i=0
- if frs.recordcount>0 then
-  frs.AbsolutePage = pageid
-  do while (frs.PageSize-i)
-   if frs.eof then exit do
-   i=i+1
-   if flage then
-     mycolor="#ffffff"
-   else
-	 mycolor="#efefef"
-   end if
+ 
+ 
+  do while not frs.EoF
   
 %>
    <tr>
 
-<td align=center width="95" height="28"><% = FormatDateTime(frs("Present Date"),2)%></td>
-<td align=center width="95" height="28"><% = FormatDateTime(frs("Present Date"),4)%></td>
+<td align=center width="95" height="28"><% = frs("Doc Date")%></td>
+<td  height="28"><% = frs("To Date") %>
+</td>
+
+<td height="28"><% = frs("Amount") %>
+</td>
+
+<td  height="28"><% = frs("Print Excel") %>
+</td>
 
 <td  height="28">
+<%
+   If frs("Excel_Type") <> "" then
+
+     Response.Write frs("Excel_Type")
+
+    End If
+%>
+</td>
+
+<td >
 <% = frs("Station") %>
 </td>
-<td  height="28"><% = frs("Coupon Type") %>
-</td>
-
-<td height="28"><% = frs("Batch") %>
-</td>
-
-<td  height="28"><% = frs("Coupon number") %>
-</td>
-
-<td  height="28">
-<% = frs("Product Type") %>
-</td>
 
 <td >
-<% = frs("Issue Date") %>
+<% = frs("ShipToCode") %>
 </td>
 
-<td >
-<% = frs("Expiry Date") %>
+<td>
+<% = frs("SoldToCode") %> 
 </td>
 
-
-<td >
-<% = frs("Excel Type") %>
-</td>
-
-
-
-<td >
-<% = frs("Status") %>
-</td>
-
-<td >
-<% = frs("Creation_Date") %>
-</td>
 </tr>
 <%
-   'response.end 
+   
    frs.movenext
   loop
-  end if
+
+ 
   %>
 
                                   </table>
+
+<%
+
+
+      ' Calculate the total
+
+      set frs1 = server.createobject("adodb.recordset")
+      'response.write  ("Exec WeeklyReport_Total '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
+      frs1.open ("Exec WeeklyReport_Total '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
+
+
+%>
+
+
+
+<br>
+
+
+ <table border="0" cellpadding="1" width="40%" cellspacing="1" class="normal">
+
+     <tr bgcolor="#DFDFDF">
+
+<%
+
+    ' Total
+    do while not frs1.EoF
+ 
+  %>
+
+  <tr>
+
+<td>Total Amount of Excel Type: <% = frs1("Excel_Type") %>
+</td>
+
+<td height="28"><% = frs1("Total") %>
+</td>
+
+  </tr>
+
+<%
+   
+   frs1.movenext
+  loop
+
+%>
+
+
+
+                                  </table>
+
+
+
                                 </td>
                               </tr>
                               <tr> 
@@ -340,7 +320,7 @@ Excel Type :
 
                                   <%
 	 if frs.recordcount>0 then
-            call countpage(frs.PageCount,pageid)
+             call countpage(frs.PageCount,pageid)
 			 response.write "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 			 if Clng(pageid)<>1 then
                  response.write " <a href=javascript:gtpage('1') style='cursor:hand' >First</a> "
@@ -364,7 +344,6 @@ Excel Type :
                               <tr> 
                                 <td height="28" align="center"> 
 <%
-   'response.write "<input type='button' value='    Delete    ' onClick='delcheck();' class='common'>"
    response.write "<input type=hidden value='' name=whatdo>"
    response.write "<input type=hidden value="&pageid&" name=pageid>"
 
@@ -377,7 +356,7 @@ Excel Type :
  </td>
                               </tr>
                               <tr> 
-                                <td valign="top"></td>
+                                <td valign="top">¡@</td>
                               </tr>
                             </table>
                           </form>
@@ -402,7 +381,7 @@ Excel Type :
 
   ' function
   Sub countpage(PageCount,pageid)
-  'response.write pagecount&"</font> Pages "
+  response.write pagecount&"</font> Pages "
 	   if PageCount>=1 and PageCount<=10 then
 		 for i=1 to PageCount
 		   if (pageid-i =0) then
