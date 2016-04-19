@@ -10,7 +10,7 @@ pageid=request("pageid")
 
 From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date = formatdatetime(now(),2) 
+   From_Date = formatdatetime(now()-7,2) 
 end if
 
 To_Date        = Request.Form("To_Date")
@@ -134,20 +134,22 @@ Redemption Raw Coupon</b></font></td>
              'response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
 	     'response.end
              'frs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
-      
+  
+
+    
       Search_No =  pageid * 10 + 1000
 
       fsql = "SELECT  Top " & Search_No
 
-      fsql = fsql & " Convert(datetime, Present_Date,111) as [Present Date] , "
+      fsql = fsql & " Convert(datetime, Present_Date,103) as [Present Date] , "
 
-      fsql = fsql & " Convert(datetime, Present_Date,111) as [Present Time] , "
+      fsql = fsql & " Convert(datetime, Present_Date,103) as [Present Time] , "
 
       fsql = fsql & " m.RequestedID as Station, m.Coupon_Type as [Coupon Type], m.Coupon_Batch as [Batch],"
 
-      fsql = fsql & " m.Coupon_Number as [Coupon Number], Convert(varchar,c.Issue_Date,111) as [Issue Date], "
+      fsql = fsql & " m.Coupon_Number as [Coupon Number], Convert(varchar,c.Issue_Date,103) as [Issue Date], "
 
-      fsql = fsql & " m.SaleAmount as [Sale Amount], Convert(varchar, c.Expiry_Date,111) as [Expiry Date], "
+      fsql = fsql & " m.SaleAmount as [Sale Amount], Convert(varchar, c.Expiry_Date,103) as [Expiry Date], "
 
       fsql = fsql & " c.Excel_Type as [Excel type], m.Product_Type as [Product Type], m.Status, m.Creation_Date"
 
@@ -176,7 +178,7 @@ Redemption Raw Coupon</b></font></td>
       fsql = fsql & " (m.Status = '"&Status&"' or '"&Status&"' = '') Order by Present_Date Desc "
 
     
-      response.write fsql
+      'response.write fsql
       'response.end
 
      ' Setting the page

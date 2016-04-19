@@ -220,7 +220,7 @@ document.fm1.submit();
 
    fsql = fsql & " order by m.id desc"
 
-        'response.write fsql
+        response.write fsql
         'response.end
 
 ' Setting the page

@@ -350,7 +350,7 @@ function dateCheck(inputText) {
 
    fsql = fsql & " order by m.present_date desc"
 
-        'response.write fsql
+        response.write fsql
         'response.end
 
 ' Setting the page

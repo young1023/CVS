@@ -41,7 +41,7 @@
   
    Rs0.open ("Exec Check_CouponType '"&Barcode&"', '"&ProductType&"'") ,  conn,3,1
 
-   Response.write ("Exec Check_CouponType '"&Barcode&"', '"&ProductType&"'")
+   'Response.write ("Exec Check_CouponType '"&Barcode&"', '"&ProductType&"'")
 
    'Response.end
 
@@ -60,7 +60,7 @@
 
     Rs1.open ("Exec Checkrange '"&Barcode&"'") ,  conn,3,1
 
-   Response.write ("Exec Checkrange '"&Barcode&"'")
+   'Response.write ("Exec Checkrange '"&Barcode&"'")
 
    'Response.end
 
@@ -95,7 +95,7 @@
 
           Rs2.open ("Exec CheckCouponExist '"&Barcode&"'") ,  conn,3,1
 
-          Response.write ("Exec CheckCouponExist '"&Barcode&"'")
+          'Response.write ("Exec CheckCouponExist '"&Barcode&"'")
 
          ' If there is record
          If Not Rs2.EoF Then
@@ -123,6 +123,8 @@
 
  
          Else
+
+          Response.write ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'")
 
           Rs3.Open ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'"), Conn, 3, 1
 
