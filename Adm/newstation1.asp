@@ -53,23 +53,22 @@ if (document.fm1.IPAddress.value == "")
    return false;
   }
 
-
 document.fm1.submit();
 }
 
 function IPAddressKeyOnly(e) {
+
     var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+
     if (keyCode != 46 && keyCode > 31 && (keyCode < 48 || keyCode > 57))
+
        return false;
+
     return true;
+
 }
 
-function DigitOnly(e) {
-    var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
-    if (keyCode > 31 && (keyCode < 48 || keyCode > 57))
-       return false;
-    return true;
-}
+
 //-->
 </SCRIPT>
 </head>
@@ -135,11 +134,11 @@ function DigitOnly(e) {
 
  <tr><td>Station: </td>
       <td>
-<input name="Station" type=text value="<% = station %>" onkeypress="return DigitOnly(event)">	    
+<input name="Station" type=text value="<% = station %>" onkeypress="return event.charCode >= 48 && event.charCode <= 57">	    
 </td>
    </tr>
  <tr>
-<td>IP Addres:</td>
+<td>IP Address:</td>
 <td>
 <input name="IPAddress" type=text value="<% =IPAddress %>" onkeypress="return IPAddressKeyOnly(event)">	    
 </td>
@@ -153,7 +152,7 @@ function DigitOnly(e) {
 
 <tr><td>Machine No:</td>
       <td>
-<input name="MachineNo" type=text value="<% =MachineNo %>" onkeypress="return DigitOnly(event)">	    
+<input name="MachineNo" type=text value="<% =MachineNo %>">	    
 </td>
    </tr>
 

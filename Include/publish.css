@@ -116,9 +116,9 @@ input.ver
 
 
 
-.reportdate
+tr.reporthead
 {
-   visibility:hidden;
+   display: none;
 
 }
 
@@ -133,7 +133,7 @@ input.ver
 
 Body
 {
-     margin-top:10px;
+     margin-top:6px;
      margin-right:10px;
      margin-left:10px;
      margin-bottom:10px;
@@ -150,20 +150,23 @@ table, td
 {
      padding: 2px 2px 2px 2px ;
      border:1px dotted black;
-     white-space: nowrap;
-     text-align: center;
+      text-align: center;
      font-size:10px;
      
 }
 
-Table.DailyReport
+
+
+Table.DailyReport 
 { 
+  position:relative;
   border: 0; 
   text-decoration:none;
   font-family: arial; 
   font-size:14px; 
-  text-align: center;
+  text-align: left;
 } 
+
 
 .noprint {
 
@@ -177,11 +180,6 @@ Table.DailyReport
 
 }
 
-.reportdate
-{
-   visibility:visible;
-
-}
 
 select
 {
@@ -191,8 +189,8 @@ select
 
 div.page
 {
-page-break-after: always;
-page-break-inside: avoid;
+page-break-before: inherit;
+
 }
 
 
@@ -200,13 +198,6 @@ page-break-inside: avoid;
 { 
  
 page-break-before: always; 
-}
-
-
-.popup_middle
-{
- visibility:hidden;
-
 }
 
 

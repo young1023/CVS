@@ -1,7 +1,8 @@
 <%
 ' Tells the browser to open excel
-'Response.ContentType = "application/vnd.ms-excel" 
-'Response.addHeader "content-disposition","attachment;filename=Redemp_Rpt_"&Month(Now())&Year(now())&".xls"
+
+Response.ContentType = "application/vnd.ms-excel"
+Response.addHeader "content-disposition","attachment;filename=Redemp_Rpt_"&Month(Now())&Year(now())&".xls"
 
 %>
 

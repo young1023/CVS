@@ -22,10 +22,9 @@ var x = document.fm1.Face_Value.value
  if (isNaN(x)) 
   {
     alert("Please input numbers.");
-    document.fm1.Face_Value.focus();
     return false;
   }
- if (x.length!=3) 
+if (x.length!=3) 
   {
     alert("Face Value should be 3 digits.");
     document.fm1.Face_Value.focus();
@@ -102,6 +101,107 @@ document.fm1.submit();
 
 
 
+function dateCheck(inputText) {
+
+         debugger;
+
+         var dateFormat = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/;
+
+          var flag = 1;
+
+
+         if (inputText.value.match(dateFormat)) {
+
+           var inputFormat1 = inputText.value.split('/');
+
+             var inputFormat2 = inputText.value.split('-');
+
+             linputFormat1 = inputFormat1.length;
+
+             linputFormat2 = inputFormat2.length;
+
+ 
+
+             if (linputFormat1 > 1) {
+
+                 var pdate = inputText.value.split('/');
+
+             }
+
+             else if (linputFormat2 > 1) {
+
+                 var pdate = inputText.value.split('-');
+
+             }
+
+             var date = parseInt(pdate[0]);
+
+             var month = parseInt(pdate[1]);
+
+             var year = parseInt(pdate[2]);
+
+ 
+
+             var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+             if (month == 1 || month > 2) {
+
+                 if (date > ListofDays[month - 1]) {
+
+                     alert("Invalid date format!");
+
+                     return false;
+
+                 }
+
+             }
+
+ 
+
+             if (month == 2) {
+
+                 var leapYear = false;
+
+ 
+
+                 if ((!(year % 4) && year % 100) || !(year % 400)) {
+
+                     leapYear = true;
+
+ 
+
+                 }
+
+                 if ((leapYear == false) && (date >= 29)) {
+
+                     alert("Invalid date format!");
+
+                     return false;
+
+                 }
+
+                 if ((leapYear == true) && (date > 29)) {
+
+                     alert("Invalid date format!");
+
+                     return false;
+
+                 }
+
+             }
+
+         }
+
+         else {
+
+             alert("Invalid date format!");
+
+             return false;
+
+         }
+
+     }
+
 
 //-->
 </SCRIPT>
@@ -176,7 +276,7 @@ document.fm1.submit();
 
  <tr><td width="30%">Face Value: </td>
       <td>
-<input name="Face_Value" type=text value="" >	    
+<input name="Face_Value" type=text value="">	    
 </td>
    </tr>
  <tr>
@@ -237,14 +337,14 @@ document.fm1.submit();
    </tr>
 <tr><td>Expiry Date: (mm-dd-yyyy)</td>
       <td>
-<input name="Expiry_Date" type=text value="">
+<input name="Expiry_Date" type=text value="" onkeyup="dateCheck(document.fm1.Expiry_Date);">
 <a href="javascript:show_calendar('fm1.Expiry_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 </td>
    </tr>
 <tr><td>Issue Date: (mm-dd-yyyy)
 </td>
       <td>
-<input name="Issue_date" type=text value="">
+<input name="Issue_date" type=text value="" onkeyup="dateCheck(document.fm1.Issue_date);">
 <a href="javascript:show_calendar('fm1.Issue_date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 
 </td>
@@ -261,7 +361,7 @@ document.fm1.submit();
    </tr>
 <tr><td>Effective Date:</td>
       <td>
-<input name="Effective_Date" type=text value="">
+<input name="Effective_Date" type=text value="" onkeyup="dateCheck(document.fm1.Effective_Date);">
 <a href="javascript:show_calendar('fm1.Effective_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 	    
 </td>

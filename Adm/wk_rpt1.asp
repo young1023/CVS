@@ -156,7 +156,7 @@ Weekly Report</b></font></td>
 ' Start the queries
          
       set frs = server.createobject("adodb.recordset")
-      response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
+     'response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
 	  frs.open ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
 
 %>

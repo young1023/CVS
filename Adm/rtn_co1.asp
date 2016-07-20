@@ -9,7 +9,15 @@
 pageid=request("pageid")
 
 From_Date      = Request.Form("From_Date")
+if From_Date = "" then
+   From_Date =  formatdatetime(now(),2) 
+end if
+
 To_Date        = Request.Form("To_Date")
+
+if To_Date = "" then
+   To_Date = formatdatetime(now(),2)
+end if
 Coupon_Type    = Request.Form("Coupon_Type")
 Station        = Request.Form("Station")
 Coupon_Batch   = Request.Form("Coupon_Batch")
@@ -78,6 +86,109 @@ function findenum()
 document.fm1.action="rtn_co1.asp"
 document.fm1.submit();
 }
+
+function dateCheck(inputText) {
+
+         debugger;
+
+         var dateFormat = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/;
+
+          var flag = 1;
+
+
+         if (inputText.value.match(dateFormat)) {
+
+           var inputFormat1 = inputText.value.split('/');
+
+             var inputFormat2 = inputText.value.split('-');
+
+             linputFormat1 = inputFormat1.length;
+
+             linputFormat2 = inputFormat2.length;
+
+ 
+
+             if (linputFormat1 > 1) {
+
+                 var pdate = inputText.value.split('/');
+
+             }
+
+             else if (linputFormat2 > 1) {
+
+                 var pdate = inputText.value.split('-');
+
+             }
+
+             var date = parseInt(pdate[0]);
+
+             var month = parseInt(pdate[1]);
+
+             var year = parseInt(pdate[2]);
+
+ 
+
+             var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+             if (month == 1 || month > 2) {
+
+                 if (date > ListofDays[month - 1]) {
+
+                     alert("Invalid date format!");
+
+                     return false;
+
+                 }
+
+             }
+
+ 
+
+             if (month == 2) {
+
+                 var leapYear = false;
+
+ 
+
+                 if ((!(year % 4) && year % 100) || !(year % 400)) {
+
+                     leapYear = true;
+
+ 
+
+                 }
+
+                 if ((leapYear == false) && (date >= 29)) {
+
+                     alert("Invalid date format!");
+
+                     return false;
+
+                 }
+
+                 if ((leapYear == true) && (date > 29)) {
+
+                     alert("Invalid date format!");
+
+                     return false;
+
+                 }
+
+             }
+
+         }
+
+         else {
+
+             alert("Invalid date format!");
+
+             return false;
+
+         }
+
+     }
+
+
 //-->
 </script>
 </head>
@@ -172,7 +283,10 @@ document.fm1.submit();
    ' Check Date Range
    if From_Date <> "" then
 
-   fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 110) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 110) "
+
+   fsql = fsql & " and Datediff(day, m.Present_Date, '"& From_Date &"') < = 0 and  Datediff(day, Present_Date, '"& To_Date &"') > = 0 "
+   
+   'fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 110) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 110) "
    
    end if
 
@@ -249,10 +363,10 @@ document.fm1.submit();
 
 
 Date From:
-<input type="text" name="From_Date" size="10" value="<% = From_Date %>">
+<input type="text" name="From_Date" size="10" value="<% = From_Date %>" onkeyup="dateCheck(document.fm1.From_Date);">
 <a href="javascript:show_calendar('fm1.From_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 To Date:
-<input type="text" name="To_Date" size="10" value="<% = To_Date %>">
+<input type="text" name="To_Date" size="10" value="<% = To_Date %>" onkeyup="dateCheck(document.fm1.To_Date);">
 <a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 
 Station

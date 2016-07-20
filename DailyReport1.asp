@@ -101,10 +101,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 <!--#include file="include/JavaScript.js" -->
 <style type="text/css">
 @media print {
-    table { page-break-inside:auto }
-    tr    { page-break-inside:avoid; page-break-after:auto }
-
-
+    
     h1 {page-break-before: always;}
 
 
@@ -429,7 +426,7 @@ for i = Year_starting to Year(Now())
 	</td>
     
 </tr>
-
+<tr>
    
 
 <td width="15%">日期 / 時間</td>
@@ -442,7 +439,8 @@ for i = Year_starting to Year(Now())
 <td width="10%">機號</td>
 <td width="10%">電子禮券</td>
 </tr>
-
+<tr>
+<td colspan="9" align="left">
 <%
 
 Total = 0
@@ -458,15 +456,10 @@ i=0
    
 %>
 
-
-
-   <tr>
-
-<td width="30%">
 <% = i & ". " & frs("Present_Date") %>
-</td>
 
-<td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+
 <%
 If frs("Period") = 11 Then
 
@@ -482,43 +475,45 @@ Elseif frs("Period") = 13 Then
 
 End if
 %>
-</td>
 
-<td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+
 <%= frs("Face_Value") %>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+
 <%  
 
 Total = Total + frs("Face_Value") 
 
 %>
-</td>
 
-<td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+
  <% = frs("Coupon_type") %>
-</td>
 
-<td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+
  <% = frs("Coupon_Batch") %>
-</td>
 
-<td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+
 <% = frs("Coupon_Number") %>
-</td>
 
-<td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+
 <% = frs("ProductType") %>
-</td>
 
-<td>&nbsp;<% = frs("MachineNo") %>
-</td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
 
-<td>
+&nbsp;<% = frs("MachineNo") %>
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
 <% = frs("Digital") %>
-</td>
-
-</tr>
 
 
+<hr>
 
 <%
 
@@ -527,6 +522,8 @@ Total = Total + frs("Face_Value")
   loop
  end if
   %>
+</td>
+</tr>
 <tr>
 <td colspan = "2" align="right">
 Total:
@@ -558,7 +555,7 @@ document.fm1.submit();
 
 function Report()
 {
-document.fm1.action="DailyReport.asp"
+document.fm1.action="DailyReport1.asp"
 document.fm1.submit();
 }
 

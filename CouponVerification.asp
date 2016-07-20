@@ -93,21 +93,21 @@ input[type=radio]:checked + label {
 
      <tr>
 
-       <td width="25%" >
+       <td width="20%" >
 
          <input type="radio" id="radio1" name="ProductType" value="54" <% If ProductType = "54" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
          <label for="radio1">V ¯à¶q</label>
 
         </td>
 
-		<td width="25%" >
+		<td width="20%" >
 
          <input type="radio" id="radio2" name="ProductType" value="53" <% If ProductType = "53" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
          <label for="radio2" >µL¹]</label>
 
         </td> 
 
-	    <td width="25%" >
+	    <td width="20%" >
 
          <input type="radio" id="radio3" name="ProductType" value="52" <% If ProductType = "52" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
          <label for="radio3">®ãªo</label>
@@ -116,7 +116,7 @@ input[type=radio]:checked + label {
         </td> 
 
   
-         <td width="25%" >
+         <td width="20%" >
 
  
          <input type="radio" id="radio4" name="ProductType" value="55" <% If ProductType = "55" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
@@ -125,6 +125,14 @@ input[type=radio]:checked + label {
 
       
   
+        </td> 
+
+            <td width="20%" >
+
+         <input type="radio" id="radio9" name="ProductType" value="B5" <% If ProductType = "B5" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+         <label for="radio9">B5 ®ãªo</label>
+
+
         </td> 
 	 
      </tr>
@@ -158,7 +166,14 @@ input[type=radio]:checked + label {
         </td> 
 
 
-        <td ></td>
+        <td >
+
+
+   <input type="radio" id="radio8" name="ProductType" value="3M" <% If ProductType = "3M" Then%>Checked<%End If%> OnClick="document.barCodeForm.Barcode.focus();">
+         <label for="radio8">&nbsp;&nbsp;&nbsp;3M&nbsp;&nbsp;&nbsp;</label>
+</td>
+
+       <td>&nbsp;</td>
 
         </tr>
 
@@ -214,7 +229,7 @@ input[type=radio]:checked + label {
 
 %>
 
-<table width="80%" border="0"  cellpadding="20" cellspacing="2" bgcolor="<%=bgcolor%>" id="Message">
+<table width="80%" border="0"  cellpadding="20" cellspacing="2" bgcolor="<%=bgcolor%>" class="Message">
 
 
      <tr>

@@ -166,15 +166,15 @@ document.fm1.submit();
    </tr>
 <tr><td>Canopy Disc:</td>
       <td>
-<input name="Canopy_Disc" type=text value="<% = rs("Canopy_Copy_Disc") %>">	    
+<input name="Canopy_Copy_Disc" type=text value="<% = rs("Canopy_Copy_Disc") %>">	    
 </td>
    </tr>
-<tr><td>Expiry Date: (mm/dd/yyyy)</td>
+<tr><td>Expiry Date: (mm-dd-yyyy)</td>
       <td>
 <input name="Expiry_Date" type=text value="<% = rs("Expiry_Date") %>">	    
 </td>
    </tr>
-<tr><td>Issue Date: (mm/dd/yyyy)</td>
+<tr><td>Issue Date: (mm-dd-yyyy)</td>
       <td>
 <input name="Issue_date" type=text value="<% = rs("Issue_Date") %>">	    
 </td>
@@ -189,7 +189,7 @@ document.fm1.submit();
 <input name="Excel_Type" type=text value="<% = rs("Excel_Type") %>">	    
 </td>
    </tr>
-<tr><td>Effective Date: (mm/dd/yyyy)</td>
+<tr><td>Effective Date:</td>
       <td>
 <input name="Effective_Date" type=text value="<% = rs("Effective_Date") %>">	    
 </td>

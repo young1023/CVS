@@ -20,7 +20,7 @@
     ' Check digit 
     If Barcode = "Invalid" Then
 
-           Message = "驗證失敗 - 禮券號碼不正確, 請重試! "
+           Message = "驗證失敗 - 禮券號碼不正確, 請重試!  "
 
 
     Response.Redirect  "CouponVerification.asp?&ProductType="&ProductType&"&Color=2&Message="&Message
@@ -41,7 +41,7 @@
   
    Rs0.open ("Exec Check_CouponType '"&Barcode&"', '"&ProductType&"'") ,  conn,3,1
 
-   'Response.write ("Exec Check_CouponType '"&Barcode&"', '"&ProductType&"'")
+   Response.write ("Exec Check_CouponType '"&Barcode&"', '"&ProductType&"'")
 
    'Response.end
 
@@ -60,7 +60,7 @@
 
     Rs1.open ("Exec Checkrange '"&Barcode&"'") ,  conn,3,1
 
-   'Response.write ("Exec Checkrange '"&Barcode&"'")
+   Response.write ("Exec Checkrange '"&Barcode&"'")
 
    'Response.end
 
@@ -95,7 +95,7 @@
 
           Rs2.open ("Exec CheckCouponExist '"&Barcode&"'") ,  conn,3,1
 
-          'Response.write ("Exec CheckCouponExist '"&Barcode&"'")
+          Response.write ("Exec CheckCouponExist '"&Barcode&"'")
 
          ' If there is record
          If Not Rs2.EoF Then
@@ -124,13 +124,11 @@
  
          Else
 
-          Response.write ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'")
-
           Rs3.Open ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'"), Conn, 3, 1
 
               ' If record is inserted.
-              If Not Rs3.EoF Then  
-
+              If Not Rs3.EoF Then 
+             
                   Message = "驗證成功!  號碼: " &  Rs3("Coupon_number") 
   
                   Message2 = "  時間: " & Rs3("Present_Date")
@@ -142,7 +140,8 @@
                     Else
 
 
-                Message = "系統出錯 - 請重試! "
+                'Message = "驗證失敗 - 禮券無效 "
+                  Message = "驗證失敗 - 請重試! "
                
 
                 Response.Redirect  "CouponVerification.asp?ProductType="&ProductType&"&Color=2&Message="&Message

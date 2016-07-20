@@ -9,21 +9,7 @@ pageid=request("pageid")
 
 
 From_Date      = Request.Form("From_Date")
-if From_Date = "" then
-   From_Date = formatdatetime(now()-7,2) 
-end if
-
 To_Date        = Request.Form("To_Date")
-
-if To_Date = "" then
-   To_Date = formatdatetime(now(),2)
-end if
-Coupon_Type    = Request.Form("Coupon_Type")
-Coupon_Batch   = Request.Form("Coupon_Batch")
-Start_Range    = Request.Form("Start_Range")
-End_Range      = Request.Form("End_Range")
-Face_Value     = Request.Form("Face_Value")
-
 
 
 %>
@@ -53,68 +39,6 @@ function exportExcel()
 document.fm1.action="rd_co_excel1.asp"
 document.fm1.submit();
 }
-
-
-function dateCheck(inputText) {
-         debugger;
-
-         var dateFormat = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
-
-         var flag = 1;
-
-         if (inputText.value.match(dateFormat)) {
-             document.myForm.dateInput.focus();
-
-             var inputFormat1 = inputText.value.split('/');
-             var inputFormat2 = inputText.value.split('-');
-             linputFormat1 = inputFormat1.length;
-             linputFormat2 = inputFormat2.length;
-
-             if (linputFormat1 > 1) {
-                 var pdate = inputText.value.split('/');
-             }
-             else if (linputFormat2 > 1) {
-                 var pdate = inputText.value.split('-');
-             }
-             var date = parseInt(pdate[0]);
-             var month = parseInt(pdate[1]);
-             var year = parseInt(pdate[2]);
-
-             var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-             if (month == 1 || month > 2) {
-                 if (date > ListofDays[month - 1]) {
-                     alert("Invalid date format!");
-                     return false;
-                 }
-             }
-
-             if (month == 2) {
-                 var leapYear = false;
-
-                 if ((!(year % 4) && year % 100) || !(year % 400)) {
-                     leapYear = true;
-
-                 }
-                 if ((leapYear == false) && (date >= 29)) {
-                     alert("Invalid date format!");
-                     return false;
-                 }
-                 if ((leapYear == true) && (date > 29)) {
-                     alert("Invalid date format!");
-                     return false;
-                 }
-             }
-             if (flag == 1) {
-                 alert("Valid Date");
-             }
-         }
-         else {
-             alert("Invalid date format!");
-             document.myForm.dateInput.focus();
-             return false;
-         }
-     }
-
 //-->
 </script>
 </head>
@@ -194,28 +118,18 @@ Redemption Coupon</b></font></td>
 ' Start the queries
          
       set frs = server.createobject("adodb.recordset")
-      response.write  ("Exec RedemptionReport1 '"&From_Date&"', '"&To_Date&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Sart_Range&"', '"&End_Range&"'") 
-	  frs.open ("Exec RedemptionReport1 '"&From_Date&"', '"&To_Date&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Sart_Range&"', '"&End_Range&"'") ,  conn,3,1
+      'response.write  ("Exec RedemptionReport1 '"&From_Date&"', '"&To_Date&"' ") 
+	  frs.open ("Exec RedemptionReport1 '"&From_Date&"', '"&To_Date&"' ") ,  conn,3,1
 
 %>
 
 
 Date From:
-<input type="text" name="From_Date" size="10" value="<% = From_Date %>" onkeyup="dateCheck(document.fm1.From_Date);">
+<input type="text" name="From_Date" size="10" value="<% = From_Date %>">
 <a href="javascript:show_calendar('fm1.From_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 To Date:
 <input type="text" name="To_Date" size="10" value="<% = To_Date %>">
 <a href="javascript:show_calendar('fm1.To_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
-Coupon Type
-<input type="text" name="Coupon_Type" size="2" maxlength="2" value="<% = Coupon_Type %>">
-Batch
-<input type="text" name="Coupon_Batch" size="3" maxlength="3" value="<% = Coupon_Batch %>">
-Face Value
-<input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
-Start Range
-<input type="text" name="Start_Range" size="6" maxlength="6" value="<% = Start_Range %>">
-End Range
-<input type="text" name="End_Range" size="6" maxlength="6" value="<% = End_Range %>">
 
 <input type="button" value="   Search   " onClick="findenum();" class="common">
 
@@ -240,8 +154,7 @@ End Range
 
 <td height="28">Present Date</td>
 <td height="28">Station</td>
-<td height="28">Coupon Number</td>
-<td height="28">Expiry Date</td>
+<td height="28">Total</td>
 
 </tr>
                                     <%
@@ -260,11 +173,9 @@ End Range
 <td  height="28"><% = frs("Station") %>
 </td>
 
-<td height="28"><% = frs("Coupon Number") %>
+<td height="28"><% = frs("Total") %>
 </td>
 
-<td height="28"><% = frs("Expiry Date") %>
-</td>
 </tr>
 <%
    
@@ -305,6 +216,7 @@ End Range
                               <tr> 
                                 <td height="28" align="center"> 
 <%
+   'response.write "<input type='button' value='    Delete    ' onClick='delcheck();' class='common'>"
    response.write "<input type=hidden value='' name=whatdo>"
    response.write "<input type=hidden value="&pageid&" name=pageid>"
 

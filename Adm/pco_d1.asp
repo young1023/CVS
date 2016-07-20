@@ -15,6 +15,7 @@ Start_Range    = Request.Form("Start_Range")
 End_Range      = Request.Form("End_Range")
 Face_Value     = Request.Form("Face_Value")
 Excel_Type     = Request.Form("Excel_Type")
+Expiry_Date    = Request.Form("Expiry_Date")
 
 
 
@@ -203,13 +204,18 @@ document.fm1.submit();
    
    end if
 
+  ' Check Expiry Date
+   if Expiry_Date <> "" then
 
+   fsql = fsql & " and Expiry_date = '" & Expiry_Date & "' "
+   
+   end if
 
   
 
        fsql = fsql & " order by Issue_Date desc"
 
-       ' response.write fsql
+        'response.write fsql
         'response.end
 
 ' Setting the page
@@ -248,6 +254,9 @@ End Range
 <input type="text" name="End_Range" size="7" maxlength="6" value="<% = End_Range %>">
 Excel Type :
 <input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
+Expiry Date :
+<input type="text" name="Expiry_Date" size="12" value="<% = Expiry_Date %>">
+
 <input type="button" value="   Search   " onClick="findenum();" class="common">
 
    </td>

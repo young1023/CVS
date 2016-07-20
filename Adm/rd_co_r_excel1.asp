@@ -24,6 +24,11 @@ Coupon_Number  = Request.Form("Coupon_Number")
 Print_Excel    = Request.Form("Print_Excel")
 Face_Value     = Request.Form("Face_Value")
 Print_Excel    = Request.Form("Print_Excel")
+
+if Print_Excel = "" then
+   Print_Excel = "All"
+end if
+
 Excel_Type     = Request.Form("Excel_Type")
 
 
@@ -34,7 +39,7 @@ Excel_Type     = Request.Form("Excel_Type")
 ' Create a server recordset object
 
       set rs = server.createobject("adodb.recordset")
-      'response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
+      response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
       rs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
         
 %>
