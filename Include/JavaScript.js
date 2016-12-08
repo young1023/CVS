@@ -51,7 +51,7 @@ barCodeForm.Button.disabled = true;
 
 // hide the message box
 
-document.getElementById("Message").style.display="none";
+//document.getElementById("Message").style.display="none";
 
 
 // if coupon has 16 digits

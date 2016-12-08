@@ -1,6 +1,8 @@
 <!--#include file="include/SQLConn.inc" -->
 <%
 
+Session("SecLevel") = ""
+
 Message = Request("Message")
 
 Dim UserIPAddress
@@ -18,6 +20,7 @@ Set Rs1 = Conn.Execute(sql1)
 If Not Rs1.EoF Then
 
 StationID = Rs1("Station")
+response.write stationid
 
 Else 
 
@@ -108,20 +111,6 @@ End If
 <div align="center">
 
 
-
-		
-<% 
-
-If  StationID = 104  then
-
-    Alert = "No unauthority PC is allowed to access the system."
-
-End If
-
-
-
-%>
-
 <table width="60%" border="0" Height="400"  class="Login">
 
     <tr>
@@ -172,7 +161,7 @@ End If
         </td> 
 
 		<td ><input Type="Button" Name=" ½T©w " value="   ½T©w   " onClick="doLogin();">
-             <input name="StationID" type="hidden" value="<%=StationID%>">
+             <input name="IPAddress" type="hidden" value="<%=IPAddress%>">
 
 
         </td>

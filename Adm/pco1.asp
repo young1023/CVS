@@ -276,30 +276,30 @@ function dateCheck(inputText) {
 
  <tr><td width="30%">Face Value: </td>
       <td>
-<input name="Face_Value" type=text value="">	    
+<input name="Face_Value" type=text value="" maxlength="3">	    
 </td>
    </tr>
  <tr>
 <td>Type:</td>
 <td>
-<input name="Product_Type" type=text value="">	    
+<input name="Product_Type" type=text value="" maxlength="2">	    
 </td>
 </tr>
      
  <tr><td>Batch: </td>
       <td>
-<input name="Batch" type=text value="">	    
+<input name="Batch" type=text value="" maxlength="3">	    
 </td>
    </tr>
 
 <tr><td>Start Range:</td>
       <td>
-<input name="Start_Range" type=text value="">	    
+<input name="Start_Range" type=text value="" maxlength="6">	    
 </td>
    </tr>
 <tr><td>End Range:</td>
       <td>
-<input name="End_Range" type=text value="">	    
+<input name="End_Range" type=text value="" maxlength="6">	    
 </td>
    </tr>
 
@@ -351,12 +351,12 @@ function dateCheck(inputText) {
    </tr>
 <tr><td>Completed:</td>
       <td>
-<input name="Completed" type=text value="">	    
+<input name="Completed" type=text value="" maxlength="1">	    
 </td>
    </tr>
 <tr><td>Excel Type:</td>
       <td>
-<input name="Excel_Type" type=text value="">	    
+<input name="Excel_Type" type=text value="" maxlength="1">	    
 </td>
    </tr>
 <tr><td>Effective Date:</td>

@@ -9,16 +9,15 @@
 pageid=request("pageid")
 
 
-From_Date   = Request.Form("From_Date")
-
+From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date = formatdatetime(now(),2) 
+   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) - 7
 end if
 
-To_Date     = Request.Form("To_Date")
+To_Date        = Request.Form("To_Date")
 
 if To_Date = "" then
-   To_Date = formatdatetime(now(),2) 
+   To_Date = year(now()) & "-" & month(now()) & "-" & day(now())
 end if
 
 Print_Excel = Request.Form("Print_Excel")
@@ -156,7 +155,7 @@ Weekly Report</b></font></td>
 ' Start the queries
          
       set frs = server.createobject("adodb.recordset")
-     'response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
+      'response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
 	  frs.open ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
 
 %>

@@ -11,14 +11,15 @@ pageid=request("pageid")
 
 From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date = formatdatetime((now() - 7) ,2) 
+   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) - 7
 end if
 
 To_Date        = Request.Form("To_Date")
 
 if To_Date = "" then
-   To_Date = formatdatetime(now(),2)
+   To_Date = year(now()) & "-" & month(now()) & "-" & day(now())
 end if
+
 
 Coupon_Type    = Request.Form("Coupon_Type")
 Station        = Request.Form("Station")

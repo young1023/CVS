@@ -4,29 +4,22 @@
 
 UserIPAddress = Request.ServerVariables("REMOTE_ADDR")
 
-sql = "Select station from station where IPAddress ='" &UserIPAddress& "'"
+sql = "Select * from station where IPAddress ='" &UserIPAddress& "'"
 
 set rs = conn.execute(sql) 
 
-Set Rs1 = Server.CreateObject("Adodb.Recordset")
-  
-sql1 = "Select * From Station s Left Join CVSUser u on "
-
-sql1 = sql1 & " s.LoginUser = u.UserName Where station ='" &rs("station")& "'"
-
-Set Rs1 = Conn.Execute(sql1)
 
 UserID        = Request.Form("UserID")
 
 If UserID     = "" Then
 
-UserID        = trim(Rs1("LoginUser"))
+UserID        = trim(rs("LoginUser"))
 
 End If
 
-StationID     = trim(Rs1("Station"))
+'response.write UserID
 
-SecLevel      = trim(Rs1("SecLevel"))
+StationID     = trim(Rs("Station"))
 
 Message       = Request("Message")
 
@@ -141,8 +134,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 
         Barcode = replace(Barcode,"'","''")
 
-        If len(Barcode) = 15 then
-
+       
         Face_Value = Left(Barcode, 3)
 
         Coupon_Type = Mid(Barcode, 5,2)
@@ -151,7 +143,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
 
         Coupon_Number = Mid(Barcode, 10,6)
 
-        end if
+       
         
 
    ' Start the Queries    

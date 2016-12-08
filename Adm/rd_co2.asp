@@ -17,13 +17,13 @@ pageid=request("pageid")
 
 From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date =  formatdatetime(now(),2) 
+   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) - 7
 end if
 
 To_Date        = Request.Form("To_Date")
 
 if To_Date = "" then
-   To_Date = formatdatetime(now(),2)
+   To_Date = year(now()) & "-" & month(now()) & "-" & day(now())
 end if
 
 Coupon_Type    = Request.Form("Coupon_Type")
@@ -319,9 +319,6 @@ findnum=replace(findnum,"'","''")
 ' Start the queries
          
       
-'set frs = server.createobject("adodb.recordset")
-      'response.write  ("Exec RedemptionReport1 '"&From_Date&"', '"&To_Date&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Sart_Range&"', '"&End_Range&"'") 
-	  'frs.open ("Exec RedemptionReport1 '"&From_Date&"', '"&To_Date&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Sart_Range&"', '"&End_Range&"'") ,  conn,3,1
 
       Search_No =  pageid * 10 + 1000
 

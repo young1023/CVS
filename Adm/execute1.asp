@@ -246,6 +246,7 @@ elseif flag ="edit_st" then
  
 
       whatgo = "station1.asp"
+
 '==========================================================================
 '
 '
@@ -266,6 +267,97 @@ elseif flag = "del_st" then
   message="Station was deleted successfully"
    whatgo="station1.asp"
 
+
+
+'---------------------------------------------------------------------------
+'
+'
+'  new user
+'
+'
+'---------------------------------------------------------------------------
+
+
+elseif flag ="add_usr" then
+
+  UserName = replace(trim(request.form("UserName")),"'","''")
+  Password = replace(trim(request.form("Password")),"'","''")
+  SecLevel = replace(trim(request.form("SecLevel")),"'","''")
+ 
+      sql1 = "Select count(1) as Tcount From CVSUser where UserName ='" & Username &"'"
+
+      set rs1 = conn.execute(sql1)
+
+      if rs1("Tcount") = 0 then
+
+
+      sql = "Insert into CVSUser (UserName, Password, SecLevel)"
+      sql = sql & " values('"&UserName&"', '"&Password&"', "&SecLevel&")"
+  'response.write sql
+  'response.end
+     conn.execute(sql)
+     message="User name is added."
+
+     else
+
+      message = "User name is used."
+
+    end if
+
+ 
+
+      whatgo = "user1.asp"
+
+'-----------------------------------------------------------------------------
+'
+'
+'  edit user
+'
+'
+'----------------------------------------------------------------------------
+
+
+elseif flag ="edit_usr" then
+
+  
+  UserName = replace(trim(request.form("UserName")),"'","''")
+  Password = replace(trim(request.form("Password")),"'","''")
+  SecLevel = replace(trim(request.form("SecLevel")),"'","''")
+
+
+      sql = "Update CVSUser set Password='"&Password&"', "
+
+      sql = sql & "SecLevel="&SecLevel&" where UserName ='"& Username &"'"
+
+      'response.write sql
+      'response.end
+     conn.execute(sql)
+     message="User is edited."
+
+ 
+
+      whatgo = "user1.asp"
+
+
+'==========================================================================
+'
+'
+'  Delete User
+'
+'
+'==========================================================================
+
+
+elseif flag = "del_usr" then
+ 
+  delid=split(trim(request.form("mid")),",")
+   for i=0 to Ubound(delid)
+     sql="delete from CVSUser where UserName='"&trim(delid(i))&"'"
+     conn.execute(sql)
+	 'response.write sql&"<br>"
+   next
+  message="User was deleted successfully"
+   whatgo="user1.asp"
 
 
 

@@ -5,14 +5,17 @@
 
    Password  = Request("Password")
 
-   StationID = Request("StationID")
-
+  
    Set Rs1 = Server.CreateObject("Adodb.Recordset")
+  
+   sql1 = "Select * From CVSUser Where UserName ='" &UserID& "' and Password ='" &Password& "'"
 
-   Rs1.open ("Exec CheckLoginPwd '"&UserID&"', '"&Password&"' , '"&StationID&"' ") ,  conn,3,1
+   Set Rs1 = Conn.Execute(sql1)
 
-    If Not Rs1.EoF Then
+  
+   If Not Rs1.EoF Then
 
+   Session("SecLevel") = Rs1("SecLevel")
 
    Response.Redirect "pco1.asp"
 
