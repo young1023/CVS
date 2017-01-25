@@ -1,27 +1,13 @@
+<!--#include file="include/SQLConn.inc" -->
 <% 
-'on error resume next
-'*********************************************************************************
-'NAME       : GenCoupon.asp          
-'DESCRIPTION: Generate Coupon
-'INPUT      : 
-'OUTPUT     : 
-'RETURNS    :                     
-'CALLS      :                     
-'CREATED    : Gary Yeung
-'MODIFIED   : 
-'********************************************************************************
 
 
 %>
-<!DOCTYPE html>
-<HTML>
-<HEAD>
-	<link rel="stylesheet" type="text/css" href="include/publish.css" />
- <meta charset="utf-8"> 
-<TITLE>Generate Coupon</TITLE>
-
-<!-- Load the javascript code -->
-
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>Shell CVS Administration</title>
+<link rel="stylesheet" type="text/css" href="include/hse.css" />
 <SCRIPT language=JavaScript>
 <!--
 
@@ -120,20 +106,73 @@ function ZeroPadNumber(nValue)
 
 
 //-->
-</script>
+</SCRIPT>
+</head>
+
+<body leftmargin="0" topmargin="0" onload="document.barCodeForm.facevalue.focus();">
+<!--#include file="include/header.inc" -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="3" class="NavyBlue" height="3"></td>
+  </tr>
+  <tr>
+    <td colspan="3" class="NavyBlue">
+    <table border="0" width="100%" cellspacing="0" cellpadding="0" class="TitleBar">
+      <tr>
+        <td width="100%">
+        <table border="0" width="100%" cellspacing="0" cellpadding="0" class="TitleBar">
+            <tr>
+              <td><div align="center"><font class="Head" style="font-size: 13px">Shell CVS Administration</font></div></td>
+            </tr>
+            </table>
+          </td>
+          <td nowrap="true">
+          </td>
+        </tr>
+      </table>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" class="NavyBlue" height="1"></td>
+    </tr>
+    <tr>
+      <td colspan="3" height="1"></td>
+    </tr>
+  </table>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" height="60%">
+    <tr>
+      <td width="1" class="HSEBlue"></td>
+      <td valign="top">
+      <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td height="4" class="HSEBlue"></td>
+        </tr>
+        <tr valign="top">
+          <td height="25"><img src="images/Curve.gif" width="22" height="16" /></td>
+        </tr>
+        <tr valign="top">
+          <td height="100%" align="middle">
 
 
-</HEAD>
+ <table width="100%" border="0" cellpadding=0 cellspacing="0" bgcolor="#FFFFFF" height="100%">
+                <tr>
+                  <td valign="top" align="center" bgcolor="#E6EBEF">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#E6EBEF" class="normal">
+                     <tr> 
+                          
+                        <td height="28" align="center"><font color="#FF6600"><b>
+	Coupon Generator</b></font></td>
+                        </tr>
+                        <tr> 
+                          <td valign="top" align="center">
+                          
 
-<BODY onload="document.barCodeForm.Barcode.focus();">
-
-<h1>Coupon Generator</h1>
 
 <div align="center">
 
 <FORM NAME="barCodeForm"  method="post"  action="GenCoupon.asp">
 
-<table width="90%" border="1"  cellpadding="4" cellspacing="2" class="Report">
+<table width="100%" border="0"  cellpadding="4" cellspacing="2" class="Report">
 										
 <tr>
 
@@ -256,7 +295,7 @@ End Range
 
 <td class="common" colspan="3"> 
 
-<textarea rows="40" cols="120" id="Barcode3" onfocus="this.select();" onmouseup="return false;">
+<textarea rows="40" cols="80" id="Barcode3" onfocus="this.select();" onmouseup="return false;">
 </textarea>
 		
 </td></tr>
@@ -267,7 +306,23 @@ End Range
 
 					
 </div>
-	
 
-</BODY>
-</HTML>
+
+
+<%
+'-----------------------------------------------------------------------------
+'
+'      End of the main Content 
+'
+'-----------------------------------------------------------------------------
+%>
+</td>
+              </tr>
+                </table>
+                </td>
+                </tr>
+              </table>
+           
+              </body>
+
+              </html>

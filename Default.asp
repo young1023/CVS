@@ -5,6 +5,7 @@ Message = Request("Message")
 
 Dim UserIPAddress
 UserIPAddress = Request.ServerVariables("REMOTE_ADDR")
+UserIPAddress = "192.168.1.1"
 'response.write UserIPAddress
 
 

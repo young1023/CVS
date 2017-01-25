@@ -16,6 +16,7 @@ End_Range      = Request.Form("End_Range")
 Face_Value     = Request.Form("Face_Value")
 Excel_Type     = Request.Form("Excel_Type")
 Expiry_Date    = Request.Form("Expiry_Date")
+Coupon_Number  = Request.Form("Coupon_Number")
 
 
 
@@ -183,6 +184,15 @@ document.fm1.submit();
    
    end if
 
+  ' Check Coupon Number
+   if Coupon_Number <> "" then
+
+   fsql = fsql & " and Cast(Start_Range as float) <= Cast(" & Coupon_Number & " as float) "
+
+   fsql = fsql & " and Cast(End_Range as float) >= Cast(" & Coupon_Number & " as float) "
+
+   end if
+
    ' Check Coupon Number
    if Start_Range <> "" then
 
@@ -207,7 +217,7 @@ document.fm1.submit();
   ' Check Expiry Date
    if Expiry_Date <> "" then
 
-   fsql = fsql & " and Expiry_date = '" & Expiry_Date & "' "
+   fsql = fsql & " and Expiry_date >= '" & Expiry_Date & "' "
    
    end if
 
@@ -215,7 +225,7 @@ document.fm1.submit();
 
        fsql = fsql & " order by Issue_Date desc"
 
-        'response.write fsql
+        response.write fsql
         'response.end
 
 ' Setting the page
@@ -248,6 +258,8 @@ Batch
 <input type="text" name="Coupon_Batch" size="3" maxlength="3" value="<% = Coupon_Batch %>">
 Face Value
 <input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
+Coupon Number
+<input type="text" name="Coupon_Number" size="7" maxlength="6" value="<% = Coupon_Number %>">
 Start Range
 <input type="text" name="Start_Range" size="7" maxlength="6" value="<% = Start_Range %>">
 End Range
@@ -256,6 +268,7 @@ Excel Type :
 <input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
 Expiry Date :
 <input type="text" name="Expiry_Date" size="12" value="<% = Expiry_Date %>">
+<a href="javascript:show_calendar('fm1.Expiry_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 
 <input type="button" value="   Search   " onClick="findenum();" class="common">
 

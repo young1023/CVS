@@ -1,6 +1,6 @@
 <%
 
-Response.write Session("SecLevel")
+'Response.write Session("SecLevel")
 
 'Redirect to login page if timeout or no security session
 
