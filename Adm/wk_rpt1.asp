@@ -11,7 +11,7 @@ pageid=request("pageid")
 
 From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) - 7
+   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) 
 end if
 
 To_Date        = Request.Form("To_Date")
@@ -66,7 +66,7 @@ document.fm1.submit();
 
 function exportExcel()
 {
-document.fm1.action="wk_rpt_excel1.asp"
+document.fm1.action="wk_rpt_csv1.asp"
 document.fm1.submit();
 }
 
@@ -155,7 +155,7 @@ Weekly Report</b></font></td>
 ' Start the queries
          
       set frs = server.createobject("adodb.recordset")
-      'response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
+      response.write  ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") 
 	  frs.open ("Exec WeeklyReport '"&From_Date&"', '"&To_Date&"', '"&Print_Excel&"', '"&Excel_Type&"' ") ,  conn,3,1
 
 %>

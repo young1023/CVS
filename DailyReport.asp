@@ -21,6 +21,8 @@ End If
 
 StationID     = trim(Rs("Station"))
 
+StationID = 399
+
 Message       = Request("Message")
 
 Coupon_Number = Request("Coupon_Number")
@@ -75,7 +77,7 @@ End If
 
 Search_Date = SDay & "/" & SMonth & "/" & SYear
 
-Search_Date = "01/01/2016"
+'Search_Date =  CDate(Search_Date)
 
 Search_NDate = NDay & "/" & NMonth & "/" & NYear
 
@@ -188,7 +190,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
   ' **************
 
 
-     fsql = fsql & " and  Present_Date >=   Convert(datetime, '" & Search_Date &"', 105) " 
+     fsql = fsql & " and  Present_Date >=   DATEADD(hh, -2, Convert(datetime, '" & Search_Date &"', 105)) " 
 
   
      fsql = fsql & " and  Present_Date < DATEADD(dd,DATEDIFF(dd,0, Convert(datetime, '" & Search_NDate &"', 105)),0) + 1 " 
@@ -204,7 +206,7 @@ Search_NDate = NDay & "/" & NMonth & "/" & NYear
     end if
    
  
-       fsql = fsql & " order by id desc"
+       fsql = fsql & " order by present_date"
 
         'response.write fsql
         'response.end
@@ -384,6 +386,20 @@ Year_starting = Year(DateAdd("yyyy", -1, Now()))
 for i = Year_starting to Year(Now())
 %>			         
 			<option value="<%=i%>" <% if clng(i)=clng(NYear) then response.write "selected"%>><%=i%></option>
+
+<% next %>
+
+			</select> 
+
+	<select name="NHour" class="common">   
+<% 
+
+
+Year_starting = Year(DateAdd("yyyy", -1, Now()))
+
+for i = 1 to 24
+%>			         
+			<option value="<%=i%>" <% if clng(i)=clng(NHour) then response.write "selected"%>><%=i%></option>
 
 <% next %>
 

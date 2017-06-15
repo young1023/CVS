@@ -17,7 +17,7 @@ pageid=request("pageid")
 
 From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) - 7
+   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) 
 end if
 
 To_Date        = Request.Form("To_Date")

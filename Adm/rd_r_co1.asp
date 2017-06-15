@@ -11,7 +11,7 @@ pageid=request("pageid")
 
 From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) - 7
+   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) 
 end if
 
 To_Date        = Request.Form("To_Date")
@@ -59,6 +59,17 @@ if (document.fm1.To_Date.value == "")
    document.fm1.To_Date.focus();
    return false;
   }
+
+ // calculate the number of days between From_Date and To_Date
+   var date1 = document.fm1.To_Date.value
+   var date2 = document.fm1.From_Date.value
+   var daysBetween = (new Date(date1).getTime() - new Date(date2).getTime())/86400000;
+if (daysBetween > 31){
+    alert('Cannot selected date range longer than 31 days!' );
+    return false;
+   }
+
+
 document.fm1.action="rd_r_co1.asp"
 document.fm1.submit();
 }
@@ -299,7 +310,7 @@ Redemption Raw Coupon</b></font></td>
      fsql = fsql & " (m.Status = '"&Print_Excel&"' or '"&Print_Excel&"' = '') Order by m.id Desc "
 
     
-      'response.write fsql
+      response.write fsql
       'response.end
 
      ' Setting the page

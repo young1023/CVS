@@ -5,29 +5,6 @@ Session("SecLevel") = ""
 
 Message = Request("Message")
 
-Dim UserIPAddress
-UserIPAddress = Request.ServerVariables("REMOTE_ADDR")
-'response.write UserIPAddress
-
-
-
-Set Rs1 = Server.CreateObject("Adodb.Recordset")
-  
-sql1 = "Select Station From Station Where IPAddress ='" &UserIPAddress& "'"
-
-Set Rs1 = Conn.Execute(sql1)
-
-If Not Rs1.EoF Then
-
-StationID = Rs1("Station")
-response.write stationid
-
-Else 
-
-'Alert = "編號未設置, 請提供此電腦的 IP 地址 [ " & UserIPAddress & " ] 給系統管理員"
-
-
-End If
 
 %>
 <html>

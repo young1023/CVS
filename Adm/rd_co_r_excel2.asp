@@ -61,7 +61,6 @@ Response.Write """" & rs("Issue Date") & ""","
 Response.Write """" & rs("Expiry Date") & """," 
 Response.Write """" & rs("Excel Type") & """," 
 Response.Write """" & rs("Status") & """," 
- 
 Response.Write """" & rs("Creation_Date") & """" & vbCrLf  
 
 ' Move to the next record
