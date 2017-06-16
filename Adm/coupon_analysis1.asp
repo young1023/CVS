@@ -67,6 +67,11 @@ else if (k==1)
 }
 
 
+function exportCSV()
+{
+document.fm1.action="coupon_analysis_csv1.asp"
+document.fm1.submit();
+}
 
 
 function gtpage(what)
@@ -400,7 +405,7 @@ Excel Type :
                               </tr>
                               <tr> 
                                 <td height="28" align="center"> 
-<input type="button" value="    csv    " onClick="delcheck();" class="common">
+<input type="button" value="    csv    " onClick="exportCSV();" class="common">
 
 
 <%
