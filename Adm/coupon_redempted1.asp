@@ -169,7 +169,7 @@ document.fm1.submit();
    
 ' Start the queries
       
-       fsql = "select * from CouponRequest where 1 =1  "
+       fsql = "select * from Coupon_Redempted where 1 =1  "
 
     ' Coupon Type
    if Coupon_Type <> "" then
@@ -268,21 +268,14 @@ Excel Type :
    <table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
      <tr bgcolor="#DFDFDF">
 <td width="5%"></td>
-<td width="7%" height="28">Face Value</td>
+<td  height="28">Face Value</td>
 <td >Type</td>
 
-<td width="5%" height="28">Batch</td>
+<td  height="28">Batch</td>
 
-<td width="10%" height="28">Start Range</td>
+<td height="28">Start Range</td>
 
-<td width="10%" height="28">End Range</td>
-<td >Digital</td>
-
-<td width="10%" height="28">Category</td>
-<td width="10%">Expiry Date
-</td>
-<td width="10%">Issue Date</td>
-<td>Completed</td>
+<td  height="28">End Range</td>
 <td>Excel<br/> Type</td>
 <td>Total Used Coupons</td>
 <td>Total Coupons Issued</td>
@@ -307,10 +300,10 @@ Excel Type :
 %>
    <tr>
 <td>
-<input type="checkbox" name="mid" value="<% = frs("Requestid") %>">
+<input type="checkbox" name="mid" value="<% = frs("RangeID") %>">
 </td>
-<% id = frs("RequestID") %>
-<td align=center width="95" height="28"><a href="pco2.asp?id=<% =frs("RequestID") %>"><% = frs("FaceValue")%></a></td>
+<% id = frs("RangeID") %>
+<td align=center width="95" height="28"><a href="pco2.asp?id=<% =frs("RangeID") %>"><% = frs("FaceValue")%></a></td>
 <td  height="28">
 <% = frs("Product_Type") %>
 </td>
@@ -323,24 +316,6 @@ Excel Type :
 <td ><% = frs("End_Range") %>
 </td>
 
-<td ><% = frs("Digital") %>
-</td>
-
-<td >
-<% = frs("Category") %>
-</td>
-
-<td>
-<% = frs("Expiry_Date") %>
-</td>
-
-<td >
-<% = frs("Issue_Date") %>
-</td>
-
-<td >
-<% = frs("Completed") %>
-</td>
 
 <td >
 <% = frs("Excel_Type") %>
@@ -351,9 +326,9 @@ Excel Type :
 
       Set rs = server.createobject("adodb.recordset")
 
-      'response.write  ("Exec Retrieve_Redemption_Rate '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"' , '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") 
+      'response.write  ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"' , '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") 
 
-	  rs.open ("Exec Retrieve_Redemption_Rate '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"', '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") ,  conn,3,1
+	  rs.open ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"', '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") ,  conn,3,1
 
 
 %>
