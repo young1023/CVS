@@ -6,8 +6,42 @@
 <%
 
 flag = trim(request.form("whatdo"))
+RangeID        = Request("ID")
 
-if flag = "add_range" then
+If RangeID <> "" Then
+
+   sql = "Select * from Coupon_Redempted where RangeID = "&RangeID
+
+   Set rs = conn.execute(sql)
+
+  Face_Value = trim(rs("FaceValue"))
+ 
+  Product_Type = replace(trim(rs("Product_Type")),"'","''")
+ 
+  Batch = replace(trim(rs("Batch")),"'","''")
+ 
+  Start_Range = replace(trim(rs("Start_Range")),"'","''")
+ 
+  End_Range = trim(rs("End_Range"))
+
+ 
+
+
+End if
+
+If flag = "add_range" then
+
+   
+  If RangeID <> "" Then
+
+    ' Delete record
+
+    sql1 = "Delete From Coupon_Redempted where RangeID = "&RangeID
+
+    Conn.execute(sql1)
+
+
+  End If
  
   Face_Value = replace(trim(request.form("Face_Value")),"'","''")
   
@@ -19,11 +53,10 @@ if flag = "add_range" then
  
   End_Range = request.form("End_Range")
 
-  Excel_Type = trim(request.form("Excel_Type")) 
  
-      sql = "Insert into Coupon_Redempted (FaceValue, Product_Type, Batch, Start_Range, End_Range,  Expiry_Date, Issue_Date, Excel_Type)"
+      sql = "Insert into Coupon_Redempted (FaceValue, Product_Type, Batch, Start_Range, End_Range)"
   
-      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Excel_Type&"')"
+      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"')"
   
    response.write sql
   'response.end
@@ -114,113 +147,10 @@ var e = document.fm1.End_Range.value
     return false;
   }
 
-
+document.fm1.whatdo.value="add_range";
 
 document.fm1.submit();
 }
-
-
-
-function dateCheck(inputText) {
-
-         debugger;
-
-         var dateFormat = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/;
-
-          var flag = 1;
-
-
-         if (inputText.value.match(dateFormat)) {
-
-           var inputFormat1 = inputText.value.split('/');
-
-             var inputFormat2 = inputText.value.split('-');
-
-             linputFormat1 = inputFormat1.length;
-
-             linputFormat2 = inputFormat2.length;
-
- 
-
-             if (linputFormat1 > 1) {
-
-                 var pdate = inputText.value.split('/');
-
-             }
-
-             else if (linputFormat2 > 1) {
-
-                 var pdate = inputText.value.split('-');
-
-             }
-
-             var date = parseInt(pdate[0]);
-
-             var month = parseInt(pdate[1]);
-
-             var year = parseInt(pdate[2]);
-
- 
-
-             var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-             if (month == 1 || month > 2) {
-
-                 if (date > ListofDays[month - 1]) {
-
-                     alert("Invalid date format!");
-
-                     return false;
-
-                 }
-
-             }
-
- 
-
-             if (month == 2) {
-
-                 var leapYear = false;
-
- 
-
-                 if ((!(year % 4) && year % 100) || !(year % 400)) {
-
-                     leapYear = true;
-
- 
-
-                 }
-
-                 if ((leapYear == false) && (date >= 29)) {
-
-                     alert("Invalid date format!");
-
-                     return false;
-
-                 }
-
-                 if ((leapYear == true) && (date > 29)) {
-
-                     alert("Invalid date format!");
-
-                     return false;
-
-                 }
-
-             }
-
-         }
-
-         else {
-
-             alert("Invalid date format!");
-
-             return false;
-
-         }
-
-     }
 
 
 //-->
@@ -281,54 +211,47 @@ function dateCheck(inputText) {
 
   <table width="99%" border="0" class="normal">
     <tr> 
-      <td colspan="2" class="BlueClr">New Pro Coupon Range</td>
+      <td colspan="2" class="BlueClr">Pro Coupon Range</td>
     </tr>
     <tr> 
       <td colspan="2"></td>
     </tr>
-  <tr> 
-      <td colspan="2"  align="right">
-<font color="red">*</font>Denotes a mandatory field</td>
-    </tr>
+
     <tr> 
       <td colspan="2" bordercolor="#999966" class="ValidHead"></td>
     </tr>
 
  <tr><td width="30%">Face Value: </td>
       <td>
-<input name="Face_Value" type=text value="" maxlength="3">	    
+<input name="Face_Value" type=text value="<% = Face_Value %>" maxlength="3">	    
 </td>
    </tr>
  <tr>
 <td>Type:</td>
 <td>
-<input name="Product_Type" type=text value="" maxlength="2">	    
+<input name="Product_Type" type=text value="<% = Product_Type %>" maxlength="2">	    
 </td>
 </tr>
      
  <tr><td>Batch: </td>
       <td>
-<input name="Batch" type=text value="" maxlength="3">	    
+<input name="Batch" type=text value="<% = Batch %>" maxlength="3">	    
 </td>
    </tr>
 
 <tr><td>Start Range:</td>
       <td>
-<input name="Start_Range" type=text value="" maxlength="6">	    
+<input name="Start_Range" type=text value="<% = Start_Range %>" maxlength="6">	    
 </td>
    </tr>
 <tr><td>End Range:</td>
       <td>
-<input name="End_Range" type=text value="" maxlength="6">	    
+<input name="End_Range" type=text value="<% = End_Range %>" maxlength="6">	    
 </td>
    </tr>
 
  
-<tr><td>Excel Type:</td>
-      <td>
-<input name="Excel_Type" type=text value="" maxlength="1">	    
-</td>
-   </tr>
+
 
 	<tr>
 <td></td>
@@ -342,8 +265,10 @@ function dateCheck(inputText) {
                                         <td colspan="2" align="center"> 
 
 <input type="button" value="  Submit  " onClick="dosubmit();" class="common">
+<input type=hidden name=whatdo value="">
+<input type=hidden name="ID" value="<% = RangeID %>">
 <input type="Reset" value="  Reset  " class="common">
-<input type=hidden name=whatdo value='add_range'>
+
 
 </td>
 </tr>

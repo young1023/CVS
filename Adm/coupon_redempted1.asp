@@ -31,7 +31,7 @@ Coupon_Number  = Request.Form("Coupon_Number")
 <!--
 function delcheck(){
 k=0;
-document.fm1.action="execute1.asp"
+document.fm1.action="execute2.asp"
 	if (document.fm1.mid!=null)
 	{
 		for(i=0;i<document.fm1.mid.length;i++)
@@ -59,7 +59,7 @@ else if (k==1)
   var msg = "Are you sure ?";
   if (confirm(msg)==true)
    {
-    document.fm1.whatdo.value="delpc";
+    document.fm1.whatdo.value="del_new_range";
     document.fm1.submit();
    }
  }
@@ -73,7 +73,7 @@ function dosubmit(){
 
 function exportCSV()
 {
-document.fm1.action="coupon_analysis_csv1.asp"
+document.fm1.action="coupon_redempted_csv1.asp"
 document.fm1.submit();
 }
 
@@ -87,7 +87,7 @@ document.fm1.submit();
 
 function findenum()
 {
-document.fm1.action="coupon_analysis1.asp"
+document.fm1.action="coupon_redempted1.asp"
 document.fm1.submit();
 }
 //-->
@@ -202,18 +202,11 @@ document.fm1.submit();
    end if
 
 
-  ' Check Excel type
-   if Excel_type <> "" then
-
-   fsql = fsql & " and Excel_type = '" & Excel_type & "' "
-   
-   end if
-
 
 
   
 
-       fsql = fsql & " order by Issue_Date desc"
+       fsql = fsql & " order by RangeID desc"
 
         'response.write fsql
         'response.end
@@ -250,8 +243,6 @@ Face Value
 <input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
 Coupon Number
 <input type="text" name="Coupon_Number" size="7" maxlength="6" value="<% = Coupon_Number %>">
-Excel Type :
-<input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
 <input type="button" value="   Search   " onClick="findenum();" class="common">
 
    </td>
@@ -276,7 +267,6 @@ Excel Type :
 <td height="28">Start Range</td>
 
 <td  height="28">End Range</td>
-<td>Excel<br/> Type</td>
 <td>Total Used Coupons</td>
 <td>Total Coupons Issued</td>
 <td width="10%">Redemption Rate</td>
@@ -303,7 +293,7 @@ Excel Type :
 <input type="checkbox" name="mid" value="<% = frs("RangeID") %>">
 </td>
 <% id = frs("RangeID") %>
-<td align=center width="95" height="28"><a href="pco2.asp?id=<% =frs("RangeID") %>"><% = frs("FaceValue")%></a></td>
+<td align=center width="95" height="28"><a href="Analy_NewRange1.asp?id=<% =frs("RangeID") %>"><% = frs("FaceValue")%></a></td>
 <td  height="28">
 <% = frs("Product_Type") %>
 </td>
@@ -317,18 +307,15 @@ Excel Type :
 </td>
 
 
-<td >
-<% = frs("Excel_Type") %>
-</td>
 
 <%
 
 
       Set rs = server.createobject("adodb.recordset")
 
-      'response.write  ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"' , '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") 
+      'response.write  ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"' , '"&frs("Start_Range")&"', '"&frs("End_Range")&"'") 
 
-	  rs.open ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"', '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") ,  conn,3,1
+	  rs.open ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"', '"&frs("Start_Range")&"', '"&frs("End_Range")&"'") ,  conn,3,1
 
 
 %>
@@ -384,9 +371,12 @@ Excel Type :
                               </tr>
                               <tr> 
                                 <td height="28" align="center"> 
-<input type="button" value="    csv    " onClick="exportCSV();" class="common">
+<input type="button" value="    csv    " onClick="exportCSV();" class="common">&nbsp;
 
-<input type="button" value="    New Range    " onClick="dosubmit();" class="common">
+<input type="button" value="    New Range    " onClick="dosubmit();" class="common">&nbsp;
+
+<input type="button" value="    Delete    " onClick="delcheck();" class="common">
+
 
 <%
    response.write "<input type=hidden value='' name=whatdo>"

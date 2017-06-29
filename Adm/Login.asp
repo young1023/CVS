@@ -17,7 +17,7 @@
 
    Session("SecLevel") = Rs1("SecLevel")
 
-   Response.Redirect "pco1.asp"
+   Response.Redirect "Status1.asp"
 
 
    Else

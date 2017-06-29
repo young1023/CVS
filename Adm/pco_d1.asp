@@ -66,7 +66,16 @@ else if (k==1)
 
 }
 
+function dosubmit(){
+ document.fm1.action="Analy_NewRange1.asp"; 
+ document.fm1.submit();
+}
 
+function exportCSV()
+{
+document.fm1.action="coupon_analysis_csv1.asp"
+document.fm1.submit();
+}
 
 
 function gtpage(what)
@@ -78,7 +87,7 @@ document.fm1.submit();
 
 function findenum()
 {
-document.fm1.action="pco_d1.asp"
+document.fm1.action="coupon_analysis1.asp"
 document.fm1.submit();
 }
 //-->
@@ -139,8 +148,7 @@ document.fm1.submit();
                     <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#E6EBEF" class="normal">
                      <tr> 
                           
-                        <td height="28" align="center"><font color="#FF6600"><b>
-	Pro Coupon Management		</b></font></td>
+                        <td height="28" align="center"><font color="#FF6600"><b>Coupon Analysis</b></font></td>
                         </tr>
                         <tr> 
                           <td valign="top" align="center">
@@ -193,19 +201,6 @@ document.fm1.submit();
 
    end if
 
-   ' Check Coupon Number
-   if Start_Range <> "" then
-
-   fsql = fsql & " and Start_Range like '%" & Start_Range & "%' "
-   
-   end if
-
- ' Check Coupon Number
-   if End_Range <> "" then
-
-   fsql = fsql & " and End_Range like '%" & End_Range & "%' "
-   
-   end if
 
   ' Check Excel type
    if Excel_type <> "" then
@@ -214,12 +209,7 @@ document.fm1.submit();
    
    end if
 
-  ' Check Expiry Date
-   if Expiry_Date <> "" then
 
-   fsql = fsql & " and Expiry_date >= '" & Expiry_Date & "' "
-   
-   end if
 
   
 
@@ -260,16 +250,8 @@ Face Value
 <input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
 Coupon Number
 <input type="text" name="Coupon_Number" size="7" maxlength="6" value="<% = Coupon_Number %>">
-Start Range
-<input type="text" name="Start_Range" size="7" maxlength="6" value="<% = Start_Range %>">
-End Range
-<input type="text" name="End_Range" size="7" maxlength="6" value="<% = End_Range %>">
 Excel Type :
 <input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
-Expiry Date :
-<input type="text" name="Expiry_Date" size="12" value="<% = Expiry_Date %>">
-<a href="javascript:show_calendar('fm1.Expiry_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
-
 <input type="button" value="   Search   " onClick="findenum();" class="common">
 
    </td>
@@ -297,14 +279,14 @@ Expiry Date :
 <td >Digital</td>
 
 <td width="10%" height="28">Category</td>
-<td >Dealer</td>
-<td>Canopy<br/>Copy<br/>Disc</td>
 <td width="10%">Expiry Date
 </td>
 <td width="10%">Issue Date</td>
 <td>Completed</td>
 <td>Excel<br/> Type</td>
-<td width="10%">Effective Date</td>
+<td>Total Used Coupons</td>
+<td>Total Coupons Issued</td>
+<td width="10%">Redemption Rate</td>
 </tr>
                                     <%
 
@@ -348,14 +330,6 @@ Expiry Date :
 <% = frs("Category") %>
 </td>
 
-<td >
-<% = frs("Dealer") %>
-</td>
-
-<td>
-<% = frs("Canopy_Copy_Disc") %> 
-</td>
-
 <td>
 <% = frs("Expiry_Date") %>
 </td>
@@ -372,8 +346,28 @@ Expiry Date :
 <% = frs("Excel_Type") %>
 </td>
 
+<%
+
+
+      Set rs = server.createobject("adodb.recordset")
+
+      'response.write  ("Exec Retrieve_Redemption_Rate '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"' , '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") 
+
+	  rs.open ("Exec Retrieve_Redemption_Rate '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"', '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") ,  conn,3,1
+
+
+%>
+
 <td >
-<% = frs("Effective_Date") %>
+<% = rs("RedemptionNo") %>
+</td>
+
+<td >
+<% = rs("TotalNo") %>
+</td>
+
+<td >
+<% = FormatNumber(rs("Rate"),1) %> %
 </td>
 
 </tr>
@@ -383,6 +377,13 @@ Expiry Date :
   loop
  end if
   %>
+<tr>
+    <td align="center" colspan="16">
+<input type="button" value="    Delete    " onClick="delcheck();" class="common">
+<input type=hidden value='' name=whatdo>
+    </td>
+</tr>
+
 
                                   </table>
                                 </td>
@@ -413,24 +414,7 @@ Expiry Date :
 %>
                                 </td>
                               </tr>
-                              <tr> 
-                                <td height="28" align="center"> 
-<input type="button" value="    Delete    " onClick="delcheck();" class="common">
-
-
-<%
-   response.write "<input type=hidden value='' name=whatdo>"
-   response.write "<input type=hidden value="&pageid&" name=pageid>"
-
-		  frs.close
-			  set frs=nothing
-			  conn.close
-			  set conn=nothing
-%>
-                                                         
- </td>
-                              </tr>
-                              <tr> 
+                              <tr>
                                 <td valign="top"></td>
                               </tr>
                             </table>
