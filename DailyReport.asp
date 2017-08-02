@@ -21,8 +21,6 @@ End If
 
 StationID     = trim(Rs("Station"))
 
-StationID = 399
-
 Message       = Request("Message")
 
 Coupon_Number = Request("Coupon_Number")
@@ -473,15 +471,18 @@ i=0
 
 <td>
 <%
-If frs("Period") = 11 Then
+
+Period = frs("Period")
+
+If Period = 11 Then
 
    Response.write "¦­"
 
-Elseif frs("Period") = 12 Then
+Elseif Period = 12 Then
 
    Response.write "¤¤"
 
-Elseif frs("Period") = 13 Then
+Elseif Period = 13 Then
 
    Response.write "±ß"
 

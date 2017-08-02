@@ -8,7 +8,6 @@
 flag = trim(request.form("whatdo"))
 ID        = Request("ID")
 
-' Edit Mode. Display data of selected record
 If ID <> "" Then
 
    sql = "Select * from LeafLetBatch where ID = "&ID
@@ -37,6 +36,8 @@ If ID <> "" Then
 
   NoOfLeafLet = trim(rs("NoOfLeafLet"))
  
+
+
 End if
 
 if flag = "add_range" then
@@ -65,11 +66,71 @@ if flag = "add_range" then
 
       
  
-      Set rs = server.createobject("adodb.recordset")
+      sql = "Insert into LeafletBatch (FaceValue1, Coupon_Type1, Batch1, Start_Range1, NoOfCoupon1, "
 
-      response.write  ("Exec Append_leafLet '"&ID&"', '"&Face_Value1&"' , '"&Coupon_Type1&"', '"&Batch1&"', '"&Start_Range1&"', '"&NoOfCoupon1&"', '"&Face_Value2&"' , '"&Coupon_Type2&"', '"&Batch2&"', '"&Start_Range2&"', '"&NoOfCoupon2&"', '"&NoOfLeafLet&"' ") 
+      sql = sql & " FaceValue2, Coupon_Type2, Batch2, Start_Range2, NoOfCoupon2, NoOfLeaflet) "
+  
+      sql = sql & " values ('"&Face_Value1&"', '"&Coupon_Type1&"', '"&Batch1&"', '"&Start_Range1&"', "
 
-	  rs.open ("Exec Append_leafLet '"&ID&"', '"&Face_Value1&"' , '"&Coupon_Type1&"', '"&Batch1&"', '"&Start_Range1&"', '"&NoOfCoupon1&"', '"&Face_Value2&"' , '"&Coupon_Type2&"', '"&Batch2&"', '"&Start_Range2&"', '"&NoOfCoupon2&"', '"&NoOfLeafLet&"' ") ,  conn,3,1
+      sql = sql & " '"&NoOfCoupon1&"', '"&Face_Value2&"', '"&Coupon_Type2&"', '"&Batch2&"', "
+
+      sql = sql & " '"&Start_Range2&"', '"&NoOfCoupon2&"', '"&NoOfLeaflet&"')"
+  
+     'response.write sql
+  
+     conn.execute(sql)
+
+       sql1 = "Select top 1 ID From LeafletBatch order by id desc"
+
+       Set Rs1 = Conn.Execute(sql1)
+
+       LeafLetID = Rs1("ID")
+  
+      for i=1 to NoOfLeafLet
+
+        End_Range1 = Clng(Start_Range1) + Clng(NoOfCoupon1) - 1 
+
+        End_Range1 = string(6 - LEN(End_Range1), "0") & End_Range1
+
+        'response.write End_Range1
+
+        sql2 = "Insert into Coupon_Redemption (LeafLetID, LeafLetNo, FaceValue, Coupon_Type, Batch, Start_Range, End_Range, NoOfCoupon)"
+
+        sql2 = sql2 & " Values ("&LeafLetID&", "& i &", '"&Face_Value1&"', '"&Coupon_Type1&"', '"&Batch1&"', '"&Start_Range1&"', "
+
+        sql2 = sql2 & " '"&End_Range1&"', "&NoOfCoupon1&")"
+
+        'response.write sql2
+
+        conn.execute(sql2)
+
+        ' Increment of start range for next leaflet
+        Start_Range1 = Clng(Start_Range1) + Clng(NoOfCoupon1)
+
+
+        ' Increment of end range of 2nd batch for next leaflet
+        End_Range2 = Clng(Start_Range2) + Clng(NoOfCoupon2) - 1
+
+        End_Range2 = string(6 - LEN(End_Range1), "0") & End_Range2
+
+       
+
+        sql3 = "Insert into Coupon_Redemption (LeafLetID, LeafLetNo, FaceValue, Coupon_Type, Batch, Start_Range, End_Range, NoOfCoupon)"
+
+        sql3 = sql3 & " Values ("&LeafLetID&",  "& i &", '"&Face_Value2&"', '"&Coupon_Type2&"', '"&Batch2&"', '"&Start_Range2&"', "
+
+        sql3 = sql3 & " '"&End_Range2&"', "&NoOfCoupon2&" )"
+
+        response.write sql3
+
+        conn.execute(sql3)
+
+        ' Increment of start range for next leaflet
+        Start_Range2 = Clng(Start_Range2) + Clng(NoOfCoupon2)
+        
+      next
+
+
 
      response.redirect "coupon_redempted1.asp"
 
@@ -461,7 +522,6 @@ document.fm1.submit();
 <% Else %>
 <input type="button" value="  Submit  " onClick="dosubmit();" class="common">
 <input type=hidden name=whatdo value="">
-<input type=hidden name="ID" value="<% = ID %>">
 <% End If %>
 <input type="Reset" value="  Reset  " class="common">
 

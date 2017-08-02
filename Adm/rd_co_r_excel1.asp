@@ -1,10 +1,9 @@
 <%
-' Tells the browser to open excel
-Response.ContentType = "application/vnd.ms-excel" 
-Response.addHeader "content-disposition","attachment;filename=Redemp_Raw_Rpt_"&Month(Now())&Year(now())&".xls"
-
+' Tells the browser to open csv
+Response.ContentType = "text/csv"
+Response.AddHeader "Cache-Control", "no-cache"
+Response.AddHeader "Content-Disposition", "attachment; filename=Redempt_Raw_"&Month(Now())&"_"&Year(now())&".csv" 
 %>
-
 <!--#include file="include/SQLConn.inc" -->
 
 <%
@@ -15,8 +14,11 @@ Response.addHeader "content-disposition","attachment;filename=Redemp_Raw_Rpt_"&M
 '**************
 
 	
+
 From_Date      = Request.Form("From_Date")
+From_Date      = "2015-01-01"
 To_Date        = Request.Form("To_Date")
+To_Date        = "2015-01-05"
 Coupon_Type    = Request.Form("Coupon_Type")
 Station        = Request.Form("Station")
 Coupon_Batch   = Request.Form("Coupon_Batch")
@@ -39,61 +41,13 @@ Excel_Type     = Request.Form("Excel_Type")
 ' Create a server recordset object
 
       set rs = server.createobject("adodb.recordset")
-      response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
+      'response.write  ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ")
       rs.open ("Exec RedemptionReport2 '"&From_Date&"', '"&To_Date&"', '"&Station&"' ,'"&Coupon_Type&"', '"&Coupon_Batch&"', '"&Face_Value&"', '"&Coupon_Number&"','"&Excel_Type&"',  '"&Print_Excel&"' ") ,  conn,3,1
-        
-%>
 
-<html>
-<meta http-equiv="Content-Type" content="text/html; charset=big5">
-<body>
-<Head>
-<STYLE TYPE="text/css">
-<!--
 
-TD 
-{
-  color: black;
-  font-family: verdana, Garamond, Times, sans-serif;
-  FONT-SIZE: 9px;
-  TEXT-ALIGN: left 
-}
+Response.Write "Present Date, Present Time, Station, Coupon Type, Batch, Coupon Number, Product Type, Sale Amount, Issue Date, Expiry Date, Excel Type, Print Excel, Print Excel Date" & vbcrlf
 
-TD.caption
-{
-  color: red;
-  font-family: verdana, Garamond, Times, sans-serif;
-  FONT-SIZE: 9px;
-  TEXT-ALIGN: left 
-}
--->
-</STYLE>
-</head>
 
-<div align="center">
-
-<table BORDER="1" width="98%">
-
-<tr bgcolor="#DFDFDF">
-
-<td height="28">Present Date</td>
-<td height="28">Present Time</td>
-
-<td height="28">Station</td>
-<td height="28">Coupon<br/>Type</td>
-<td  height="28">Batch</td>
-<td  height="28">Coupon Number</td>
-<td  height="28">Product<br/>Type</td>
-<td  height="28">Sale<br/>Amount</td>
-<td>Issue Date</td>
-<td >Expiry Date</td>
-<td>Excel<br/> Type</td>
-
-<td>Print Excel</td>
-<td>Print Excel Date</td>
-</tr>
-
-<%
 ' Move to the first record
 rs.movefirst
 
@@ -101,70 +55,41 @@ rs.movefirst
 do while not rs.eof
  
 		
-%>
 
-<tr>
+Response.Write """" &  FormatDateTime(rs("Present Date"),2) & ""","  
 
-<td align=center width="95" height="28"><% = FormatDateTime(rs("Present Date"),2)%></td>
-<td align=center width="95" height="28"><% = FormatDateTime(rs("Present Date"),4)%></td>
+Response.Write """" &  FormatDateTime(rs("Present Date"),4) & ""","  
 
-<td  height="28">
-<% = rs("Station") %>
-</td>
-<td  height="28"><% = rs("Coupon Type") %>
-</td>
+Response.Write """" &  rs("Station") & """," 
 
-<td height="28"><% = rs("Batch") %>
-</td>
+Response.Write """" &  rs("Coupon Type") & ""","  
 
-<td  height="28"><% = rs("Coupon number") %>
-</td>
+Response.Write """" &  rs("Batch") & """," 
 
-<td  height="28">
-<% = rs("Product Type") %>
-</td>
+Response.Write """" & rs("Coupon number") & """," 
 
-<td>
-<% = rs("Sale Amount") %> 
-</td>
+Response.Write """" & rs("Product Type") & """," 
 
-<td >
-<% = rs("Issue Date") %>
-</td>
+Response.Write """" &  rs("Sale Amount") & ""","   
 
-<td >
-<% = rs("Expiry Date") %>
-</td>
+Response.Write """" &  rs("Issue Date") & """," 
 
+Response.Write """" & rs("Expiry Date") & """," 
 
-<td >
-<% = rs("Excel Type") %>
-</td>
+Response.Write """" &  rs("Excel Type") & """," 
 
+Response.Write """" &  rs("Status") & """," 
 
+Response.Write """" &  rs("Creation_Date") & """" & vbCrLf  
 
-<td >
-<% = rs("Status") %>
-</td>
-
-<td >
-<% = rs("Creation_Date") %>
-</td>
-</tr>
-
-<%
 ' Move to the next record
 rs.movenext
+
 ' Loop back to the do statement
-loop %>
-</table>
+loop 
 
-</div>
 
-</body>
-</html>
 
-<%
 ' Close and set the recordset to nothing
 rs.close
 set rs=nothing

@@ -7,19 +7,7 @@
 ' check which page is it
 page_id=request("pageid")
 
-
-
-Coupon_Type    = Request.Form("Coupon_Type")
-Coupon_Batch   = Request.Form("Coupon_Batch")
-Start_Range    = Request.Form("Start_Range")
-End_Range      = Request.Form("End_Range")
-Face_Value     = Request.Form("Face_Value")
-Excel_Type     = Request.Form("Excel_Type")
-Expiry_Date    = Request.Form("Expiry_Date")
-Coupon_Number  = Request.Form("Coupon_Number")
-
-
-
+ID = Request("ID")
 
 %>
 <html>
@@ -31,7 +19,7 @@ Coupon_Number  = Request.Form("Coupon_Number")
 <!--
 function delcheck(){
 k=0;
-document.fm1.action="execute1.asp"
+document.fm1.action="execute2.asp"
 	if (document.fm1.mid!=null)
 	{
 		for(i=0;i<document.fm1.mid.length;i++)
@@ -59,7 +47,7 @@ else if (k==1)
   var msg = "Are you sure ?";
   if (confirm(msg)==true)
    {
-    document.fm1.whatdo.value="delpc";
+    document.fm1.whatdo.value="del_new_range";
     document.fm1.submit();
    }
  }
@@ -73,7 +61,7 @@ function dosubmit(){
 
 function exportCSV()
 {
-document.fm1.action="coupon_analysis_csv1.asp"
+document.fm1.action="coupon_redempted_csv1.asp?id=<% =id %>"
 document.fm1.submit();
 }
 
@@ -81,15 +69,11 @@ document.fm1.submit();
 function gtpage(what)
 {
 document.fm1.pageid.value=what;
-document.fm1.action="pco_d1.asp"
+document.fm1.action="coupon_redempted2.asp?id=<% =id %>"
 document.fm1.submit();
 }
 
-function findenum()
-{
-document.fm1.action="coupon_analysis1.asp"
-document.fm1.submit();
-}
+
 //-->
 </script>
 
@@ -158,62 +142,50 @@ document.fm1.submit();
                               <tr> 
                                 <td height="28"> 
 <% 
+
+
 ' By getting the pageid, the system knows which page to go.
 
 		pageid=trim(request.form("pageid"))
 		if pageid="" then
+
+       'Update redeem at coupon redemption table
+       Set rs = server.createobject("adodb.recordset")
+
+	   rs.open ("Exec Update_Redemption_Rate '"& ID &"'") ,  conn,3,1
+
 		  pageid=1
+
 		end if
-        findnum=replace(trim(request.form("findnum")),"%","¢H")
-        findnum=replace(findnum,"'","''")
+
    
 ' Start the queries
       
-       fsql = "select * from CouponRequest where 1 =1  "
+       fsql = "Select a.LeafLetNo as 'LeafLetNo' , a.FaceValue as 'FaceValue1', "
 
-    ' Coupon Type
-   if Coupon_Type <> "" then
+       fsql = fsql & "a.Coupon_Type as 'Coupon_Type1', a.Batch as 'Batch1', "
 
-   fsql = fsql & " and Product_Type = '" & Coupon_Type & "' "
-   
-   end if
+       fsql = fsql & "a.Start_Range as 'Start_Range1', a.End_Range as 'End_Range1', "
 
-   ' Batch
-   if Coupon_Batch <> "" then
+       fsql = fsql & " a.NoOfCoupon as 'TotalNo1', b.FaceValue as 'FaceValue2', "
 
-   fsql = fsql & " and Batch = '" & Coupon_Batch & "' "
-   
-   end if
+       fsql = fsql & "b.Coupon_Type as 'Coupon_Type2', b.Batch as 'Batch2', "
 
-   ' Face Value
-   if Face_Value <> "" then
+       fsql = fsql & "b.Start_Range as 'Start_Range2', b.End_Range as 'End_Range2', "
 
-   fsql = fsql & " and FaceValue like '%" & Face_Value & "%' "
-   
-   end if
+       fsql = fsql & "b.NoOfCoupon as 'TotalNo2', TotalNo = (a.NoOfCoupon + b.NoOfCoupon ), "
 
-  ' Check Coupon Number
-   if Coupon_Number <> "" then
-
-   fsql = fsql & " and Cast(Start_Range as float) <= Cast(" & Coupon_Number & " as float) "
-
-   fsql = fsql & " and Cast(End_Range as float) >= Cast(" & Coupon_Number & " as float) "
-
-   end if
+       fsql = fsql & "TotalRedeem = (a.Redeem + b.Redeem) "
 
 
-  ' Check Excel type
-   if Excel_type <> "" then
+       fsql = fsql & "from Coupon_Redemption a inner join coupon_Redemption b "
 
-   fsql = fsql & " and Excel_type = '" & Excel_type & "' "
-   
-   end if
+       fsql = fsql & "on a.leafletid = b.leafletid and a.leafletno = b.leafletno "
 
+       fsql = fsql & "and a.id = (b.id - 1) where a.leafletid =" & ID
 
+       fsql = fsql & " order by a.LeafLetID "
 
-  
-
-       fsql = fsql & " order by Issue_Date desc"
 
         'response.write fsql
         'response.end
@@ -237,57 +209,56 @@ document.fm1.submit();
 
          call countpage(frs.PageCount,pageid)
          end if
-	     'response.write "&nbsp;&nbsp;<input type='text' name='findnum' size='13' value='"&findnum&"'>"
-		 'response.write "&nbsp;&nbsp;<input type='button' value='   Search   ' onClick='findenum();' class='common'>"
 	   
 %>
 
-Coupon Type
-<input type="text" name="Coupon_Type" size="2" maxlength="2" value="<% = Coupon_Type %>">
-Batch
-<input type="text" name="Coupon_Batch" size="3" maxlength="3" value="<% = Coupon_Batch %>">
-Face Value
-<input type="text" name="Face_Value" size="3" maxlength="3" value="<% = Face_Value %>">
-Coupon Number
-<input type="text" name="Coupon_Number" size="7" maxlength="6" value="<% = Coupon_Number %>">
-Excel Type :
-<input type="text" name="Excel_Type" size="4" value="<% = Excel_Type %>">
-<input type="button" value="   Search   " onClick="findenum();" class="common">
 
    </td>
       </tr>
          <tr> 
             <td valign="top" height="28">
 
-<% ' ----------------------------------------------------------------
-   ' Main table of the page, change content here for different module 
-   ' ----------------------------------------------------------------
-%>
-
 
    <table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
+
      <tr bgcolor="#DFDFDF">
-<td width="5%"></td>
-<td width="7%" height="28">Face Value</td>
+
+<td ></td>
+
+
+<td colspan="5" align="center">First Batch</td>
+
+<td colspan="5" align="center">Second Batch</td>
+
+<td  colspan="3"></td>
+
+</tr>
+
+     <tr bgcolor="#DFDFDF">
+
+<td  width="5%" height="28">#</td>
+<td  height="28">Face Value</td>
 <td >Type</td>
 
-<td width="5%" height="28">Batch</td>
+<td  height="28">Batch</td>
 
-<td width="10%" height="28">Start Range</td>
+<td height="28">Start Range</td>
 
-<td width="10%" height="28">End Range</td>
-<td >Digital</td>
+<td  height="28">End Range</td>
 
-<td width="10%" height="28">Category</td>
-<td width="10%">Expiry Date
-</td>
-<td width="10%">Issue Date</td>
-<td>Completed</td>
-<td>Excel<br/> Type</td>
+<td  height="28">Face Value</td>
+<td >Type</td>
 
-<td>Total Used Coupons</td>
-<td>Total Coupons Issued</td>
+<td  height="28">Batch</td>
+
+<td height="28">Start Range</td>
+
+<td  height="28">End Range</td>
+
+<td>Coupons Used</td>
+<td>Coupons Issued</td>
 <td width="10%">Redemption Rate</td>
+
 </tr>
                                     <%
 
@@ -295,81 +266,104 @@ Excel Type :
 
  i=0
  if frs.recordcount>0 then
+
   frs.AbsolutePage = pageid
+
   do while (frs.PageSize-i)
+
    if frs.eof then exit do
+
    i=i+1
-   if flage then
+
+   
+
+  b = i mod 2
+
+  If b <> 0 then
+
+
      mycolor="#ffffff"
+
    else
+
 	 mycolor="#efefef"
+
    end if
+
   
 %>
-   <tr>
+   <tr bgcolor="<% = mycolor %>">
+
+
+
+<% LeafLetNo = frs("LeafLetNo") %>
+
+
 <td>
-<input type="checkbox" name="mid" value="<% = frs("Requestid") %>">
+
+<% = LeafLetNo %>
+
 </td>
-<% id = frs("RequestID") %>
-<td align=center width="95" height="28"><a href="pco2.asp?id=<% =frs("RequestID") %>"><% = frs("FaceValue")%></a></td>
+
+<td align=center width="95" height="28"><% = frs("FaceValue1")%></td>
+
 <td  height="28">
-<% = frs("Product_Type") %>
-</td>
-<td  height="28"><% = frs("Batch") %>
+
+<% = frs("Coupon_Type1") %>
+
 </td>
 
-<td height="28"><% = frs("Start_Range") %>
+<td  height="28"><% = frs("Batch1") %>
 </td>
 
-<td ><% = frs("End_Range") %>
+<td height="28"><% = frs("Start_Range1") %>
 </td>
 
-<td ><% = frs("Digital") %>
+<td ><% = frs("End_Range1") %>
 </td>
+
+<td align=center width="95" height="28"><% = frs("FaceValue2")%></td>
+
+<td  height="28">
+
+<% = frs("Coupon_Type2") %>
+
+</td>
+
+<td  height="28"><% = frs("Batch2") %>
+</td>
+
+<td height="28"><% = frs("Start_Range2") %>
+</td>
+
+<td ><% = frs("End_Range2") %>
+</td>
+
 
 <td >
-<% = frs("Category") %>
-</td>
-
-<td>
-<% = frs("Expiry_Date") %>
-</td>
-
-<td >
-<% = frs("Issue_Date") %>
-</td>
-
-<td >
-<% = frs("Completed") %>
-</td>
-
-<td >
-<% = frs("Excel_Type") %>
-</td>
-
-<%
-
-
-      Set rs = server.createobject("adodb.recordset")
-
-      'response.write  ("Exec Retrieve_Redemption_Rate '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"' , '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") 
-
-	  rs.open ("Exec Retrieve_Redemption_Rate '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"', '"&frs("Start_Range")&"', '"&frs("End_Range")&"', '"&frs("Excel_Type")&"'") ,  conn,3,1
-
+<% 
+    = frs("TotalRedeem") 
 
 %>
-
-<td >
-<% = rs("RedemptionNo") %>
 </td>
 
 <td >
-<% = rs("TotalNo") %>
+
+<% = frs("TotalNo") %>
 </td>
 
 <td >
-<% = FormatNumber(rs("Rate"),1) %> %
+  <% 
+
+
+   response.write FormatNumber(frs("TotalRedeem")/frs("TotalNo") * 100,1) & "%"
+
+   %> 
 </td>
+
+
+
+
 
 </tr>
 <%
@@ -378,13 +372,6 @@ Excel Type :
   loop
  end if
   %>
-<tr>
-    <td align="center" colspan="16">
-<input type="button" value="    Delete    " onClick="delcheck();" class="common">
-<input type=hidden value='' name=whatdo>
-    </td>
-</tr>
-
 
                                   </table>
                                 </td>
@@ -415,7 +402,25 @@ Excel Type :
 %>
                                 </td>
                               </tr>
-                              <tr>
+                              <tr> 
+                                <td height="28" align="center"> 
+<input type="button" value="    csv    " onClick="exportCSV();" class="common">&nbsp;
+
+
+
+<%
+   response.write "<input type=hidden value='' name=whatdo>"
+   response.write "<input type=hidden value="&pageid&" name=pageid>"
+
+		  frs.close
+			  set frs=nothing
+			  conn.close
+			  set conn=nothing
+%>
+                                                         
+ </td>
+                              </tr>
+                              <tr> 
                                 <td valign="top"></td>
                               </tr>
                             </table>

@@ -7,54 +7,34 @@ Response.AddHeader "Content-Disposition", "attachment; filename=Redempt_Rate_"&M
 <!--#include file="include/SQLConn.inc" -->
 <%
 
-Coupon_Type    = Request.Form("Coupon_Type")
-Coupon_Batch   = Request.Form("Coupon_Batch")
-Coupon_Number  = Request.Form("Coupon_Number")
-Face_Value     = Request.Form("Face_Value")
-Range = trim(request.form("mid"))
+id = request("id")
 
-response.write delid
       
-   fsql = "Select * from Coupon_Redempted Where 1 = 1 "
+       fsql = "Select a.LeafLetNo as 'LeafLetNo' , a.FaceValue as 'FaceValue1', "
 
-   ' Coupon Type
-   if Coupon_Type <> "" then
+       fsql = fsql & "a.Coupon_Type as 'Coupon_Type1', a.Batch as 'Batch1', "
 
-   fsql = fsql & " and Product_Type = '" & Coupon_Type & "' "
+       fsql = fsql & "a.Start_Range as 'Start_Range1', a.End_Range as 'End_Range1', "
+
+       fsql = fsql & " a.NoOfCoupon as 'TotalNo1', b.FaceValue as 'FaceValue2', "
+
+       fsql = fsql & "b.Coupon_Type as 'Coupon_Type2', b.Batch as 'Batch2', "
+
+       fsql = fsql & "b.Start_Range as 'Start_Range2', b.End_Range as 'End_Range2', "
+
+       fsql = fsql & "b.NoOfCoupon as 'TotalNo2', TotalNo = (a.NoOfCoupon + b.NoOfCoupon ), "
+
+       fsql = fsql & "TotalRedeem = (a.Redeem + b.Redeem) "
+
+       fsql = fsql & "from Coupon_Redemption a inner join coupon_Redemption b "
+
+       fsql = fsql & "on a.leafletid = b.leafletid and a.leafletno = b.leafletno "
+
+       fsql = fsql & "and a.id = (b.id - 1) where a.leafletid =" & ID
+
+       fsql = fsql & " order by a.LeafLetID "
+
    
-   end if
-
-   ' Batch
-   if Coupon_Batch <> "" then
-
-   fsql = fsql & " and Batch = '" & Coupon_Batch & "' "
-   
-   end if
-
-   ' Face Value
-   if Face_Value <> "" then
-
-   fsql = fsql & " and FaceValue like '%" & Face_Value & "%' "
-   
-   end if
-
-  ' Check Coupon Number
-   if Coupon_Number <> "" then
-
-   fsql = fsql & " and Cast(Start_Range as float) <= Cast(" & Coupon_Number & " as float) "
-
-   fsql = fsql & " and Cast(End_Range as float) >= Cast(" & Coupon_Number & " as float) "
-
-   end if
-
-   If Range <> "" Then
-
-   fsql = fsql & "and RangeID in (" & Range & ")"
-
-   End If
-
-
-   fsql = fsql & " order by RangeID desc"
 
         'response.write fsql
         'response.end
@@ -63,7 +43,7 @@ response.write delid
 	
 
 
-Response.Write "Face Value ,Type, Batch, Start Range, End Range,  Total Used Coupons, Total Coupons Issued, Redemption Rate" & vbcrlf
+Response.Write "Face Value ,Type, Batch, Start Range, End Range, Face Value ,Type, Batch, Start Range, End Range, Total Used Coupons, Total Coupons Issued, Redemption Rate" & vbcrlf
 
  if not frs.EoF then
  
@@ -71,28 +51,35 @@ Response.Write "Face Value ,Type, Batch, Start Range, End Range,  Total Used Cou
 
    Do While not frs.EOF
 
-   Response.Write """" &  frs("FaceValue") & """," 
+   LeafLetNo = frs("LeafLetNo")
 
-   Response.Write """" &  frs("Product_Type") & """," 
+   Response.Write """" &  frs("FaceValue1") & """," 
 
-   Response.Write """" & frs("Batch") & """," 
-   Response.Write """" &  frs("Start_Range") & """," 
-   Response.Write """" &  frs("End_Range") & """," 
-  
+   Response.Write """" &  frs("Coupon_Type1") & """," 
 
-      Set rs = server.createobject("adodb.recordset")
+   Response.Write """" & frs("Batch1") & """," 
 
-      'response.write  ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"' , '"&frs("Start_Range")&"', '"&frs("End_Range")&"'") 
+   Response.Write """" &  frs("Start_Range1") & """," 
 
-	  rs.open ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"', '"&frs("Start_Range")&"', '"&frs("End_Range")&"'") ,  conn,3,1
+   Response.Write """" &  frs("End_Range1") & """," 
 
+   Response.Write """" &  frs("FaceValue2") & """," 
 
-Response.Write """" &  rs("RedemptionNo") & """," 
-Response.Write """" &  rs("TotalNo") & """," 
-Response.Write """" &  FormatNumber(rs("Rate"),1) & "%" & """" & vbCrLf  
+   Response.Write """" &  frs("Coupon_Type2") & """," 
 
+   Response.Write """" & frs("Batch2") & """," 
 
-   
+   Response.Write """" &  frs("Start_Range2") & """," 
+
+   Response.Write """" &  frs("End_Range2") & """," 
+
+  Response.Write """" &  frs("TotalRedeem")  & """," 
+
+  Response.Write """" &  frs("TotalNo") & """," 
+
+  response.write FormatNumber(frs("TotalRedeem")/frs("TotalNo") * 100,1)  & "%" & """" & vbCrLf  
+
+     
    frs.movenext
   loop
  end if

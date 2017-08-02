@@ -41,9 +41,8 @@ if flag = "add_pco" then
   Completed = trim(request.form("Completed")) 
   Excel_Type = trim(request.form("Excel_Type")) 
   Effective_Date = trim(request.form("Effective_Date")) 
- Fixed_Barcode  = trim(request.form("Fixed_Barcode")) 
  
-  sql1 = "Select count(1) as Tcount From CouponRequest Where Cast(FaceValue as float) = "& int(Face_Value)
+  sql1 = "Select count(1) as Tcount From Fixed_Barcode_Coupon Where Cast(FaceValue as float) = "& int(Face_Value)
 
   sql1 = sql1 & " and Cast(Product_Type as float) = " & Product_Type
 
@@ -70,8 +69,8 @@ if flag = "add_pco" then
 
   If rs1("Tcount") = 0 then
 
-      sql = "Insert into CouponRequest (FaceValue, Product_Type, Batch, Start_Range, End_Range, Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, Excel_Type, Effective_Date, Digital, Fixed_Barcode)"
-      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Disc&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date&"', '"&Digital&"', '"&Fixed_Barcode&"')"
+      sql = "Insert into Fixed_Barcode_Coupon (FaceValue, Product_Type, Batch, Start_Range, End_Range, Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, Excel_Type, Effective_Date, Digital)"
+      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Disc&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date&"', '"&Digital&"')"
   'response.write sql
   'response.end
      conn.execute(sql)
@@ -162,6 +161,32 @@ elseif flag = "delpc" then
   message="Pro coupon record was deleted successfully"
    whatgo="pco_d1.asp"
 
+'==========================================================================
+'
+'
+'  Delete Leaflet
+'
+'
+'==========================================================================
+
+
+elseif flag = "del_leaflet" then
+ 
+  delid=split(trim(request.form("mid")),",")
+   for i=0 to Ubound(delid)
+     sql="delete from LeafletBatch where id="&trim(delid(i))
+     conn.execute(sql)
+	 'response.write sql&"<br>"
+   next
+
+   for i=0 to Ubound(delid)
+     sql="delete from coupon_redemption where Leafletid="&trim(delid(i))
+     conn.execute(sql)
+	 'response.write sql&"<br>"
+   next
+  message="Leaflet record was deleted successfully"
+   whatgo="coupon_redempted1.asp"
+
 '---------------------------------------------------------------------------
 '
 '
@@ -247,118 +272,26 @@ elseif flag ="edit_st" then
  
 
       whatgo = "station1.asp"
-
 '==========================================================================
 '
 '
-'  Delete station
+'  Delete New Range
 '
 '
 '==========================================================================
 
 
-elseif flag = "del_st" then
+elseif flag = "del_new_range" then
  
   delid=split(trim(request.form("mid")),",")
    for i=0 to Ubound(delid)
-     sql="delete from station where IPAddress='"&trim(delid(i))&"'"
+     sql="delete from Coupon_Redempted where RangeID = "&trim(delid(i))
      conn.execute(sql)
 	 'response.write sql&"<br>"
    next
-  message="Station was deleted successfully"
-   whatgo="station1.asp"
+  message="Coupon Range was deleted successfully"
+   whatgo="coupon_redempted1.asp"
 
-
-
-'---------------------------------------------------------------------------
-'
-'
-'  new user
-'
-'
-'---------------------------------------------------------------------------
-
-
-elseif flag ="add_usr" then
-
-  UserName = replace(trim(request.form("UserName")),"'","''")
-  Password = replace(trim(request.form("Password")),"'","''")
-  SecLevel = replace(trim(request.form("SecLevel")),"'","''")
- 
-      sql1 = "Select count(1) as Tcount From CVSUser where UserName ='" & Username &"'"
-
-      set rs1 = conn.execute(sql1)
-
-      if rs1("Tcount") = 0 then
-
-
-      sql = "Insert into CVSUser (UserName, Password, SecLevel)"
-      sql = sql & " values('"&UserName&"', '"&Password&"', "&SecLevel&")"
-  'response.write sql
-  'response.end
-     conn.execute(sql)
-     message="User name is added."
-
-     else
-
-      message = "User name is used."
-
-    end if
-
- 
-
-      whatgo = "user1.asp"
-
-'-----------------------------------------------------------------------------
-'
-'
-'  edit user
-'
-'
-'----------------------------------------------------------------------------
-
-
-elseif flag ="edit_usr" then
-
-  
-  UserName = replace(trim(request.form("UserName")),"'","''")
-  Password = replace(trim(request.form("Password")),"'","''")
-  SecLevel = replace(trim(request.form("SecLevel")),"'","''")
-
-
-      sql = "Update CVSUser set Password='"&Password&"', "
-
-      sql = sql & "SecLevel="&SecLevel&" where UserName ='"& Username &"'"
-
-      'response.write sql
-      'response.end
-     conn.execute(sql)
-     message="User is edited."
-
- 
-
-      whatgo = "user1.asp"
-
-
-'==========================================================================
-'
-'
-'  Delete User
-'
-'
-'==========================================================================
-
-
-elseif flag = "del_usr" then
- 
-  delid=split(trim(request.form("mid")),",")
-   for i=0 to Ubound(delid)
-     sql="delete from CVSUser where UserName='"&trim(delid(i))&"'"
-     conn.execute(sql)
-	 'response.write sql&"<br>"
-   next
-  message="User was deleted successfully"
-   whatgo="user1.asp"
 
 
 

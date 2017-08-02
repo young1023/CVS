@@ -14,7 +14,7 @@ End if
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
   <tr>
-    <td height="72" width="10%"><IMG style="LEFT: 0px; POSITION: absolute; TOP: 0px"  alt ="Shell logo" src="IMAGES/Shell.gif" border=0 ></IMG></td>
+    <td height="72" width="10%"></td>
    
 <td align="right">
 
@@ -83,8 +83,12 @@ Station</a>
 User</a>
 </td>
 <td align="right">
-<a href="coupon1.asp" title="Station" style="TEXT-DECORATION: none">
+<a href="coupon1.asp" title="Coupon" style="TEXT-DECORATION: none">
 Coupon</a>
+</td>
+<td align="right">
+<a href="gc1.asp" title="Generate Coupon" style="TEXT-DECORATION: none">
+Generate Coupon</a>
 </td>
 
 <% End If %>

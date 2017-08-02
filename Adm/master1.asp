@@ -11,14 +11,13 @@ pageid=request("pageid")
 
 From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) 
-  
+   From_Date =  formatdatetime(now(),2) 
 end if
 
 To_Date        = Request.Form("To_Date")
 
 if To_Date = "" then
-   To_Date = year(now()) & "-" & month(now()) & "-" & day(now())
+   To_Date = formatdatetime(now(),2)
 end if
 
 Coupon_Type    = Request.Form("Coupon_Type")
@@ -301,9 +300,9 @@ function dateCheck(inputText) {
 
    ' Check Date Range
 
-   fsql = fsql & " and Datediff(day, m.Present_Date, '"& From_Date &"') < = 0 and  Datediff(day, Present_Date, '"& To_Date &"') > = 0 "
+   'fsql = fsql & " and Datediff(day, m.Present_Date, '"& From_Date &"') < = 0 and  Datediff(day, Present_Date, '"& To_Date &"') > = 0 "
 
-   'fsql = fsql & " and m.Present_date >=  Convert(datetime, '" & From_Date & "', 111) and m.Present_Date <=  Convert(datetime, '" & To_Date & "', 111) "
+   'fsql = fsql & " and m.Present_date >=  Convert(varchar, '" & From_Date & "', 102) and m.Present_Date <=  Convert(varchar, '" & To_Date & "', 102) "
    
  
 

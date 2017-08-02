@@ -1,7 +1,5 @@
-<!--#include file="include/SQLConn.inc" -->
-<%
 
-Session("SecLevel") = ""
+<%
 
 Message = Request("Message")
 
@@ -22,7 +20,7 @@ Message = Request("Message")
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><img src="images/Shell.gif" /></td>
+    <td></td>
     <td align="right"></td>
   </tr>
 </table>
@@ -87,7 +85,6 @@ Message = Request("Message")
 
 <div align="center">
 
-
 <table width="60%" border="0" Height="400"  class="Login">
 
     <tr>
@@ -138,7 +135,7 @@ Message = Request("Message")
         </td> 
 
 		<td ><input Type="Button" Name=" ½T©w " value="   ½T©w   " onClick="doLogin();">
-             <input name="IPAddress" type="hidden" value="<%=IPAddress%>">
+             <input name="StationID" type="hidden" value="<%=StationID%>">
 
 
         </td>

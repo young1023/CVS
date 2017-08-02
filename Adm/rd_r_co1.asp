@@ -11,15 +11,14 @@ pageid=request("pageid")
 
 From_Date      = Request.Form("From_Date")
 if From_Date = "" then
-   From_Date =  year(now()) & "-" & month(now()) & "-" & day(now()) 
+   From_Date = formatdatetime((now() - 7) ,2) 
 end if
 
 To_Date        = Request.Form("To_Date")
 
 if To_Date = "" then
-   To_Date = year(now()) & "-" & month(now()) & "-" & day(now())
+   To_Date = formatdatetime(now(),2)
 end if
-
 
 Coupon_Type    = Request.Form("Coupon_Type")
 Station        = Request.Form("Station")
@@ -59,17 +58,6 @@ if (document.fm1.To_Date.value == "")
    document.fm1.To_Date.focus();
    return false;
   }
-
- // calculate the number of days between From_Date and To_Date
-   var date1 = document.fm1.To_Date.value
-   var date2 = document.fm1.From_Date.value
-   var daysBetween = (new Date(date1).getTime() - new Date(date2).getTime())/86400000;
-if (daysBetween > 31){
-    alert('Cannot selected date range longer than 31 days!' );
-    return false;
-   }
-
-
 document.fm1.action="rd_r_co1.asp"
 document.fm1.submit();
 }
@@ -275,13 +263,17 @@ Redemption Raw Coupon</b></font></td>
 
       fsql = fsql & " Convert(datetime, Present_Date,111) as [Present Date] , "
 
-      fsql = fsql & " Convert(datetime, Present_Date,111) as [Present Time] , "
+      'fsql = fsql & " Convert(datetime, Present_Date,111) as [Present Time] , "
 
       fsql = fsql & " m.RequestedID as Station, m.Coupon_Type as [Coupon Type], m.Coupon_Batch as [Batch],"
 
-      fsql = fsql & " m.Coupon_Number as [Coupon Number], Convert(varchar,c.Issue_Date,111) as [Issue Date], "
+      fsql = fsql & " m.Coupon_Number as [Coupon Number], "
 
-      fsql = fsql & " m.SaleAmount as [Sale Amount], Convert(varchar, c.Expiry_Date,111) as [Expiry Date], "
+      fsql = fsql & " Convert(varchar,c.Issue_Date,111) as [Issue Date], "
+
+      fsql = fsql & " m.SaleAmount as [Sale Amount], "
+
+      fsql = fsql & " Convert(varchar, c.Expiry_Date,111) as [Expiry Date], "
 
       fsql = fsql & " c.Excel_Type as [Excel type], m.Product_Type as [Product Type], m.Status, m.Creation_Date"
 
@@ -289,11 +281,11 @@ Redemption Raw Coupon</b></font></td>
 
       fsql = fsql & " m.Coupon_batch = c.Batch and Cast(m.Face_Value as float) = Cast(c.FaceValue as float) and "
 
-      fsql = fsql & " Cast(c.Start_Range as float) <= Cast(m.Coupon_Number as float) and Cast(c.End_Range as float) >= Cast(m.Coupon_Number as float) where "
+      fsql = fsql & " Cast(c.Start_Range as float) <= Cast(m.Coupon_Number as float) and Cast(c.End_Range as float) >= Cast(m.Coupon_Number as float) where 1=1 "
 
-      fsql = fsql & " (Datediff(day, Present_Date, '"&From_Date&"') < = 0 or '"&From_Date&"' = '') "
+      'fsql = fsql & " and (Datediff(day, Convert(datetime, Present_Date,111), '"&From_Date&"') < = 0 or '"&From_Date&"' = '') "
 
-      fsql = fsql & " and (Datediff(day, Present_Date, '"&To_Date&"') >= 0 or '"&To_Date&"' = '') "
+      'fsql = fsql & " and (Datediff(day, Convert(datetime, Present_Date,111), '"&To_Date&"') >= 0 or '"&To_Date&"' = '') "
 
       fsql = fsql & " and (m.RequestedID = '"&Station&"'  or '"&Station&"' = '') and "
 
@@ -310,7 +302,7 @@ Redemption Raw Coupon</b></font></td>
      fsql = fsql & " (m.Status = '"&Print_Excel&"' or '"&Print_Excel&"' = '') Order by m.id Desc "
 
     
-      response.write fsql
+      'response.write fsql
       'response.end
 
      ' Setting the page

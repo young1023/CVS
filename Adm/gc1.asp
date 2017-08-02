@@ -60,7 +60,10 @@ modDigit  = (10 - ((total + 17) % 10)) % 10;
 modDigit2 = (10 - ((total + 23) % 10)) % 10;
 
 
+
 bc1 =  fv + modDigit + ct + bt + sr + modDigit2 + "\n" ;
+
+
 
 bc2 = bc2 + bc1
 
@@ -104,6 +107,19 @@ function ZeroPadNumber(nValue)
 }
 
 
+function PopupBarcodeImage() {
+
+     var bc = document.barCodeForm.barcode3.value
+	 
+     var str="BarcodeImage.asp?barcode=" + bc
+	
+		
+	newwindow = window.open(str  , "myWindow", "status = 1, height = 500, width = 600, scrollbars=yes, resizable = yes" )
+		 if (window.focus) {
+           newwindow.focus();
+       }
+ 			
+}
 
 //-->
 </SCRIPT>
@@ -139,40 +155,30 @@ function ZeroPadNumber(nValue)
       <td colspan="3" height="1"></td>
     </tr>
   </table>
-  <table width="100%" border="0" cellspacing="0" cellpadding="0" height="60%">
-    <tr>
-      <td width="1" class="HSEBlue"></td>
-      <td valign="top">
-      <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+ 
+     <table width="99%"border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td height="4" class="HSEBlue"></td>
         </tr>
         <tr valign="top">
           <td height="25"><img src="images/Curve.gif" width="22" height="16" /></td>
         </tr>
-        <tr valign="top">
-          <td height="100%" align="middle">
+        <tr>
+          <td align="center">
 
 
- <table width="100%" border="0" cellpadding=0 cellspacing="0" bgcolor="#FFFFFF" height="100%">
-                <tr>
-                  <td valign="top" align="center" bgcolor="#E6EBEF">
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#E6EBEF" class="normal">
-                     <tr> 
-                          
-                        <td height="28" align="center"><font color="#FF6600"><b>
+<font color="#FF6600"><b>
 	Coupon Generator</b></font></td>
                         </tr>
                         <tr> 
-                          <td valign="top" align="center">
+                          <td align="center">
                           
 
 
-<div align="center">
 
 <FORM NAME="barCodeForm"  method="post"  action="GenCoupon.asp">
 
-<table width="100%" border="0"  cellpadding="4" cellspacing="2" class="Report">
+<table width="80%" border="0"  cellpadding="4" cellspacing="2" class="normal">
 										
 <tr>
 
@@ -180,9 +186,9 @@ function ZeroPadNumber(nValue)
 First Key Number
 </td>
 
-<td class="common"> 
+<td > 
 
-<INPUT name="keynumber" type="text" size="2" value="17" readonly>
+<INPUT name="keynumber" type="text" size="20" value="17" readonly>
 		
 </td>
 
@@ -190,14 +196,11 @@ First Key Number
 Second Key Number
 </td>
 
-<td class="common"> 
+<td > 
 
-<INPUT name="keynumber2" type="text" size="2" value="23" readonly>
-
+<INPUT name="keynumber2" type="text" size="20" value="23" readonly>
 		
 </td>
-
-
 
 </tr>
 			
@@ -207,9 +210,9 @@ Second Key Number
 Face Value 
 </td>
 
-<td class="common"> 
+<td > 
 
-<INPUT name="facevalue" type="text" size="3" value="" MaxLength="3">
+<INPUT name="facevalue" type="text" size="20" value="" MaxLength="3">
 	
 </td>
 
@@ -217,9 +220,9 @@ Face Value
 Coupon type 
 </td>
 
-<td class="common"> 
+<td > 
 
-<INPUT name="coupontype" type="text" size="2" value="" MaxLength="2">
+<INPUT name="coupontype" type="text" size="20" value="" MaxLength="2">
 	
 </td>
 
@@ -230,9 +233,9 @@ Coupon type
 Batch
 </td>
 
-<td class="common" colspan="3"> 
+<td  colspan="3"> 
 
-<INPUT name="batch" size="3" type="text" value="" MaxLength="3">
+<INPUT name="batch" size="20" type="text" value="" MaxLength="3">
 	
 </td>
 
@@ -244,9 +247,9 @@ Batch
 Start Range
 </td>
 
-<td class="common"> 
+<td > 
 
-<INPUT name="startrange" size="6" type="text" value="" MaxLength="6">
+<INPUT name="startrange" size="20" type="text" value="" MaxLength="6">
 	
 </td>
 
@@ -254,9 +257,9 @@ Start Range
 End Range
 </td>
 
-<td class="common"> 
+<td > 
 
-<INPUT name="endrange" size="6" type="text" value="" MaxLength="6">
+<INPUT name="endrange" size="20" type="text" value="" MaxLength="6">
 	
 </td>
 
@@ -265,15 +268,16 @@ End Range
 	 
 							
 								
-								<tr><td class="common">
+								<tr><td >
 								
 			
 								
 								
 		
-							</td><td class="common" >
-							<INPUT TYPE=button onClick="GenCoupon();" value="Generate">
-	
+							</td><td  >
+						
+		<INPUT TYPE=button onClick="GenCoupon();" value="Generate">
+	<INPUT TYPE=button onClick="PopupBarcodeImage();" value="Generate Barcode Image">
 							</td>
 
 
@@ -293,9 +297,9 @@ End Range
 16 digits Coupon Number
 </td>
 
-<td class="common" colspan="3"> 
+<td  colspan="4"> 
 
-<textarea rows="40" cols="80" id="Barcode3" onfocus="this.select();" onmouseup="return false;">
+<textarea rows="20" name="barcode3" cols="100" id="Barcode3" onfocus="this.select();" onmouseup="return false;">
 </textarea>
 		
 </td></tr>
@@ -305,23 +309,12 @@ End Range
 							
 
 					
-</div>
 
 
-
-<%
-'-----------------------------------------------------------------------------
-'
-'      End of the main Content 
-'
-'-----------------------------------------------------------------------------
-%>
 </td>
               </tr>
                 </table>
-                </td>
-                </tr>
-              </table>
+        
            
               </body>
 

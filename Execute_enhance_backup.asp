@@ -13,6 +13,8 @@
    Set Rs1 = Server.CreateObject("Adodb.Recordset")
    Set Rs2 = Server.CreateObject("Adodb.Recordset")
    Set Rs3 = Server.CreateObject("Adodb.Recordset")
+   Set Rs4 = Server.CreateObject("Adodb.Recordset")
+   Set Rs5 = Server.CreateObject("Adodb.Recordset")
  
    Barcode    = trim(Request("Barcode"))
 
@@ -30,7 +32,13 @@
  
      End If
  
-   
+
+   'response.write "Station ID:  " & Stationid & "<br>"
+
+   'response.write "Barcode: " & Barcode & "<br>"
+
+   'response.end
+
    Set Message = Nothing
 
    ' Check Coupon Type
@@ -54,6 +62,39 @@
           Rs0.close
           set Rs0 = nothing
 
+
+
+   ' Check Fixed Barcode Coupon
+
+       'Response.write ("Exec Check_Fixed_Barcode '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'")
+         
+       Rs4.open ("Exec Check_Fixed_Barcode '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"' ") ,  conn,3,1
+
+
+   'Response.end
+
+   If Not Rs4.EoF Then
+
+          
+           Response.write ("Exec Insert_Fixed_Barcode_Coupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'")
+
+            Rs5.Open ("Exec Insert_Fixed_Barcode_Coupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'"), Conn, 3, 1
+
+             
+
+           Message = "驗證成功!  號碼: " &  Rs5("Coupon_number") 
+  
+           Message2 = "  時間: " & Rs5("Present_Date")
+
+
+
+    Response.Redirect  "CouponVerification.asp?ProductType="&ProductType&"&Color=1&Message="&Message&"&Message2="&Message2
+      
+ 
+   End If
+   
+    Rs4.close
+    set Rs4 = nothing
 
 
    ' Check Barcode Range
@@ -124,9 +165,6 @@
  
          Else
 
-
-  Response.write ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'")
-
           Rs3.Open ("Exec InsertCoupon '"&Barcode&"', '"&IPAddress&"','"&ProductType&"','"&ScanDate&"'"), Conn, 3, 1
 
               ' If record is inserted.
@@ -142,6 +180,8 @@
       
                     Else
 
+
+                'Message = "驗證失敗 - 禮券無效 "
                   Message = "驗證失敗 - 請重試! "
                
 

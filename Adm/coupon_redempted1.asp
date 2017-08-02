@@ -59,7 +59,7 @@ else if (k==1)
   var msg = "Are you sure ?";
   if (confirm(msg)==true)
    {
-    document.fm1.whatdo.value="del_new_range";
+    document.fm1.whatdo.value="del_leaflet";
     document.fm1.submit();
    }
  }
@@ -81,7 +81,7 @@ document.fm1.submit();
 function gtpage(what)
 {
 document.fm1.pageid.value=what;
-document.fm1.action="pco_d1.asp"
+document.fm1.action="coupon_redempted1.asp"
 document.fm1.submit();
 }
 
@@ -169,12 +169,12 @@ document.fm1.submit();
    
 ' Start the queries
       
-       fsql = "select * from Coupon_Redempted where 1 =1  "
+       fsql = "select * from LeafletBatch where 1 =1  "
 
     ' Coupon Type
    if Coupon_Type <> "" then
 
-   fsql = fsql & " and Product_Type = '" & Coupon_Type & "' "
+   fsql = fsql & " and Coupon_Type = '" & Coupon_Type & "' "
    
    end if
 
@@ -206,7 +206,7 @@ document.fm1.submit();
 
   
 
-       fsql = fsql & " order by RangeID desc"
+       fsql = fsql & " order by ID desc"
 
         'response.write fsql
         'response.end
@@ -257,8 +257,35 @@ Coupon Number
 
 
    <table border="0" align=center cellpadding="1" width="100%" cellspacing="1" class="normal">
+
      <tr bgcolor="#DFDFDF">
+
+<td ></td>
+
+
+<td colspan="5" align="center">First Batch</td>
+
+<td colspan="5" align="center">Second Batch</td>
+
+<td  colspan="2"></td>
+
+</tr>
+
+     <tr bgcolor="#DFDFDF">
+
 <td width="5%"></td>
+
+
+
+<td  height="28">Face Value</td>
+
+<td >Type</td>
+
+<td  height="28">Batch</td>
+
+<td height="28">Start Range</td>
+
+<td  height="28">No. of coupon</td>
 <td  height="28">Face Value</td>
 <td >Type</td>
 
@@ -266,10 +293,12 @@ Coupon Number
 
 <td height="28">Start Range</td>
 
-<td  height="28">End Range</td>
-<td>Total Used Coupons</td>
-<td>Total Coupons Issued</td>
-<td width="10%">Redemption Rate</td>
+<td  height="28">No. of coupon</td>
+
+<td  height="28">No. of leaflet</td>
+
+<td></td>
+
 </tr>
                                     <%
 
@@ -290,47 +319,49 @@ Coupon Number
 %>
    <tr>
 <td>
-<input type="checkbox" name="mid" value="<% = frs("RangeID") %>">
+<input type="checkbox" name="mid" value="<% = frs("ID") %>">
 </td>
-<% id = frs("RangeID") %>
-<td align=center width="95" height="28"><a href="Analy_NewRange1.asp?id=<% =frs("RangeID") %>"><% = frs("FaceValue")%></a></td>
+
+
+
+<td  height="28"><a href="coupon_redempted2.asp?id=<% =frs("ID") %>"><% = frs("FaceValue1")%></a></td>
 <td  height="28">
-<% = frs("Product_Type") %>
+<% = frs("Coupon_Type1") %>
 </td>
-<td  height="28"><% = frs("Batch") %>
-</td>
-
-<td height="28"><% = frs("Start_Range") %>
+<td  height="28"><% = frs("Batch1") %>
 </td>
 
-<td ><% = frs("End_Range") %>
+<td height="28"><% = frs("Start_Range1") %>
 </td>
 
+<td ><% = frs("NoOfCoupon1") %>
+</td>
 
-
-<%
-
-
-      Set rs = server.createobject("adodb.recordset")
-
-      'response.write  ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"' , '"&frs("Start_Range")&"', '"&frs("End_Range")&"'") 
-
-	  rs.open ("Exec Retrieve_Redemption_Rate2 '"&frs("Product_Type")&"', '"&frs("Batch")&"', '"&frs("FaceValue")&"', '"&frs("Start_Range")&"', '"&frs("End_Range")&"'") ,  conn,3,1
-
-
-%>
 
 <td >
-<% = rs("RedemptionNo") %>
+<% = frs("FaceValue2") %>
 </td>
 
 <td >
-<% = rs("TotalNo") %>
+<% = frs("Coupon_Type2") %>
 </td>
 
 <td >
-<% = FormatNumber(rs("Rate"),1) %> %
+<% = frs("Batch2") %> 
 </td>
+
+<td height="28"><% = frs("Start_Range2") %>
+</td>
+
+<td ><% = frs("NoOfCoupon2") %>
+</td>
+
+<td ><% = frs("NoOfLeaflet") %>
+</td>
+
+<td>
+<% id = frs("ID") %>
+<a href="Analy_NewRange1.asp?id=<% =frs("ID") %>">Edit</a></td>
 
 </tr>
 <%
@@ -371,9 +402,8 @@ Coupon Number
                               </tr>
                               <tr> 
                                 <td height="28" align="center"> 
-<input type="button" value="    csv    " onClick="exportCSV();" class="common">&nbsp;
 
-<input type="button" value="    New Range    " onClick="dosubmit();" class="common">&nbsp;
+<input type="button" value="    New Leaflets    " onClick="dosubmit();" class="common">&nbsp;
 
 <input type="button" value="    Delete    " onClick="delcheck();" class="common">
 

@@ -366,6 +366,92 @@ function dateCheck(inputText) {
 	    
 </td>
    </tr>
+
+<tr><td>Time Allowed:</td>
+      <td>From:&nbsp;
+
+
+
+<select size="1" name="Start_Time" class="common">
+
+<% 
+    For i = 0 to 24
+
+%>
+			<option value="<% = i %>"><% = i %></option>
+		
+<%
+    Next
+
+%>
+
+	</select>&nbsp;To:&nbsp;
+
+<select size="1" name="Start_Time" class="common">
+
+<% 
+    
+    For j = 0 to 24
+
+%>
+			<option value="<% = j %>" <% If trim(j) = 24 then %>Selected<% End If %>><% = j %></option>
+		
+<%
+    Next
+
+%>
+
+	</select>    
+</td>
+   </tr>
+
+<tr> 
+      <td>Restricted Station:  </td>
+<td >
+<%
+
+		SQL = "Select * from Station where Cast(station as int) >= 200 Order by station"
+
+		Set Rs = Conn.Execute(SQL)
+
+        Rs.MoveFirst
+						
+            If Rs.EoF Then
+
+                  Response.write "No station found."
+
+						Else
+					        
+                 i = 1
+							
+                   Do While Not Rs.EoF
+
+ %>
+
+<Input Type="checkbox" Name="StationID" Value="<% = Rs("StationID") %>">
+ 
+   <% = Rs("Station") %>
+                        
+<%    
+   
+     Rs.Movenext
+                               
+       If Len(i/ 10) = 1 then
+                               
+           Response.write "<br>"
+ 
+                               End If
+
+                                  i = i + 1
+
+							Loop
+
+						End If
+%>
+        
+</td>
+    </tr>
+
 	<tr>
 <td></td>
 <td>
