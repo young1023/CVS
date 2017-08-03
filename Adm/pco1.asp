@@ -203,6 +203,7 @@ function dateCheck(inputText) {
      }
 
 
+
 //-->
 </SCRIPT>
 
@@ -210,7 +211,7 @@ function dateCheck(inputText) {
 </script>
 </head>
 
-<body leftmargin="0" topmargin="0" >
+<body leftmargin="0" topmargin="0">
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <!--#include file="include/header.inc" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -337,14 +338,14 @@ function dateCheck(inputText) {
    </tr>
 <tr><td>Expiry Date: (mm-dd-yyyy)</td>
       <td>
-<input name="Expiry_Date" type=text value="" onkeyup="dateCheck(document.fm1.Expiry_Date);">
+<input name="Expiry_Date" type=text value="" >
 <a href="javascript:show_calendar('fm1.Expiry_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 </td>
    </tr>
 <tr><td>Issue Date: (mm-dd-yyyy)
 </td>
       <td>
-<input name="Issue_date" type=text value="" onkeyup="dateCheck(document.fm1.Issue_date);">
+<input name="Issue_date" type=text value="">
 <a href="javascript:show_calendar('fm1.Issue_date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 
 </td>
@@ -361,7 +362,7 @@ function dateCheck(inputText) {
    </tr>
 <tr><td>Effective Date:</td>
       <td>
-<input name="Effective_Date" type=text value="" onkeyup="dateCheck(document.fm1.Effective_Date);">
+<input name="Effective_Date" type=text value="">
 <a href="javascript:show_calendar('fm1.Effective_Date');" onMouseOver="window.status='Date Picker'; overlib('Click here to choose a date from a full year pop-up calendar.'); return true;" onMouseOut="window.status=''; nd(); return true;"><img src="images/show-calendar.gif" width=24 height=22 border=0></a>
 	    
 </td>
@@ -387,7 +388,7 @@ function dateCheck(inputText) {
 
 	</select>&nbsp;To:&nbsp;
 
-<select size="1" name="Start_Time" class="common">
+<select size="1" name="End_Time" class="common">
 
 <% 
     
@@ -406,7 +407,7 @@ function dateCheck(inputText) {
    </tr>
 
 <tr> 
-      <td>Restricted Station:  </td>
+      <td>Allowed Station(s):  </td>
 <td >
 <%
 
@@ -428,7 +429,7 @@ function dateCheck(inputText) {
 
  %>
 
-<Input Type="checkbox" Name="StationID" Value="<% = Rs("StationID") %>">
+<Input Type="checkbox" Name="Station" checked Value="<% = Rs("Station") %>">
  
    <% = Rs("Station") %>
                         

@@ -60,7 +60,7 @@
 
     Rs1.open ("Exec Checkrange '"&Barcode&"'") ,  conn,3,1
 
-    Response.write ("Exec Checkrange '"&Barcode&"'")
+    'Response.write ("Exec Checkrange '"&Barcode&"'")
 
    'Response.end
 
@@ -74,10 +74,12 @@
  
    Else
 
+       RequestID = Rs1("RequestID")
+
 
        If Rs1("Expiry_Date") < DateValue(Now) Then
 
-  
+   
           Message = "驗證失敗 - 禮券過期!"
         
           
@@ -92,6 +94,61 @@
 
           Rs1.close
           set Rs1 = nothing
+
+
+      ' --------------------------------------------
+
+      ' Enhancement of restricted hours and stations
+
+      ' --------------------------------------------
+
+      ' Check restricted time
+
+          Set Rs4 = Server.CreateObject("Adodb.Recordset")
+
+          Rs4.open ("Exec Check_Time '"& RequestID &"', '"& ScanDate &"' ") ,  conn,3,1
+
+          'Response.write ("Exec Check_Time '"& RequestID &"', '"& ScanDate &"' ") 
+
+         If Not Rs4.EoF Then
+
+
+                      Message = "驗證失敗 - 禮券只可在 "& Rs4("Start_Time") &" 時至 "& Rs4("End_Time") &" 時使用!"
+
+
+       Response.Redirect  "CouponVerification.asp?ProductType="&ProductType&"&Color=2&Message="&Message
+
+     
+           End If
+
+          Rs4.close
+          set Rs4 = nothing
+
+       ' Check restricted station
+
+          Set Rs5 = Server.CreateObject("Adodb.Recordset")
+
+          Rs5.open ("Exec Check_Station '"& RequestID &"', '"& IPaddress &"' ") ,  conn,3,1
+
+          'Response.write ("Exec Check_Station '"& RequestID &"', '"& IPaddress &"' ") 
+
+          'Response.end
+
+         If Rs5("Tcount") = 0 Then
+
+
+                      Message = "驗證失敗 - 禮券只可在指定油店使用!"
+
+
+          Response.Redirect  "CouponVerification.asp?ProductType="&ProductType&"&Color=2&Message="&Message
+
+     
+           End If
+
+          Rs5.close
+          set Rs5 = nothing
+
+       ' --------------------------------------------
 
           Rs2.open ("Exec CheckCouponExist '"&Barcode&"'") ,  conn,3,1
 

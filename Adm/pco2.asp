@@ -194,6 +194,101 @@ document.fm1.submit();
 <input name="Effective_Date" type=text value="<% = rs("Effective_Date") %>">	    
 </td>
    </tr>
+
+<tr><td>Time Allowed:</td>
+      <td>From:&nbsp;
+
+
+
+<select size="1" name="Start_Time" class="common">
+
+<% 
+    For i = 0 to 24
+
+%>
+			<option value="<% = i %>" <% If trim(i)  = trim(rs("Start_Time")) then %>Selected<% End If %>><% = i %></option>
+		
+<%
+    Next
+
+%>
+
+	</select>&nbsp;To:&nbsp;
+
+<select size="1" name="Start_Time" class="common">
+
+<% 
+    
+    For j = 0 to 24
+
+%>
+			<option value="<% = j %>" <% If trim(j)  = Trim(rs("End_Time")) then %>Selected<% End If %>><% = j %></option>
+		
+<%
+    Next
+
+%>
+
+	</select>    
+</td>
+   </tr>
+
+<tr> 
+      <td>Restricted Station:  </td>
+<td >
+<%
+
+		SQL1 = "Select * from Station where Cast(station as int) >= 200 Order by station"
+
+		Set Rs1 = Conn.Execute(SQL1)
+
+        SQL2 = "Select Station From Restricted_Station where RequestID = "& RequestID
+
+        'response.write sql2
+
+		Set Rs2 = Conn.Execute(SQL2)
+
+
+        Rs1.MoveFirst
+						
+            If Rs1.EoF Then
+
+                  Response.write "No station found."
+
+						Else
+					        
+                 i = 1
+							
+                   Do While Not Rs1.EoF
+
+
+                          
+
+ %>
+
+<Input Type="checkbox" Name="Station" Value="<% = Rs1("Station") %>">
+ 
+   <% = Rs1("Station") %>
+                        
+<%    
+   
+     Rs1.Movenext
+                               
+       If Len(i/ 10) = 1 then
+                               
+           Response.write "<br>"
+ 
+                               End If
+
+                                  i = i + 1
+
+							Loop
+
+						End If
+%>
+        
+</td>
+    </tr>
 	<tr>
 <td></td>
 <td>

@@ -213,7 +213,7 @@ document.fm1.submit();
 
   
 
-       fsql = fsql & " order by Issue_Date desc"
+       fsql = fsql & " order by RequestID desc"
 
         'response.write fsql
         'response.end
@@ -273,21 +273,23 @@ Excel Type :
 
 <td width="5%" height="28">Batch</td>
 
-<td width="10%" height="28">Start Range</td>
+<td  height="28">Start<br/> Range</td>
 
-<td width="10%" height="28">End Range</td>
+<td  height="28">End<br/> Range</td>
 <td >Digital</td>
 
-<td width="10%" height="28">Category</td>
-<td width="10%">Expiry Date
+<td  height="28">Category</td>
+<td >Expiry Date
 </td>
-<td width="10%">Issue Date</td>
+<td >Issue Date</td>
+<td >Start<br/>Time</td>
+<td >End<br/>Time</td>
 <td>Completed</td>
-<td>Excel<br/> Type</td>
+<td>Excel<br/>Type</td>
 
-<td>Total Used Coupons</td>
-<td>Total Coupons Issued</td>
-<td width="10%">Redemption Rate</td>
+<td>Coupons<br/>Used</td>
+<td>Coupons<br/>Issued</td>
+<td >Rate</td>
 </tr>
                                     <%
 
@@ -337,6 +339,14 @@ Excel Type :
 
 <td >
 <% = frs("Issue_Date") %>
+</td>
+
+<td >
+<% = frs("Start_Time") %>
+</td>
+
+<td >
+<% = frs("End_Time") %>
 </td>
 
 <td >

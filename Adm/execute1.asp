@@ -41,7 +41,16 @@ if flag = "add_pco" then
   Completed = trim(request.form("Completed")) 
   Excel_Type = trim(request.form("Excel_Type")) 
   Effective_Date = trim(request.form("Effective_Date")) 
- Fixed_Barcode  = trim(request.form("Fixed_Barcode")) 
+
+  ' Retrieve start and end time
+  Start_Time = trim(request.form("Start_Time")) 
+
+  End_Time = trim(request.form("End_Time")) 
+
+  ' Retrieve Station ID
+  Station = Split(trim(request.form("Station")),",")
+
+
  
   sql1 = "Select count(1) as Tcount From CouponRequest Where Cast(FaceValue as float) = "& int(Face_Value)
 
@@ -70,11 +79,43 @@ if flag = "add_pco" then
 
   If rs1("Tcount") = 0 then
 
-      sql = "Insert into CouponRequest (FaceValue, Product_Type, Batch, Start_Range, End_Range, Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, Excel_Type, Effective_Date, Digital, Fixed_Barcode)"
-      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"&End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Disc&"', '"&Expiry_Date&"' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date&"', '"&Digital&"', '"&Fixed_Barcode&"')"
-  'response.write sql
-  'response.end
+      sql = "Insert into CouponRequest (FaceValue, Product_Type, Batch, Start_Range, End_Range, "
+
+      sql = sql & " Category, Dealer, Canopy_Copy_Disc, Expiry_Date, Issue_Date, Completed, "
+
+      sql = sql & "Excel_Type, Effective_Date, Digital, Start_Time, End_Time)"
+
+      sql = sql & " values('"&Face_Value&"', '"&Product_Type&"', '"&Batch&"', '"&Start_Range&"', '"
+
+      sql = sql & End_Range&"', '"&Category&"', '"&Dealer&"', '"&Canopy_Disc&"', '"&Expiry_Date
+
+      sql = sql & "' , '"&Issue_Date&"', '"&Completed&"' , '"&Excel_Type&"', '"&Effective_Date
+
+      sql = sql & "', '"&Digital&"' , '"&Start_Time&"', '"&End_Time&"')"
+  
+    response.write sql
+    'response.end
      conn.execute(sql)
+
+
+    sql3 = "Select Top 1 RequestID From CouponRequest Order by RequestID Desc "
+
+    Set Rs3 = Conn.Execute(sql3)
+
+    RequestID = Rs3("RequestID")
+
+
+     ' Append Allowed Station
+     for i=0 to Ubound(Station)
+
+     sql4 = "Insert into Restricted_Station (Station, RequestID) Values ("& Trim(Station(i)) & "," & RequestID & ")"
+     
+     response.write sql4
+
+     conn.execute(sql4)
+	 
+      next
+   
      message="The items are added."
 
   else
